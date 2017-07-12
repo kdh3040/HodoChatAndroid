@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HodoTalk</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="cardlist">cardlist</string>
+    <string name="faq">faq</string>
+    <string name="heartCharge">heartCharge</string>
+    <string name="popview">popview</string>
+    <string name="qa">QA</string>
+
+</resources>
