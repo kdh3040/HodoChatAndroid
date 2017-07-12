@@ -11,5 +11,7 @@
     <string name="heartCharge">heartCharge</string>
     <string name="popview">popview</string>
     <string name="qa">QA</string>
+    <string name="title_activity_chat_page_main">ChatPage_main</string>
+    <string name="title_activity_join">JoinActivity</string>
 
 </resources>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "922919840865",
+    "firebase_url": "https://hodotalk.firebaseio.com",
+    "project_id": "hodotalk",
+    "storage_bucket": "hodotalk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922919840865:android:5860bb5080f453d0",
+        "android_client_info": {
+          "package_name": "hodo.hodotalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "922919840865-k9moaipiblqhbeg962mnlo6gfqn5srfe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hodo.hodotalk",
+            "certificate_hash": "ac7afbc6d2a5d624f832f1c6de503d289e2b75c9"
+          }
+        },
+        {
+          "client_id": "922919840865-rdunekm0jjnt4q00deaipi7ak40aqoma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHFwIsV8EEBtnz2oilUHx9ejDhlRLk9jU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "922919840865-rdunekm0jjnt4q00deaipi7ak40aqoma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
