@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +19,8 @@ import android.widget.Button;
 import android.widget.TabHost;
 
 import hodo.hodotalk.ChatPage.ChatPage_main;
+import hodo.hodotalk.Data.UserData_Profile;
+import hodo.hodotalk.Data.UserData_Url;
 import hodo.hodotalk.MainPage.Choice;
 import hodo.hodotalk.MainPage.Connect;
 import hodo.hodotalk.MainPage.Main;
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity
     private  QA cQA;
     private  Setting cSetting;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +85,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
+        //    UserData_Url _userUrl[] = new UserData_Url[5];
+
+        initTab();
+    }
+
+    private  void initTab()
+    {
 
         cMain = Main.newInstance();
         cChoice = Choice.newInstance();
@@ -110,6 +125,7 @@ public class MainActivity extends AppCompatActivity
         tabhost.addTab(tab3);
         tabhost.addTab(tab4);
 
+
         tabhost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
@@ -140,49 +156,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        /*
-        btnMain = (Button) findViewById(R.id.btnMain);
-        btnMatching = (Button) findViewById(R.id.btnMatching);
-        btnChoice = (Button) findViewById(R.id.btnChoice);
-        btnConnect = (Button) findViewById(R.id.btnConnect);
-
-
-        View.OnClickListener listener = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId())
-                {
-                    case R.id.btnMain:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fl_activity_main_container, cMain).commit();
-                        break;
-                    case R.id.btnMatching:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fl_activity_main_container, cMatching).commit();
-                        break;
-                    case R.id.btnChoice:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fl_activity_main_container, cChoice).commit();
-                        break;
-                    case R.id.btnConnect:
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.fl_activity_main_container, cConnect).commit();
-                        break;
-                }
-            }
-        };
-
-        btnMain.setOnClickListener(listener);
-        btnMatching.setOnClickListener(listener);
-        btnChoice.setOnClickListener(listener);
-        btnConnect.setOnClickListener(listener);
-
-        */
     }
 
     @Override
