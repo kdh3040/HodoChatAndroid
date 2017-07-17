@@ -25,6 +25,21 @@
             tools:layout_editor_absoluteY="0dp">>
 
             <Button
+                android:id="@+id/btnNickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="NickName" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">>
+
+            <Button
                 android:id="@+id/btnAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,6 +96,21 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="body" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">>
+
+            <Button
+                android:id="@+id/btnJoin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Join" />
+
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

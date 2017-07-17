@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,7 @@ public class Matching extends Fragment {
         {
             int a = random.nextInt(400);
             nature[i] = new MainPage_Object();
-            nature[i].SetData("email"+i, "Token"+i, a, "Nickname"+i, a, a, a, a,a, a);
+            nature[i].SetData("email"+i, "Token"+i, "IMG", a, "Nickname"+i, a, a, a, a,a, a);
         }
 
         url[0] = "http://imgnews.naver.com/image/5291/2017/05/19/0000620923_001_20170519112758962.jpeg";
@@ -140,6 +141,9 @@ public class Matching extends Fragment {
                 .detectDiskWrites()
                 .detectNetwork()
                 .penaltyLog().build());
+
+
+        Log.d("!!!!!", "App End----");
 
         return rootView;
     }

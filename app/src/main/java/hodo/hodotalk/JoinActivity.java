@@ -14,11 +14,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class JoinActivity extends AppCompatActivity {
 
+    private Button btnJoin;
+    private Button btnNickName;
     private Button btnAge;
     private  Button btnBlood;
     private  Button btnLoc;
@@ -26,12 +31,13 @@ public class JoinActivity extends AppCompatActivity {
     private  Button btnJob;
     private  Button btnBody;
 
-    private  static String nChoiceAge;
-    private  static String nChoiceBlood;
-    private  static String nChoiceLoc;
-    private  static String nChoiceRel;
-    private  static String nChoiceJob;
-    private  static String nChoiceBody;
+    private  static String strChoiceNickName;
+    private  static int strChoiceAge;
+    private  static int strChoiceBlood;
+    private  static int strChoiceLoc;
+    private  static int strChoiceRel;
+    private  static int strChoiceJob;
+    private  static int strChoiceBody;
 
     ArrayAdapter<String> adapter;
     ArrayAdapter<String> adapterAge;
@@ -58,7 +64,8 @@ public class JoinActivity extends AppCompatActivity {
             }
         });
 
-
+        btnJoin = (Button) findViewById(R.id.btnJoin);
+        btnNickName = (Button) findViewById(R.id.btnNickName);
         btnAge = (Button) findViewById(R.id.btnAge);
         btnBlood = (Button) findViewById(R.id.btnBlood);
         btnLoc = (Button) findViewById(R.id.btnLoc);
@@ -84,12 +91,14 @@ public class JoinActivity extends AppCompatActivity {
         adapterJob.addAll("학생", "교수","사장", "회장", "가수", "트수", "백수", "공무원");
         adapterBody.addAll("빼뺴","마른","보통","근육", "건장","뚱뚱", "트수");
 
-        btnAge.setText("나이 : "+ nChoiceAge);
-        btnBlood.setText("혈액형 : "+ nChoiceBlood);
-        btnLoc.setText("지역 : "+ nChoiceLoc);
-        btnRel.setText("종교 : "+ nChoiceRel);
-        btnJob.setText("직업 : "+ nChoiceJob);
-        btnBody.setText("체형 : "+ nChoiceBody);
+        btnJoin.setText("가입하기");
+        btnNickName.setText("닉네임 : "+ strChoiceNickName);
+        btnAge.setText("나이 : "+ strChoiceAge);
+        btnBlood.setText("혈액형 : "+ strChoiceBlood);
+        btnLoc.setText("지역 : "+ strChoiceLoc);
+        btnRel.setText("종교 : "+ strChoiceRel);
+        btnJob.setText("직업 : "+ strChoiceJob);
+        btnBody.setText("체형 : "+ strChoiceBody);
 
         adapterAge.notifyDataSetChanged();
         adapterBlood.notifyDataSetChanged();
@@ -104,6 +113,12 @@ public class JoinActivity extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId())
                 {
+                    case R.id.btnJoin:
+                        SetData_Firebase();
+                        break;
+                    case R.id.btnNickName:
+                        CreateListDialog(adapterAge, 0);
+                        break;
                     case R.id.btnAge:
                         CreateListDialog(adapterAge, 0);
                         break;
@@ -127,17 +142,19 @@ public class JoinActivity extends AppCompatActivity {
             }
         };
 
+        btnNickName.setOnClickListener(listener);
         btnAge.setOnClickListener(listener);
         btnBlood.setOnClickListener(listener);
         btnLoc.setOnClickListener(listener);
         btnRel.setOnClickListener(listener);
         btnJob.setOnClickListener(listener);
         btnBody.setOnClickListener(listener);
-
+        btnJoin.setOnClickListener(listener);
     }
 
     private void UpdateStatus() {
 
+        btnNickName = (Button) findViewById(R.id.btnNickName);
         btnAge = (Button) findViewById(R.id.btnAge);
         btnBlood = (Button) findViewById(R.id.btnBlood);
         btnLoc = (Button) findViewById(R.id.btnLoc);
@@ -145,14 +162,28 @@ public class JoinActivity extends AppCompatActivity {
         btnJob = (Button) findViewById(R.id.btnjob);
         btnBody = (Button) findViewById(R.id.btnbody);
 
-        btnAge.setText("나이 : "+ nChoiceAge);
-        btnBlood.setText("혈액형 : "+ nChoiceBlood);
-        btnLoc.setText("지역 : "+ nChoiceLoc);
-        btnRel.setText("종교 : "+ nChoiceRel);
-        btnJob.setText("직업 : "+ nChoiceJob);
-        btnBody.setText("체형 : "+ nChoiceBody);
+        btnNickName.setText("닉네임 : "+ strChoiceAge);
+        btnAge.setText("나이 : "+ strChoiceAge);
+        btnBlood.setText("혈액형 : "+ strChoiceBlood);
+        btnLoc.setText("지역 : "+ strChoiceLoc);
+        btnRel.setText("종교 : "+ strChoiceRel);
+        btnJob.setText("직업 : "+ strChoiceJob);
+        btnBody.setText("체형 : "+ strChoiceBody);
     }
 
+    private void SetData_Firebase(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table = database.getReference("Account/ID");
+        DatabaseReference user = table.child(strChoiceNickName);
+        user.child("NickName").setValue(strChoiceNickName);
+        user.child("Age").setValue(strChoiceAge);
+        user.child("Blood").setValue(strChoiceBlood);
+        user.child("Body").setValue(strChoiceBody);
+        user.child("Job").setValue(strChoiceJob);
+        user.child("Location").setValue(strChoiceLoc);
+        user.child("Religion").setValue(strChoiceRel);
+        //user.child("ImageUrl").setValue(strChoice);
+    }
 
     public void CreateListDialog(ArrayAdapter<String> _adapter, final  int i){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -169,26 +200,29 @@ public class JoinActivity extends AppCompatActivity {
 
                 switch (i){
                     case 0:
-                        nChoiceAge = menu;
+                        strChoiceNickName = menu;
+                        strChoiceAge = which;
+
                         break;
                     case 1:
-                        nChoiceBlood = menu;
+                        strChoiceBlood = which;
                         break;
                     case 2:
-                        nChoiceLoc = menu;
+                        strChoiceLoc = which;
                         break;
                     case 3:
-                        nChoiceRel = menu;
+                        strChoiceRel = which;
                         break;
                     case 4:
-                        nChoiceJob = menu;
+                        strChoiceJob = which;
                         break;
                     case 5:
-                        nChoiceBody = menu;
+                        strChoiceBody = which;
                         break;
                 }
 
                 UpdateStatus();
+
             }
 
         });

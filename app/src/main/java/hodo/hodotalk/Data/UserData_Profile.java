@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 public class UserData_Profile {
     private String userEmailID; // email 주소에서 @ 이전까지의 값.
     private String fcmToken;     // 토큰
-
+    private String Img;
     private int    Gender;       // 성별 (1: 여자, 2: 남자)
 
     private String Nickname;     // 닉네임
@@ -21,7 +21,7 @@ public class UserData_Profile {
     {
         userEmailID = null ; // email 주소에서 @ 이전까지의 값.
         fcmToken = null;     // 토큰
-
+        Img = null;
         Gender = 0;       // 성별 (1: 여자, 2: 남자)
 
         Nickname = null;     // 닉네임
@@ -33,11 +33,11 @@ public class UserData_Profile {
         Body = 0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
     }
 
-    public  void SetDataAll(String _Email, String _Token, int _Gender, String _NickName, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)
+    public  void SetDataAll(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)
     {
         userEmailID = _Email;
         fcmToken = _Token;
-
+        Img = _Img;
         Gender = _Gender;
         Nickname = _NickName;
         Age = _Age;

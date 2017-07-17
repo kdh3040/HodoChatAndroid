@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class Main extends Fragment {
         return fragment;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,7 +58,6 @@ public class Main extends Fragment {
 
         btn_fragment = (Button)rootView.findViewById(R.id.button2);
         btn_fragment.setText("카드 더 보기");
-
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.mainpage_cardview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -70,7 +71,7 @@ public class Main extends Fragment {
             @Override
             public void onClick(View v)
             {
-                mMainAdapter.SetData();
+                mMainAdapter.SetData_Firebase();
                 recyclerView.setAdapter(new MainPage_Adapter());
             }
         });
@@ -80,6 +81,8 @@ public class Main extends Fragment {
                 .detectDiskWrites()
                 .detectNetwork()
                 .penaltyLog().build());
+
+        Log.d("!!!!!", "App End----");
 
         return rootView;
     }

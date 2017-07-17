@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,12 +19,20 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TabHost;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import hodo.hodotalk.ChatPage.ChatPage_main;
+import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData_Profile;
 import hodo.hodotalk.Data.UserData_Url;
 import hodo.hodotalk.MainPage.Choice;
 import hodo.hodotalk.MainPage.Connect;
 import hodo.hodotalk.MainPage.Main;
+import hodo.hodotalk.MainPage.MainPage_Object;
 import hodo.hodotalk.MainPage.Matching;
 import hodo.hodotalk.MyPage.CardList;
 import hodo.hodotalk.MyPage.FAQ;
@@ -54,14 +63,19 @@ public class MainActivity extends AppCompatActivity
     private  QA cQA;
     private  Setting cSetting;
 
+    static int cnt = 8;
+    public static  MainPage_Object UserData[] = new MainPage_Object[cnt];
 
-
+    private int nDataSet = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        Log.d("!!!!!", "App start----");
 
         // 오른쪽 밑에 우편 모양
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -89,7 +103,44 @@ public class MainActivity extends AppCompatActivity
 
         //    UserData_Url _userUrl[] = new UserData_Url[5];
 
-        initTab();
+        Log.d("!!!!!", "firebase start----");
+        initData_firebase();
+        Log.d("!!!!!", "firebase End----");
+    }
+
+    public  void initData_firebase()
+    {
+        for(int i=0; i< cnt; i++) {
+            UserData[i] = new MainPage_Object();
+        }
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Account").child("ID");
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int i = 0;
+                        for (DataSnapshot fileSnapshot : dataSnapshot.getChildren()) {
+                            //Get map of users in datasnapshot
+                            //collectPhoneNumbers((Map<String,Object>) dataSnapshot.getValue());
+
+                            RecvData recUser = new RecvData();
+                            recUser = fileSnapshot.getValue(RecvData.class);
+                            UserData[i++].SetData(recUser.Email, "token", recUser.Img, recUser.Gender, recUser.NickName, recUser.Age, recUser.Blood,
+                                    recUser.Location, recUser.Religion, recUser.Job, recUser.Body);
+
+
+                        }
+                        nDataSet = 1;
+
+                        initTab();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
     }
 
     private  void initTab()
@@ -109,6 +160,7 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager()
                 .beginTransaction()
+                //.replace(R.id.fl_activity_main_container, cMain).commit();
                 .replace(R.id.fl_activity_main_container, cMain).commit();
 
 

@@ -15,16 +15,16 @@
       },
       "oauth_client": [
         {
+          "client_id": "922919840865-rdunekm0jjnt4q00deaipi7ak40aqoma.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "922919840865-k9moaipiblqhbeg962mnlo6gfqn5srfe.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "hodo.hodotalk",
             "certificate_hash": "ac7afbc6d2a5d624f832f1c6de503d289e2b75c9"
           }
-        },
-        {
-          "client_id": "922919840865-rdunekm0jjnt4q00deaipi7ak40aqoma.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
