@@ -1,10 +1,8 @@
-package hodo.hodotalk;
+package hodo.hodotalk.MyPage;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,10 +19,14 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class JoinActivity extends AppCompatActivity {
+import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.MainActivity;
+import hodo.hodotalk.R;
+import hodo.hodotalk.Util.TransformValue;
+
+public class EditProfile extends AppCompatActivity {
 
     private Button btnJoin;
-    private Button btnNickName;
     private Button btnAge;
     private  Button btnBlood;
     private  Button btnLoc;
@@ -57,30 +58,25 @@ public class JoinActivity extends AppCompatActivity {
 
     private String TAG = "@@@Firebase : ";
     private  String[] arrStr = new String[2];
+
+
+    private TransformValue _TV = new TransformValue();
+    public static MyData stMyData = MyData.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_join);
+        setContentView(R.layout.activity_edit_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        btnJoin = (Button) findViewById(R.id.btnJoin);
-        btnNickName = (Button) findViewById(R.id.btnNickName);
-        btnAge = (Button) findViewById(R.id.btnAge);
-        btnBlood = (Button) findViewById(R.id.btnBlood);
-        btnLoc = (Button) findViewById(R.id.btnLoc);
-        btnRel = (Button) findViewById(R.id.btnReligion);
-        btnJob = (Button) findViewById(R.id.btnjob);
-        btnBody = (Button) findViewById(R.id.btnbody);
+        btnJoin = (Button) findViewById(R.id.EditProfile_btnJoin);
+        btnAge = (Button) findViewById(R.id.EditProfile_btnAge);
+        btnBlood = (Button) findViewById(R.id.EditProfile_btnBlood);
+        btnLoc = (Button) findViewById(R.id.EditProfile_btnLoc);
+        btnRel = (Button) findViewById(R.id.EditProfile_btnReligion);
+        btnJob = (Button) findViewById(R.id.EditProfile_btnjob);
+        btnBody = (Button) findViewById(R.id.EditProfile_btnbody);
 
 
         adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_singlechoice);
@@ -93,21 +89,15 @@ public class JoinActivity extends AppCompatActivity {
         adapterBody = new ArrayAdapter<>(this, android.R.layout.select_dialog_singlechoice);
 
 
+        Setting_MyData();
+
+
         adapterAge.addAll("10대", "20대", "30대", "40대");
         adapterBlood.addAll("A형", "B형", "O형", "AB형");
         adapterLoc.addAll("서울", "경기도","부산", "인천", "경남", "경북", "대구", "전북", "전남", "광주", "대전", "울산", "강원", "충북", "충남", "세종", "제주");
         adapterRel.addAll("무교","불교","기독","천주", "원불교","유교", "이슬람");
         adapterJob.addAll("학생", "교수","사장", "회장", "가수", "트수", "백수", "공무원");
         adapterBody.addAll("빼뺴","마른","보통","근육", "건장","뚱뚱", "트수");
-
-        btnJoin.setText("가입하기");
-        btnNickName.setText("닉네임 : "+ strChoiceNickName);
-        btnAge.setText("나이 : "+ strChoiceAge);
-        btnBlood.setText("혈액형 : "+ strChoiceBlood);
-        btnLoc.setText("지역 : "+ strChoiceLoc);
-        btnRel.setText("종교 : "+ strChoiceRel);
-        btnJob.setText("직업 : "+ strChoiceJob);
-        btnBody.setText("체형 : "+ strChoiceBody);
 
         adapterAge.notifyDataSetChanged();
         adapterBlood.notifyDataSetChanged();
@@ -122,36 +112,32 @@ public class JoinActivity extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId())
                 {
-                    case R.id.btnJoin:
+                    case R.id.EditProfile_btnJoin:
                         SetData_Firebase();
                         break;
-                    case R.id.btnNickName:
+                    case R.id.EditProfile_btnAge:
                         CreateListDialog(adapterAge, 0);
                         break;
-                    case R.id.btnAge:
-                        CreateListDialog(adapterAge, 0);
-                        break;
-                    case R.id.btnBlood:
+                    case R.id.EditProfile_btnBlood:
                         CreateListDialog(adapterBlood, 1);
                         break;
-                    case R.id.btnLoc:
+                    case R.id.EditProfile_btnLoc:
                         CreateListDialog(adapterLoc ,2);
                         break;
-                    case R.id.btnReligion:
+                    case R.id.EditProfile_btnReligion:
                         CreateListDialog(adapterRel, 3);
                         break;
-                    case R.id.btnjob:
+                    case R.id.EditProfile_btnjob:
                         CreateListDialog(adapterJob, 4);
                         break;
-                    case R.id.btnbody:
+                    case R.id.EditProfile_btnbody:
                         CreateListDialog(adapterBody, 5);
                         break;
                 }
-              //  UpdateStatus();
+                //  UpdateStatus();
             }
         };
 
-        btnNickName.setOnClickListener(listener);
         btnAge.setOnClickListener(listener);
         btnBlood.setOnClickListener(listener);
         btnLoc.setOnClickListener(listener);
@@ -161,6 +147,17 @@ public class JoinActivity extends AppCompatActivity {
         btnJoin.setOnClickListener(listener);
 
         InitProfile_firebase();
+    }
+
+    public  void Setting_MyData()
+    {
+        btnJoin.setText("저장하기");
+        btnAge.setText("나이 : "+ _TV.Transform_Age(stMyData.getAge()));
+        btnBlood.setText("혈액형 : "+ _TV.Transform_Blood(stMyData.getBlood()));
+        btnLoc.setText("지역 : "+ _TV.Transform_Loc(stMyData.getLocation()));
+        btnRel.setText("종교 : "+ _TV.Transform_Rel(stMyData.getReligion()));
+        btnJob.setText("직업 : "+ _TV.Transform_job(stMyData.getJob()));
+        btnBody.setText("체형 : "+ _TV.Transform_Body(stMyData.getBody()));
     }
 
     public  void InitProfile_firebase()
@@ -196,31 +193,29 @@ public class JoinActivity extends AppCompatActivity {
 
     private void UpdateStatus() {
 
-        btnNickName = (Button) findViewById(R.id.btnNickName);
-        btnAge = (Button) findViewById(R.id.btnAge);
-        btnBlood = (Button) findViewById(R.id.btnBlood);
-        btnLoc = (Button) findViewById(R.id.btnLoc);
-        btnRel = (Button) findViewById(R.id.btnReligion);
-        btnJob = (Button) findViewById(R.id.btnjob);
-        btnBody = (Button) findViewById(R.id.btnbody);
+        btnAge = (Button) findViewById(R.id.EditProfile_btnAge);
+        btnBlood = (Button) findViewById(R.id.EditProfile_btnBlood);
+        btnLoc = (Button) findViewById(R.id.EditProfile_btnLoc);
+        btnRel = (Button) findViewById(R.id.EditProfile_btnReligion);
+        btnJob = (Button) findViewById(R.id.EditProfile_btnjob);
+        btnBody = (Button) findViewById(R.id.EditProfile_btnbody);
 
-        btnNickName.setText("닉네임 : "+ strChoiceAge);
-        btnAge.setText("나이 : "+ strChoiceAge);
-        btnBlood.setText("혈액형 : "+ strChoiceBlood);
-        btnLoc.setText("지역 : "+ strChoiceLoc);
-        btnRel.setText("종교 : "+ strChoiceRel);
-        btnJob.setText("직업 : "+ strChoiceJob);
-        btnBody.setText("체형 : "+ strChoiceBody);
+        btnAge.setText("나이 : "+ _TV.Transform_Age(strChoiceAge));
+        btnBlood.setText("혈액형 : "+ _TV.Transform_Blood(strChoiceBlood));
+        btnLoc.setText("지역 : "+ _TV.Transform_Loc(strChoiceLoc));
+        btnRel.setText("종교 : "+ _TV.Transform_Rel(strChoiceRel));
+        btnJob.setText("직업 : "+ _TV.Transform_job(strChoiceJob));
+        btnBody.setText("체형 : "+ _TV.Transform_Body(strChoiceBody));
+
+        stMyData.UpdateMyProfile(strChoiceAge, strChoiceBlood, strChoiceLoc, strChoiceRel, strChoiceJob, strChoiceBody);
+
     }
 
     private void SetData_Firebase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table = database.getReference("Account/ID");
-        DatabaseReference user = table.child(strChoiceNickName);
-        user.child("NickName").setValue(strChoiceNickName);
+        DatabaseReference user = table.child(stMyData.getNickName());
         user.child("Age").setValue(strChoiceAge);
-        user.child("Email").setValue(mAuth.getCurrentUser().getEmail());
-        user.child("Token").setValue(strToken);
         user.child("Blood").setValue(strChoiceBlood);
         user.child("Body").setValue(strChoiceBody);
         user.child("Job").setValue(strChoiceJob);
@@ -240,7 +235,7 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String menu = adapter.getItem(which);
-                Toast.makeText(JoinActivity.this, "선택한  : "+menu + " asdsad : " + which, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(JoinActivity.this, "선택한  : "+menu + " asdsad : " + which, Toast.LENGTH_SHORT).show();
 
                 switch (i){
                     case 0:

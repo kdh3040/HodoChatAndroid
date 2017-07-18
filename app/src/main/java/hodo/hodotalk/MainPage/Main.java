@@ -1,27 +1,24 @@
 package hodo.hodotalk.MainPage;
 
-import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import hodo.hodotalk.Data.UserData_Profile;
-import hodo.hodotalk.JoinActivity;
 import hodo.hodotalk.MainActivity;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Service.ViewProfile;
+import hodo.hodotalk.Util.ItemClickSupport;
 
 
 /**
@@ -36,17 +33,18 @@ public class Main extends Fragment {
     public  RecyclerView.Adapter mAdapter;
     public Button btn_fragment;
 
+    private MainActivity MV = new MainActivity();
     public MainPage_Adapter mMainAdapter;
     private  RecyclerView recyclerView;
-    public Main() {
-        // Required empty public constructor
-    }
+
+    private int nAddView = 0;
+
+    private GestureDetector gestureDetector;
 
     public static Main newInstance() {
         Main fragment = new Main();
         return fragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,8 +69,15 @@ public class Main extends Fragment {
             @Override
             public void onClick(View v)
             {
-                mMainAdapter.SetData_Firebase();
-                recyclerView.setAdapter(new MainPage_Adapter());
+                nAddView++;
+                mMainAdapter.DelDataList();
+                mMainAdapter.AddData(nAddView);
+                RefreshItem();
+
+
+                /// 테스트용
+                if(nAddView > 1)
+                    nAddView = 1;
             }
         });
 
@@ -84,7 +89,75 @@ public class Main extends Fragment {
 
         Log.d("!!!!!", "App End----");
 
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener(){
+
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                //Toast.makeText(Main.this, "클릭한 아이템의 이름은 ", Toast.LENGTH_SHORT).show();
+                Log.d("@@@@@", "!!!!!!");
+                final String SendNick = mMainAdapter.SelectUser(position);
+                if(SendNick != null)
+                {
+                    AlertDialog.Builder newdlg = new AlertDialog.Builder(v.getContext());
+                    newdlg.setTitle(SendNick + "님의 프로필을 열어볼까요?");
+                    newdlg.setMessage("하트 5개가 사용됩니다").setCancelable(false);
+                    newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            if(MV.GetMyHeart() >= 5) {
+                                MV.SetMyHeart(MV.GetMyHeart() - 5);
+                                ViewProfilePage(SendNick);
+                            }
+                        }
+                    });
+                    newdlg.setNeutralButton("하트구매", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int asdadsad=0;
+                        }
+                    });
+                    newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int asdadsad=0;
+                        }
+                    });
+
+                    newdlg.show();
+                }
+            }
+        });
+
+        ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+               // Toast.makeText(Main.this, "길게 눌렀구나 ", Toast.LENGTH_SHORT).show();
+                Log.d("@@@@@", "$$$$$$");
+                return true;
+            }
+        });
+
         return rootView;
+    }
+
+    public void ViewProfilePage(String _NickName)
+    {
+        Intent intent = new Intent(getActivity(), ViewProfile.class);
+        //startActivity(intent);
+        String SendNick = _NickName;
+        intent.putExtra("Name", SendNick);
+        startActivityForResult(intent, 100);
+    }
+
+    public void SendHeart_Dialog()
+    {
+     /*   DialogFragment util_dialog = new Util_DialogFragment();
+        util_dialog.setTargetFragment(Main.this, 0);
+        util_dialog.show(getFragmentManager(), "sssssss");*/
+    }
+
+    public void RefreshItem()
+    {
+        recyclerView.removeAllViewsInLayout();
+        recyclerView.setAdapter(mMainAdapter);
+
     }
 }
 

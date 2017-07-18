@@ -19,6 +19,7 @@
 
     </FrameLayout>
 
+
     <TabHost
         android:id = "@+id/tab_host"
         android:layout_width="fill_parent"
@@ -73,6 +74,7 @@
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
+
     </TabHost>
 
 

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="hodo.hodotalk.Service.ViewProfile"
+    tools:showIn="@layout/activity_view_profile">
+
+
+    <Button
+        android:id="@+id/Btn_Profile_SendHeart"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="fill_parent"
+            android:layout_height="300dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/common_google_signin_btn_icon_dark"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/texthead_Iam"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/imageView2"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="저는요"
+            android:layout_centerHorizontal="true" />
+
+
+        <TextView
+            android:id="@+id/text_Iam"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/texthead_Iam"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/texthead_job"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/text_Iam"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="직업"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/text_job"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/texthead_job"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_centerHorizontal="true" />
+
+
+
+        <TextView
+            android:id="@+id/texthead_body"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/text_job"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="체형"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/text_body"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/texthead_body"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_centerHorizontal="true" />
+
+
+
+        <TextView
+            android:id="@+id/texthead_Height"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/text_body"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="키"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/text_Height"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/texthead_Height"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_centerHorizontal="true" />
+
+
+
+        <TextView
+            android:id="@+id/texthead_Rel"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/text_Height"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="종교"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/text_Rel"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/texthead_Rel"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_centerHorizontal="true" />
+
+
+
+        <TextView
+            android:id="@+id/texthead_Blood"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/text_Rel"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="혈액형"
+            android:layout_centerHorizontal="true" />
+
+
+        <TextView
+            android:id="@+id/text_Blood"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/texthead_Blood"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+
+        </LinearLayout>
+        </ScrollView>
+
+
+
+</android.support.constraint.ConstraintLayout>

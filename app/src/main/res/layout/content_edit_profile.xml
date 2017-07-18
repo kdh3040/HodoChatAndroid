@@ -25,33 +25,13 @@
             tools:layout_editor_absoluteY="0dp">>
 
             <Button
-                android:id="@+id/btnNickName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="NickName" />
-            <Button
-                android:id="@+id/btnGender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Gender" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="380dp"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">>
-
-            <Button
-                android:id="@+id/btnAge"
+                android:id="@+id/EditProfile_btnAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="AGE" />
             <Button
-                android:id="@+id/btnBlood"
+                android:id="@+id/EditProfile_btnBlood"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -67,14 +47,14 @@
             tools:layout_editor_absoluteY="0dp">>
 
             <Button
-                android:id="@+id/btnLoc"
+                android:id="@+id/EditProfile_btnLoc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Location" />
 
             <Button
-                android:id="@+id/btnReligion"
+                android:id="@+id/EditProfile_btnReligion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -89,14 +69,14 @@
             tools:layout_editor_absoluteY="0dp">>
 
             <Button
-                android:id="@+id/btnjob"
+                android:id="@+id/EditProfile_btnjob"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="job" />
 
             <Button
-                android:id="@+id/btnbody"
+                android:id="@+id/EditProfile_btnbody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -110,11 +90,11 @@
             tools:layout_editor_absoluteY="0dp">>
 
             <Button
-                android:id="@+id/btnJoin"
+                android:id="@+id/EditProfile_btnJoin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Join" />
+                android:text="Save" />
 
         </LinearLayout>
     </LinearLayout>

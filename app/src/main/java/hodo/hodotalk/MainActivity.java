@@ -3,38 +3,35 @@ package hodo.hodotalk;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import hodo.hodotalk.ChatPage.ChatPage_main;
+import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
-import hodo.hodotalk.Data.UserData_Profile;
-import hodo.hodotalk.Data.UserData_Url;
+import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.MainPage.Choice;
 import hodo.hodotalk.MainPage.Connect;
 import hodo.hodotalk.MainPage.Main;
-import hodo.hodotalk.MainPage.MainPage_Object;
 import hodo.hodotalk.MainPage.Matching;
 import hodo.hodotalk.MyPage.CardList;
+import hodo.hodotalk.MyPage.EditProfile;
 import hodo.hodotalk.MyPage.FAQ;
 import hodo.hodotalk.MyPage.HeartCharge;
 import hodo.hodotalk.MyPage.PopView;
@@ -42,12 +39,8 @@ import hodo.hodotalk.MyPage.QA;
 import hodo.hodotalk.MyPage.Setting;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
-    private  Button btnMain;
-    private  Button btnMatching;
-    private  Button btnChoice;
-    private  Button btnConnect;
 
     // 메인 페이지
     private  Main cMain;
@@ -64,9 +57,18 @@ public class MainActivity extends AppCompatActivity
     private  Setting cSetting;
 
     static int cnt = 8;
-    public static  MainPage_Object UserData[] = new MainPage_Object[cnt];
+    public static UserData stUserData[] = new UserData[cnt];
+    public static MyData stMyData = MyData.getInstance();
+    public static RecvData stRecvData = new RecvData ();
 
-    private int nDataSet = 0;
+
+    private static final int RC_SIGN_IN = 1001;
+
+    // Firebase - Authentication
+    private FirebaseAuth mAuth;
+    private String TAG = "@@@Firebase : ";
+    private  String MyID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 //Intent intent = new Intent(MainActivity.this, ChatPage_main.class);
-                Intent intent = new Intent(MainActivity.this, JoinActivity.class);
+                Intent intent = new Intent(MainActivity.this, EditProfile.class);
                 startActivity(intent);
 
             }
@@ -100,18 +102,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-
-        //    UserData_Url _userUrl[] = new UserData_Url[5];
-
         Log.d("!!!!!", "firebase start----");
-        initData_firebase();
+        InitData_firebase();
+        InitProfile_firebase();
         Log.d("!!!!!", "firebase End----");
     }
 
-    public  void initData_firebase()
+    public  void InitData_firebase()
     {
         for(int i=0; i< cnt; i++) {
-            UserData[i] = new MainPage_Object();
+            stUserData[i] = UserData.getInstance();
         }
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Account").child("ID");
@@ -121,17 +121,12 @@ public class MainActivity extends AppCompatActivity
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         int i = 0;
                         for (DataSnapshot fileSnapshot : dataSnapshot.getChildren()) {
-                            //Get map of users in datasnapshot
-                            //collectPhoneNumbers((Map<String,Object>) dataSnapshot.getValue());
 
-                            RecvData recUser = new RecvData();
-                            recUser = fileSnapshot.getValue(RecvData.class);
-                            UserData[i++].SetData(recUser.Email, "token", recUser.Img, recUser.Gender, recUser.NickName, recUser.Age, recUser.Blood,
-                                    recUser.Location, recUser.Religion, recUser.Job, recUser.Body);
-
-
+                            stRecvData = fileSnapshot.getValue(RecvData.class);
+                            stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
+                                    stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
                         }
-                        nDataSet = 1;
+
 
                         initTab();
                     }
@@ -210,6 +205,53 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public  void InitProfile_firebase()//@NonNull final String userID, @NonNull final LoadUserCallback callback)
+    {
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null){
+            int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
+            MyID =  mAuth.getCurrentUser().getEmail().substring(0, idx);
+        } else {
+            Log.d(TAG, "Log out State");
+            finish();
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Account").child("ID");
+
+        ref.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                stRecvData = dataSnapshot.getValue(RecvData.class);
+                stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
+                        stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public int GetMyHeart()
+    {
+        return  stMyData.GetHeart();
+    }
+
+    public void SetMyHeart(int _Heart)
+    {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table = database.getReference("Account/ID");
+        DatabaseReference user = table.child(stMyData.getNickName());
+        user.child("Heart").setValue(_Heart);
+        stMyData.SetData_Heart(_Heart);
+    }
+
+    public void UpdateMyProfile(int _Age, int _Blood, int _Location, int _Religion, int _Job, int _body)
+    {
+        stMyData.UpdateMyProfile(_Age, _Blood, _Location, _Religion,_Job, _body);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -272,10 +314,16 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fl_activity_main_container, cQA).commit();
+        }else if (id == R.id.nav_google_signin) {
+           // signIn();
+        }else if (id == R.id.nav_google_signout) {
+           // signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
+
 }
