@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.MainActivity;
@@ -60,7 +61,7 @@ public class EditProfile extends AppCompatActivity {
     private  String[] arrStr = new String[2];
 
 
-    private TransformValue _TV = new TransformValue();
+    public static TransformValue _TV = TransformValue.getInstance();
     public static MyData stMyData = MyData.getInstance();
 
     @Override
@@ -158,6 +159,9 @@ public class EditProfile extends AppCompatActivity {
         btnRel.setText("종교 : "+ _TV.Transform_Rel(stMyData.getReligion()));
         btnJob.setText("직업 : "+ _TV.Transform_job(stMyData.getJob()));
         btnBody.setText("체형 : "+ _TV.Transform_Body(stMyData.getBody()));
+
+
+
     }
 
     public  void InitProfile_firebase()
@@ -212,15 +216,28 @@ public class EditProfile extends AppCompatActivity {
     }
 
     private void SetData_Firebase(){
+
+        int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  mAuth.getCurrentUser().getEmail().substring(0, idx);
+
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table = database.getReference("Account/ID");
-        DatabaseReference user = table.child(stMyData.getNickName());
+        DatabaseReference table;
+
+        if(stMyData.getGender() == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
         user.child("Age").setValue(strChoiceAge);
         user.child("Blood").setValue(strChoiceBlood);
         user.child("Body").setValue(strChoiceBody);
         user.child("Job").setValue(strChoiceJob);
         user.child("Location").setValue(strChoiceLoc);
         user.child("Religion").setValue(strChoiceRel);
+        String strToken = FirebaseInstanceId.getInstance().getToken();
+        user.child("Token").setValue(strToken);
         //user.child("ImageUrl").setValue(strChoice);
     }
 

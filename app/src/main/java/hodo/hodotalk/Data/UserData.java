@@ -1,12 +1,14 @@
 package hodo.hodotalk.Data;
 
+import java.io.Serializable;
+
 /**
  * Created by boram on 2017-07-18.
  */
 
-public class UserData {
+public class UserData implements Serializable{
 
-
+    private static final long  serialVersionUID = 1L;
 
     private int    Age;          // 나이 ( 1 ~ 99)
     private int    Blood;        // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
@@ -21,6 +23,7 @@ public class UserData {
     private int    Religion;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
     private String Token;     // 토큰
 
+/*
     private static UserData  _Instance;
     public static UserData getInstance()
     {
@@ -28,22 +31,22 @@ public class UserData {
             _Instance = new UserData();
 
         return  _Instance;
-    }
+    }*/
 
 
-    private UserData()
+    public UserData()
     {
-        Age =0;          // 나이 ( 1 ~ 99)
-        Blood =0;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
-        Body =0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
+        Age =20;          // 나이 ( 1 ~ 99)
+        Blood =20;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
+        Body =20;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
         Email = null; // email 주소에서 @ 이전까지의 값.
-        Gender = 0;       // 성별 (1: 여자, 2: 남자)
+        Gender = 20;       // 성별 (1: 여자, 2: 남자)
         Heart = 0;
         Img = null;
-        Job = 0;           // 직업
-        Location = 0;     // 지역 ( 1: 서울, 2: 경기도 3: 부산 4: 인천 5: 경남 6: 경북 7: 대구 8: 전북 9: 전남 10: 광주 11: 대전 12: 울산 13: 강원 14: 충북 15: 충남 16 : 세종 17: 제주)
+        Job = 20;           // 직업
+        Location = 20;     // 지역 ( 1: 서울, 2: 경기도 3: 부산 4: 인천 5: 경남 6: 경북 7: 대구 8: 전북 9: 전남 10: 광주 11: 대전 12: 울산 13: 강원 14: 충북 15: 충남 16 : 세종 17: 제주)
         NickName = null;     // 닉네임
-        Religion = 0;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
+        Religion = 20;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
         Token = null;     // 토큰
 
     }
@@ -83,8 +86,20 @@ public class UserData {
         return  rtClass;
     }
 
+    public String getEmail() {
+        return Email;
+    }
+
+    public String getToken() {
+        return Token;
+    }
+
     public String getNickName() {
         return NickName;
+    }
+
+    public int getReligion() {
+        return Religion;
     }
 
     public int getLocation() {

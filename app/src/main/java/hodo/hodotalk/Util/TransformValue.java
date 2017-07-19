@@ -1,11 +1,44 @@
 package hodo.hodotalk.Util;
 
+import hodo.hodotalk.Data.MyData;
+
 /**
  * Created by boram on 2017-07-18.
  */
 
 public class TransformValue {
 
+    private static TransformValue _Instance;
+    public static TransformValue getInstance()
+    {
+        if(_Instance == null)
+            _Instance = new TransformValue();
+
+        return  _Instance;
+    }
+
+
+    private TransformValue()
+    {
+
+    }
+
+    public String Transform_Gender(int _Gender)
+    {
+        String rtValue = null;
+        switch (_Gender) {
+            case 0:
+                rtValue = "여성";
+                break;
+            case 1:
+                rtValue = "남성";
+                break;
+            default:
+                rtValue = "--";
+                break;
+        }
+        return  rtValue;
+    }
 
     public String Transform_Age(int _Age)
     {
@@ -25,7 +58,7 @@ public class TransformValue {
                 rtValue = "40대";
                 break;
             default:
-                rtValue = "20대";
+                rtValue = "--";
                 break;
 
         }
@@ -50,7 +83,7 @@ public class TransformValue {
                 rtValue = "AB형";
                 break;
             default:
-                rtValue = "A형";
+                rtValue = "--";
                 break;
 
         }
@@ -114,7 +147,7 @@ public class TransformValue {
                 rtValue = "제주";
                 break;
             default:
-                rtValue = "전북";
+                rtValue = "--";
                 break;
         }
         return rtValue;
@@ -147,7 +180,7 @@ public class TransformValue {
                 rtValue = "이슬람";
                 break;
             default:
-                rtValue = "무교";
+                rtValue = "--";
                 break;
 
         }
@@ -184,7 +217,7 @@ public class TransformValue {
                 rtValue = "공무원";
                 break;
             default:
-                rtValue = "가수";
+                rtValue = "--";
                 break;
 
         }
@@ -215,7 +248,7 @@ public class TransformValue {
                 rtValue = "건장";
                 break;
             default:
-                rtValue = "근육";
+                rtValue = "--";
                 break;
         }
         return rtValue;

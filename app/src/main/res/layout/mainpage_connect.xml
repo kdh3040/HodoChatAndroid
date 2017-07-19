@@ -5,10 +5,80 @@
     android:layout_height="match_parent"
     tools:context="hodo.hodotalk.MainPage.Connect">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/ic_menu_manage"
-        android:text="@string/cardlist" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+                <ImageView
+                    android:id="@+id/image_favorit_profile"
+                    android:layout_width="fill_parent"
+                    android:layout_height="300dp"
+                    android:layout_weight="1"
+
+                    tools:layout_editor_absoluteY="0dp"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/texthead_Favotie_Iam"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/image_favorit_profile"
+                    android:background="#C2C2C2"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="  저는요"
+                    android:layout_centerHorizontal="true" />
+
+
+                <TextView
+                    android:id="@+id/text_Favotie_Iam"
+                    android:layout_width="fill_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/texthead_Favotie_Iam"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/Btn_Favotie_SendHeart"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>

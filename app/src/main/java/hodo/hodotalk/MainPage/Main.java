@@ -15,9 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import hodo.hodotalk.MainActivity;
+import hodo.hodotalk.Data.FavoritData;
+import hodo.hodotalk.Data.FavoriteData_Group;
+import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.R;
 import hodo.hodotalk.Service.ViewProfile;
+import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.ItemClickSupport;
 
 
@@ -33,7 +37,13 @@ public class Main extends Fragment {
     public  RecyclerView.Adapter mAdapter;
     public Button btn_fragment;
 
-    private MainActivity MV = new MainActivity();
+    //private MainActivity MV = new MainActivity();
+
+    public MyData stMyData = MyData.getInstance();
+    public UserData stTargetData = new UserData();
+    private HoDoDefine cDef = HoDoDefine.getInstance();
+    private FavoriteData_Group stFavoriteGroup = FavoriteData_Group.getInstance();
+
     public MainPage_Adapter mMainAdapter;
     private  RecyclerView recyclerView;
 
@@ -95,7 +105,8 @@ public class Main extends Fragment {
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 //Toast.makeText(Main.this, "클릭한 아이템의 이름은 ", Toast.LENGTH_SHORT).show();
                 Log.d("@@@@@", "!!!!!!");
-                final String SendNick = mMainAdapter.SelectUser(position);
+                stTargetData = mMainAdapter.SelectUser(position);
+                final String SendNick = stTargetData.getNickName();
                 if(SendNick != null)
                 {
                     AlertDialog.Builder newdlg = new AlertDialog.Builder(v.getContext());
@@ -103,9 +114,10 @@ public class Main extends Fragment {
                     newdlg.setMessage("하트 5개가 사용됩니다").setCancelable(false);
                     newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            if(MV.GetMyHeart() >= 5) {
-                                MV.SetMyHeart(MV.GetMyHeart() - 5);
-                                ViewProfilePage(SendNick);
+                            if(stMyData.getHeart() >= cDef.getHeartCost()) {
+                                stMyData.setHeart(stMyData.getHeart() - cDef.getHeartCost());
+                                SaveFavoritePage();
+                                ViewProfilePage();
                             }
                         }
                     });
@@ -123,6 +135,8 @@ public class Main extends Fragment {
                     newdlg.show();
                 }
             }
+
+
         });
 
         ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
@@ -136,14 +150,15 @@ public class Main extends Fragment {
 
         return rootView;
     }
+    private void SaveFavoritePage() {
+        stFavoriteGroup.m_stFavorite[0].SetData(stTargetData.getEmail(), stTargetData.getImage(), stTargetData.getNickName());
+    }
 
-    public void ViewProfilePage(String _NickName)
+    public void ViewProfilePage()
     {
         Intent intent = new Intent(getActivity(), ViewProfile.class);
-        //startActivity(intent);
-        String SendNick = _NickName;
-        intent.putExtra("Name", SendNick);
-        startActivityForResult(intent, 100);
+        intent.putExtra("Target", stTargetData);
+        startActivity(intent);
     }
 
     public void SendHeart_Dialog()

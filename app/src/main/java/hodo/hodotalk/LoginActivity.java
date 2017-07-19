@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null){
             Log.d(TAG, "Current User:" + mAuth.getCurrentUser().getEmail());
             // 만약 회원이라면 메인으로 이동한다.
-            GotoMainPage();
+            GotoMainPage(true);
         } else {
             Log.d(TAG, "Log out State");
         }
@@ -78,13 +78,9 @@ public class LoginActivity extends AppCompatActivity {
                 String email = edtEmail.getText().toString().trim();
                 String passwd = edtPasswd.getText().toString().trim();
                 Log.d(TAG, "Email:" + email + " Password:" + passwd);
-                //이메일과 비밀번호를 확인하는 부분
-                if(isValidEmail(email) && isValidPasswd(passwd)){
-                    signinAccount(email, passwd);
-                } else {
-                    Toast.makeText(LoginActivity.this,
-                            "Check Email or Password",
-                            Toast.LENGTH_LONG).show();
+                if(email != null && passwd != null) {
+                    mAuth.createUserWithEmailAndPassword(email, passwd);
+                    GotoMainPage(false);
                 }
             }
         });
@@ -126,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "Account Log in  Complete");
                                     Log.d(TAG, "Current User:" + mAuth.getCurrentUser().getEmail());
                                     // Go go Main
-                                    GotoMainPage();
+                                    GotoMainPage(true);
                                 }else {
                                     Toast.makeText(LoginActivity.this,
                                             "Log In Failed", Toast.LENGTH_LONG).show();
@@ -135,9 +131,16 @@ public class LoginActivity extends AppCompatActivity {
                         });
     }
 
-    private void GotoMainPage(){
+    private void GotoMainPage(boolean login){
         //Intent intent = new Intent(LoginActivity.this, JoinActivity.class);
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent;
+
+        if(login == true)
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+
+        else
+            intent = new Intent(LoginActivity.this, JoinActivity.class);
+
         startActivity(intent);
         finish();
     }

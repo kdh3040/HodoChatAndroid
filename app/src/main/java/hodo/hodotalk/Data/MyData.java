@@ -2,6 +2,13 @@ package hodo.hodotalk.Data;
 
 import android.media.session.MediaSession;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by boram on 2017-07-18.
  */
@@ -34,18 +41,18 @@ public class MyData {
 
     private MyData()
     {
-         Age =0;          // 나이 ( 1 ~ 99)
-         Blood =0;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
-         Body =0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
-         Email = null; // email 주소에서 @ 이전까지의 값.
-         Gender = 0;       // 성별 (1: 여자, 2: 남자)
-         Heart = 0;
-         Img = null;
-         Job = 0;           // 직업
-         Location = 0;     // 지역 ( 1: 서울, 2: 경기도 3: 부산 4: 인천 5: 경남 6: 경북 7: 대구 8: 전북 9: 전남 10: 광주 11: 대전 12: 울산 13: 강원 14: 충북 15: 충남 16 : 세종 17: 제주)
-         NickName = null;     // 닉네임
-         Religion = 0;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
-         Token = null;     // 토큰
+        Age =20;          // 나이 ( 1 ~ 99)
+        Blood =20;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
+        Body =20;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
+        Email = null; // email 주소에서 @ 이전까지의 값.
+        Gender = 20;       // 성별 (1: 여자, 2: 남자)
+        Heart = 0;
+        Img = null;
+        Job = 20;           // 직업
+        Location = 20;     // 지역 ( 1: 서울, 2: 경기도 3: 부산 4: 인천 5: 경남 6: 경북 7: 대구 8: 전북 9: 전남 10: 광주 11: 대전 12: 울산 13: 강원 14: 충북 15: 충남 16 : 세종 17: 제주)
+        NickName = null;     // 닉네임
+        Religion = 20;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
+        Token = null;     // 토큰
 
     }
 
@@ -84,11 +91,34 @@ public class MyData {
         return  rtClass;
     }
 
+    public String getEmail() {return  Email;}
 
-    public void SetData_Heart(int heart) {
+    public int getGender() {return  Gender;}
+
+    public void setHeart(int heart) {
         Heart = heart;
+
+        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(Gender == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("Heart", Heart);
+        user.updateChildren(updateMap);
+
+//        user.child("Heart").setValue(Heart);
     }
-    public int GetHeart()
+    public int getHeart()
     {
         return Heart;
     }

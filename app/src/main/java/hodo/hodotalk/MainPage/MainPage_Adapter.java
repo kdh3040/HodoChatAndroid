@@ -27,6 +27,7 @@ import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.MainActivity;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
 
 /**
@@ -36,24 +37,34 @@ import hodo.hodotalk.Util.TransformValue;
 public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.ViewHolder> {
     public List<UserData> items;
 
-    static int cnt = 8;
-    int Listcnt = 4;
+    static int cnt;
+    int Listcnt;
 
+    private HoDoDefine cDef = HoDoDefine.getInstance();
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
 
 
-    public TransformValue _TR = new TransformValue();
-    public static UserData stUserData[] = new UserData[cnt];
+    public TransformValue _TR = TransformValue.getInstance();
+    private MainActivity cMA = new MainActivity();
+    public static UserData stUserData[] = new UserData[20];
+    private MyData stMydata = MyData.getInstance();
 
     public MainPage_Adapter() {
         super();
 
         items = new ArrayList<UserData>();
 
+        //stUserData[cnt] = new UserData();
+
+       cnt = cDef.getDownloadCnt();
+       Listcnt = cDef.getViewListCnt();
+
         for(int i=0; i< cnt; i++) {
-            stUserData[i] = UserData.getInstance();
+            //stUserData[i] = UserData.getInstance();
+            stUserData[i] = new UserData();
+            stUserData[i] = cMA.stUserData[i];
         }
 
         SetData_Firebase();
@@ -68,7 +79,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     public void AddData(int _idx)
     {
         for(int i=0; i< Listcnt; i++) {
-            items.add(stUserData[i + _idx*4]);
+            items.add(stUserData[i + _idx*Listcnt]);
         }
         notifyDataSetChanged();
     }
@@ -130,14 +141,15 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
         return items.size();
     }
 
-    public String SelectUser(int position) {
-        String rtValue = null;
-        if(stUserData[position].getNickName() !=null)
+    public UserData SelectUser(int position) {
+        UserData rtClass= null;
+        rtClass = stUserData[position];
+        /*if(stUserData[position].getNickName() !=null)
         {
             rtValue = stUserData[position].getNickName();
             Log.d("####", stUserData[position].getNickName() );
-        }
-            return  rtValue;
+        }*/
+            return  rtClass;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,5 +1,6 @@
 package hodo.hodotalk;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,8 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,9 +38,16 @@ import hodo.hodotalk.MyPage.HeartCharge;
 import hodo.hodotalk.MyPage.PopView;
 import hodo.hodotalk.MyPage.QA;
 import hodo.hodotalk.MyPage.Setting;
+import hodo.hodotalk.Util.HoDoDefine;
+import hodo.hodotalk.Util.TransformValue;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
+
+    public  static  TransformValue cTrans =  TransformValue.getInstance();
+
+
+    private int nMyGender;
 
 
     // 메인 페이지
@@ -56,11 +64,11 @@ public class MainActivity extends AppCompatActivity
     private  QA cQA;
     private  Setting cSetting;
 
-    static int cnt = 8;
-    public static UserData stUserData[] = new UserData[cnt];
-    public static MyData stMyData = MyData.getInstance();
-    public static RecvData stRecvData = new RecvData ();
 
+    public static UserData stUserData[] = new UserData[20];
+    public static MyData stMyData = MyData.getInstance();
+    private HoDoDefine cDef = HoDoDefine.getInstance();
+    static int cnt;
 
     private static final int RC_SIGN_IN = 1001;
 
@@ -79,16 +87,19 @@ public class MainActivity extends AppCompatActivity
 
         Log.d("!!!!!", "App start----");
 
+        Intent intent = getIntent();
+        nMyGender = intent.getIntExtra("MyGender", 0);
+
         // 오른쪽 밑에 우편 모양
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //Intent intent = new Intent(MainActivity.this, ChatPage_main.class);
-                Intent intent = new Intent(MainActivity.this, EditProfile.class);
-                startActivity(intent);
-
+                Context context = getApplicationContext();
+                stMyData.setHeart(stMyData.getHeart() + 100);
+                Toast toast = Toast.makeText(context, "현재 보유 하트 " + stMyData.getHeart(), Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 
@@ -101,33 +112,42 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        cnt = cDef.getDownloadCnt();
+        //stUserData[] = new UserData[cnt];
 
         Log.d("!!!!!", "firebase start----");
-        InitData_firebase();
         InitProfile_firebase();
+        InitData_firebase();
+
         Log.d("!!!!!", "firebase End----");
     }
 
     public  void InitData_firebase()
     {
         for(int i=0; i< cnt; i++) {
-            stUserData[i] = UserData.getInstance();
+            //stUserData[i] = UserData.getInstance();
+            stUserData[i] = new UserData();
         }
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Account").child("ID");
+        DatabaseReference ref;
+        if(nMyGender == 0)
+            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
+        else
+            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
+
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         int i = 0;
                         for (DataSnapshot fileSnapshot : dataSnapshot.getChildren()) {
-
+                            RecvData stRecvData = new RecvData ();
                             stRecvData = fileSnapshot.getValue(RecvData.class);
-                            stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
-                                    stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                            if(stRecvData != null) {
+                                stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
+                                        stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                            }
                         }
-
-
                         initTab();
                     }
 
@@ -197,9 +217,7 @@ public class MainActivity extends AppCompatActivity
                                 .beginTransaction()
                                 .replace(R.id.fl_activity_main_container, cConnect).commit();
                         break;
-
                 }
-
             }
         });
 
@@ -217,14 +235,19 @@ public class MainActivity extends AppCompatActivity
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Account").child("ID");
+        DatabaseReference ref1, ref2;
+        ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
 
-        ref.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref1.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                RecvData stRecvData = new RecvData ();
                 stRecvData = dataSnapshot.getValue(RecvData.class);
-                stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
-                        stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                if(stRecvData != null)
+                {
+                    stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
+                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                }
             }
 
             @Override
@@ -232,19 +255,36 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
+
+        ref2.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                RecvData stRecvData = new RecvData ();
+                stRecvData = dataSnapshot.getValue(RecvData.class);
+                if(stRecvData != null) {
+                    stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
+                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
     public int GetMyHeart()
     {
-        return  stMyData.GetHeart();
+        return  stMyData.getHeart();
     }
 
     public void SetMyHeart(int _Heart)
     {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table = database.getReference("Account/ID");
-        DatabaseReference user = table.child(stMyData.getNickName());
-        user.child("Heart").setValue(_Heart);
-        stMyData.SetData_Heart(_Heart);
+
+        stMyData.setHeart(_Heart);
     }
 
     public void UpdateMyProfile(int _Age, int _Blood, int _Location, int _Religion, int _Job, int _body)
