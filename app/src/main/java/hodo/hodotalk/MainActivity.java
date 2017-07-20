@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData;
+import hodo.hodotalk.Data.UserData_Group;
 import hodo.hodotalk.MainPage.Choice;
 import hodo.hodotalk.MainPage.Connect;
 import hodo.hodotalk.MainPage.Main;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     private  Setting cSetting;
 
 
-    public static UserData stUserData[] = new UserData[20];
+    public static UserData_Group stUserData = UserData_Group.getInstance();
     public static MyData stMyData = MyData.getInstance();
     private HoDoDefine cDef = HoDoDefine.getInstance();
     static int cnt;
@@ -124,11 +125,6 @@ public class MainActivity extends AppCompatActivity
 
     public  void InitData_firebase()
     {
-        for(int i=0; i< cnt; i++) {
-            //stUserData[i] = UserData.getInstance();
-            stUserData[i] = new UserData();
-        }
-
         DatabaseReference ref;
         if(nMyGender == 0)
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
@@ -144,7 +140,7 @@ public class MainActivity extends AppCompatActivity
                             RecvData stRecvData = new RecvData ();
                             stRecvData = fileSnapshot.getValue(RecvData.class);
                             if(stRecvData != null) {
-                                stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
+                                stUserData.m_stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
                                         stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
                             }
                         }

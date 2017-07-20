@@ -25,6 +25,7 @@ import java.util.List;
 
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
+import hodo.hodotalk.Data.UserData_Group;
 import hodo.hodotalk.MainActivity;
 import hodo.hodotalk.R;
 import hodo.hodotalk.Util.HoDoDefine;
@@ -48,7 +49,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
     public TransformValue _TR = TransformValue.getInstance();
     private MainActivity cMA = new MainActivity();
-    public static UserData stUserData[] = new UserData[20];
+    public static UserData_Group stUserData = UserData_Group.getInstance();
     private MyData stMydata = MyData.getInstance();
 
     public MainPage_Adapter() {
@@ -63,8 +64,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
         for(int i=0; i< cnt; i++) {
             //stUserData[i] = UserData.getInstance();
-            stUserData[i] = new UserData();
-            stUserData[i] = cMA.stUserData[i];
+            stUserData.m_stUserData[i] = cMA.stUserData.m_stUserData[i];
         }
 
         SetData_Firebase();
@@ -79,7 +79,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     public void AddData(int _idx)
     {
         for(int i=0; i< Listcnt; i++) {
-            items.add(stUserData[i + _idx*Listcnt]);
+            items.add(stUserData.m_stUserData[i + _idx*Listcnt]);
         }
         notifyDataSetChanged();
     }
@@ -87,7 +87,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     public  void  SetData_Firebase()
     {
         for(int i=0; i< Listcnt; i++) {
-            items.add(stUserData[i]);
+            items.add(stUserData.m_stUserData[i]);
         }
     }
 
@@ -143,7 +143,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
     public UserData SelectUser(int position) {
         UserData rtClass= null;
-        rtClass = stUserData[position];
+        rtClass = stUserData.m_stUserData[position];
         /*if(stUserData[position].getNickName() !=null)
         {
             rtValue = stUserData[position].getNickName();

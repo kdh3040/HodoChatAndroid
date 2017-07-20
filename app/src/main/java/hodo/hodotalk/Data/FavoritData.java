@@ -16,8 +16,10 @@ import java.util.Map;
 
         private FirebaseAuth mAuth;
         private String Email; // email 주소에서 @ 이전까지의 값.
+        private String Token;     // 토큰
         private String Img;
         private String NickName;     // 닉네임
+
         private MyData m_stMyData = MyData.getInstance();
 
     public FavoritData()
@@ -25,11 +27,13 @@ import java.util.Map;
             Email = null; // email 주소에서 @ 이전까지의 값.
             Img = null;
             NickName = null;     // 닉네임
+            Token = null;
         }
 
-        public  void SetData(String _Email, String _Img,  String _NickName)
+        public  void SetData(String _Email, String _Token, String _Img,  String _NickName)
         {
             Email = _Email;
+            Token = _Token;
             Img = _Img;
             NickName = _NickName;
 
@@ -44,9 +48,10 @@ import java.util.Map;
                 table = database.getReference("Favorite/MAN");
 
             DatabaseReference user = table.child(tempStr);
-            user.child("Email").setValue(_Email);
-            user.child("NickName").setValue(_NickName);
-            user.child("Img").setValue(_Img);
+            user.child("Email").setValue(Email);
+            user.child("Token").setValue(Token);
+            user.child("NickName").setValue(Img);
+            user.child("Img").setValue(NickName);
 
         }
 
@@ -60,11 +65,15 @@ import java.util.Map;
             return  rtClass;
         }
 
-
-        public String getNickName() {
-            return NickName;
+    public String getEmail() {
+        return Email;
+    }
+    public String getToken() {
+            return Token;
         }
-
+    public String getNickName() {
+        return NickName;
+    }
     public String getImg() {
         return Img;
     }

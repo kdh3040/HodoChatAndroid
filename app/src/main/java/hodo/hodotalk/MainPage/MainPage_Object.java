@@ -37,7 +37,6 @@ public class MainPage_Object {
 
         public MainPage_Object()
         {
-
             _userProfile = new UserData_Profile();
         }
 

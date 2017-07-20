@@ -151,7 +151,7 @@ public class Main extends Fragment {
         return rootView;
     }
     private void SaveFavoritePage() {
-        stFavoriteGroup.m_stFavorite[0].SetData(stTargetData.getEmail(), stTargetData.getImage(), stTargetData.getNickName());
+        stFavoriteGroup.m_stFavorite[0].SetData(stTargetData.getEmail(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
     }
 
     public void ViewProfilePage()
