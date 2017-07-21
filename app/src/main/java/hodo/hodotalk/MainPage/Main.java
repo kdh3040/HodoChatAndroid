@@ -89,11 +89,11 @@ public class Main extends Fragment {
             }
         });
 
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+/*        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
                 .detectNetwork()
-                .penaltyLog().build());
+                .penaltyLog().build());*/
 
         Log.d("!!!!!", "App End----");
 

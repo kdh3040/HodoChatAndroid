@@ -2,6 +2,7 @@ package hodo.hodotalk.MainPage;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -176,4 +177,6 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     {
         bm.recycle();
     }
+
+
 }
