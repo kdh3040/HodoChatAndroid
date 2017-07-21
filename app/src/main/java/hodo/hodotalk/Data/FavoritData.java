@@ -30,7 +30,7 @@ import java.util.Map;
             Token = null;
         }
 
-        public  void SetData(String _Email, String _Token, String _Img,  String _NickName)
+        public  void SetData(int _FavoriteIdx, String _Email, String _Token, String _Img,  String _NickName)
         {
             Email = _Email;
             Token = _Token;
@@ -43,11 +43,11 @@ import java.util.Map;
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference table;
             if(m_stMyData.getGender() == 0 )
-                table = database.getReference("Favorite/WOMAN");
+                table = database.getReference("Favorite/WOMAN" + tempStr);
             else
-                table = database.getReference("Favorite/MAN");
+                table = database.getReference("Favorite/MAN" + tempStr);
 
-            DatabaseReference user = table.child(tempStr);
+            DatabaseReference user = table.child(Integer.toString(_FavoriteIdx));
             user.child("Email").setValue(Email);
             user.child("Token").setValue(Token);
             user.child("NickName").setValue(Img);

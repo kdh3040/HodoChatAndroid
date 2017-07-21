@@ -133,7 +133,7 @@ public class ViewProfile extends AppCompatActivity {
     }
 
     private void SaveFavoritePage() {
-        stFavoriteGroup.m_stFavorite[stmyData.getFavorite()].SetData(stTargetData.getEmail(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+        stFavoriteGroup.m_stFavorite[stmyData.getFavorite()].SetData(stmyData.getFavorite(), stTargetData.getEmail(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
     }
 
     private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
