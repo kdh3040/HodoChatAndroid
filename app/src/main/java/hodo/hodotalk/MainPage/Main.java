@@ -42,7 +42,7 @@ public class Main extends Fragment {
     public MyData stMyData = MyData.getInstance();
     public UserData stTargetData = new UserData();
     private HoDoDefine cDef = HoDoDefine.getInstance();
-    private FavoriteData_Group stFavoriteGroup = FavoriteData_Group.getInstance();
+
 
     public MainPage_Adapter mMainAdapter;
     private  RecyclerView recyclerView;
@@ -116,7 +116,6 @@ public class Main extends Fragment {
                         public void onClick(DialogInterface dialog, int id) {
                             if(stMyData.getHeart() >= cDef.getHeartCost()) {
                                 stMyData.setHeart(stMyData.getHeart() - cDef.getHeartCost());
-                                SaveFavoritePage();
                                 ViewProfilePage();
                             }
                         }
@@ -150,9 +149,7 @@ public class Main extends Fragment {
 
         return rootView;
     }
-    private void SaveFavoritePage() {
-        stFavoriteGroup.m_stFavorite[0].SetData(stTargetData.getEmail(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
-    }
+
 
     public void ViewProfilePage()
     {

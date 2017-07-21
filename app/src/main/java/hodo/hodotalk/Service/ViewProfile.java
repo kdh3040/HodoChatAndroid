@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.R;
@@ -43,7 +44,7 @@ public class ViewProfile extends AppCompatActivity {
     private ImageView imgProfile;
 
     private TextView txtProfile[] = new TextView[5];
-
+    private FavoriteData_Group stFavoriteGroup = FavoriteData_Group.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,9 @@ public class ViewProfile extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 if(stmyData.getHeart() > 5) {
                     stmyData.setHeart(stmyData.getHeart() - 5);
+                    stmyData.setFavorite(stmyData.getFavorite()+1);
                     SendHeartToFCM();
+                    SaveFavoritePage();
                 }
             }
 
@@ -127,6 +130,10 @@ public class ViewProfile extends AppCompatActivity {
         });
 
         newdlg.show();
+    }
+
+    private void SaveFavoritePage() {
+        stFavoriteGroup.m_stFavorite[stmyData.getFavorite()].SetData(stTargetData.getEmail(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
     }
 
     private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";

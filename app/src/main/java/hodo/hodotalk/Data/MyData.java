@@ -27,9 +27,11 @@ public class MyData {
     private String NickName;     // 닉네임
     private int    Religion;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
     private String Token;     // 토큰
+    private int    Favorite;     // 좋아요 보낸 숫자
 
 
     private static MyData  _Instance;
+
     public static MyData getInstance()
     {
         if(_Instance == null)
@@ -53,7 +55,7 @@ public class MyData {
         NickName = null;     // 닉네임
         Religion = 0;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
         Token = null;     // 토큰
-
+        Favorite = 0;
     }
 
     public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)
@@ -158,5 +160,13 @@ public class MyData {
 
     public int getBody() {
         return Body;
+    }
+
+    public int getFavorite() {
+        return  Favorite;
+    }
+
+    public void setFavorite(int _Favorite) {
+        Favorite = _Favorite;
     }
 }
