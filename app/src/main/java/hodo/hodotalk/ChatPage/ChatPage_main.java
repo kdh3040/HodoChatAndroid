@@ -17,6 +17,7 @@ public class ChatPage_main extends AppCompatActivity {
         setContentView(R.layout.chatpage_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //databaseList();
 
     }
 
