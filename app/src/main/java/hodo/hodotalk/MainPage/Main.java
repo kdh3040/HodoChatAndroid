@@ -15,12 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import hodo.hodotalk.Data.FavoritData;
-import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.R;
-import hodo.hodotalk.Service.ViewProfile;
+import hodo.hodotalk.ViewProfile;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.ItemClickSupport;
 
@@ -86,8 +84,8 @@ public class Main extends Fragment {
 
 
                 /// 테스트용
-                if(nAddView > 1)
-                    nAddView = 1;
+                if(nAddView > 5)
+                    nAddView = 5;
             }
         });
 

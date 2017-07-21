@@ -1,4 +1,4 @@
-package hodo.hodotalk.Service;
+package hodo.hodotalk;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,8 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -29,7 +27,6 @@ import java.net.URLConnection;
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
-import hodo.hodotalk.R;
 import hodo.hodotalk.Util.TransformValue;
 
 public class ViewProfile extends AppCompatActivity {

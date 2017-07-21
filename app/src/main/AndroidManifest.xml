@@ -47,7 +47,7 @@
             android:label="@string/title_activity_edit_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Service.ViewProfile"
+            android:name=".ViewProfile"
             android:label="@string/title_activity_view_profile"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 

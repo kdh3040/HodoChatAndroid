@@ -46,6 +46,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
 
+    private Bitmap bm;
 
     public TransformValue _TR = TransformValue.getInstance();
     private MainActivity cMA = new MainActivity();
@@ -74,6 +75,10 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     public void DelDataList()
     {
         items.clear();
+
+        if(bm != null)
+            bm.recycle();
+
     }
 
     public void AddData(int _idx)
@@ -121,12 +126,13 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
         //viewHolder.tvNature.setText(nature.getNickName());
         //viewHolder.imgThumbnail.setImageResource(nature.getThumbnail());
         try {
+
             String _url = stUserData.getImage();
             URL imageURL = new URL(_url);
             URLConnection ucon = imageURL.openConnection();
             ucon.connect();
             BufferedInputStream imagebuff = new BufferedInputStream(ucon.getInputStream(), (1024*50));
-            Bitmap bm = BitmapFactory.decodeStream(imagebuff);
+            bm = BitmapFactory.decodeStream(imagebuff);
             imagebuff.close();
             viewHolder.imgThumbnail.setImageBitmap(bm);
         }         catch (MalformedURLException e) {
@@ -164,5 +170,10 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
             tvNature = (TextView) itemView.findViewById(R.id.tv_des_nature);
 
         }
+    }
+
+    public void RecycleBMP()
+    {
+        bm.recycle();
     }
 }

@@ -43,9 +43,9 @@ import java.util.Map;
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference table;
             if(m_stMyData.getGender() == 0 )
-                table = database.getReference("Favorite/WOMAN" + tempStr);
+                table = database.getReference("Favorite/WOMAN/" + tempStr);
             else
-                table = database.getReference("Favorite/MAN" + tempStr);
+                table = database.getReference("Favorite/MAN/" + tempStr);
 
             DatabaseReference user = table.child(Integer.toString(_FavoriteIdx));
             user.child("Email").setValue(Email);

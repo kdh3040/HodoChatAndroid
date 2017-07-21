@@ -167,6 +167,27 @@ public class MyData {
     }
 
     public void setFavorite(int _Favorite) {
+
         Favorite = _Favorite;
+
+        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(Gender == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("Favorite", Favorite);
+        user.updateChildren(updateMap);
+
     }
+
+
 }
