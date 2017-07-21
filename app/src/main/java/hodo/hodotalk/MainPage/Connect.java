@@ -16,6 +16,7 @@ import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -85,6 +86,7 @@ public class Connect extends Fragment {
         try {
             String _url = m_stFavorite.m_stFavorite[0].getImg();
             URL imageURL = new URL(_url);
+
             URLConnection ucon = imageURL.openConnection();
             ucon.connect();
             BufferedInputStream imagebuff = new BufferedInputStream(ucon.getInputStream(), (1024*50));
