@@ -99,6 +99,8 @@ public class JoinActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        InitProfile_firebase();
+
         path = Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"/TEST_TEXT_WRITE";
 
         ImgProfile = (ImageView)findViewById(R.id.imageProfile);
@@ -204,7 +206,7 @@ public class JoinActivity extends AppCompatActivity {
         btnGender.setOnClickListener(listener);
         btnImg.setOnClickListener(listener);
 
-        InitProfile_firebase();
+
        // onTextWriting("test", "testBody");
     }
 

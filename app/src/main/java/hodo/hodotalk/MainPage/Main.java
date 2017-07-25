@@ -103,7 +103,7 @@ public class Main extends Fragment {
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 //Toast.makeText(Main.this, "클릭한 아이템의 이름은 ", Toast.LENGTH_SHORT).show();
                 Log.d("@@@@@", "!!!!!!");
-                stTargetData = mMainAdapter.SelectUser(position);
+                stTargetData = mMainAdapter.SelectUser(position + nAddView *4);
                 final String SendNick = stTargetData.getNickName();
                 if(SendNick != null)
                 {
