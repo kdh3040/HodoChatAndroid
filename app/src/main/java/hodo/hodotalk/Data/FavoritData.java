@@ -55,7 +55,8 @@ import java.util.Map;
             else
                 table = database.getReference("Favorite/MAN/" + tempStr);
 
-            DatabaseReference user = table.child(Integer.toString(_FavoriteIdx-1));
+            DatabaseReference user = table.child(Integer.toString(_FavoriteIdx));
+            //DatabaseReference user = table.child(NickName);
             user.child("Email").setValue(Email);
             user.child("Token").setValue(Token);
             user.child("NickName").setValue(NickName);

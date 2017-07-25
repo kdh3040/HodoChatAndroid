@@ -35,7 +35,8 @@ public class FavoriteData_Group {
 
     public void GetDataFromFCB(int _idx)
     {
-        m_stFavorite[_idx].GetDataFromFCB(_idx);
+        for(int i = 0; i< _idx; i++)
+            m_stFavorite[i].GetDataFromFCB(i);
     }
 
 

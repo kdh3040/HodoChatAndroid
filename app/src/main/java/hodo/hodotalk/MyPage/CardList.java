@@ -57,6 +57,8 @@ public class CardList extends Fragment {
 
         dynamicLayout = (LinearLayout)rootView.findViewById(R.id.dynamicLayout);
 
+
+
         for(int i = 0; i<getNumber; i++) {
 
             LinearLayout item = new LinearLayout(this.getContext());

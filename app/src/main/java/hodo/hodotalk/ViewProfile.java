@@ -108,9 +108,11 @@ public class ViewProfile extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 if(stmyData.getHeart() > 5) {
                     stmyData.setHeart(stmyData.getHeart() - 5);
-                    stmyData.setFavorite(stmyData.getFavorite()+1);
-                    SendHeartToFCM();
                     SaveFavoritePage();
+                    SendHeartToFCM();
+                    stmyData.setFavorite(stmyData.getFavorite()+1);
+
+
                 }
             }
 
