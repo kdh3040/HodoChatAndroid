@@ -59,7 +59,8 @@ import java.util.Map;
             user.child("Email").setValue(Email);
             user.child("Token").setValue(Token);
             user.child("NickName").setValue(NickName);
-            user.child("Img").setValue(Img);
+            //user.child("Img").setValue(Img);
+            user.child("Img").setValue("DummY");
 
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
             String str_date = df.format(new Date());
