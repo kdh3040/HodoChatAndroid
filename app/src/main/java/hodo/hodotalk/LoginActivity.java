@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         progDialog = new ProgressDialog(LoginActivity.this);
         mAuth = FirebaseAuth.getInstance();
         //로그인 정보 확인
+
         if(mAuth.getCurrentUser() != null){
             Log.d(TAG, "Current User:" + mAuth.getCurrentUser().getEmail());
             // 만약 회원이라면 메인으로 이동한다.
@@ -79,8 +80,22 @@ public class LoginActivity extends AppCompatActivity {
                 String passwd = edtPasswd.getText().toString().trim();
                 Log.d(TAG, "Email:" + email + " Password:" + passwd);
                 if(email != null && passwd != null) {
-                    mAuth.createUserWithEmailAndPassword(email, passwd);
-                    GotoMainPage(false);
+
+                    mAuth.createUserWithEmailAndPassword(email,passwd)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        GotoMainPage(false);
+                                    } else {
+                                        Toast.makeText(LoginActivity.this,
+                                                "이메일 형식이 아닙니다",
+                                                Toast.LENGTH_LONG).show();
+                                        int asdasd =0;
+                                        //보통 이메일이 이미 존재하거나, 이메일 형식이아니거나, 비밀번호가 6자리 이상이 아닐 때 발생 
+                                    }
+                                }
+                            });
                 }
             }
         });
