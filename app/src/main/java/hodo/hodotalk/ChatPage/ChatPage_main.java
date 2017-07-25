@@ -93,6 +93,7 @@ public class ChatPage_main extends AppCompatActivity {
         img_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                openImgLib();
 
             }
         });
@@ -149,6 +150,14 @@ public class ChatPage_main extends AppCompatActivity {
             }
         };
         m_DatabaseReference.addChildEventListener(m_ChildEventListener);
+    }
+
+    private void openImgLib() {
+
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
+        startActivity(intent);
+
     }
 
 }
