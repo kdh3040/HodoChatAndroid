@@ -8,14 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.R;
 
 /**
  * Created by mjk on 2017. 7. 21..
  */
 
-public class ChatPage_Adapter extends ArrayAdapter<ChatPage_ChatData>
-{
+public class ChatPage_Adapter extends ArrayAdapter<ChatPage_ChatData> {
+
+    MyData m_Mydata = MyData.getInstance();
 
     public ChatPage_Adapter(Context context, int resource) {
         super(context, resource);
@@ -41,8 +43,14 @@ public class ChatPage_Adapter extends ArrayAdapter<ChatPage_ChatData>
         }else{
             chatLayout = (ChatLayout)convertView.getTag();
         }
+
         ChatPage_ChatData chatPage_chatData = getItem(position);
-        chatLayout.mTxtUserName.setText(chatPage_chatData.senderName);
+
+        if(chatPage_chatData.senderName == m_Mydata.getNickName()){
+            chatLayout.mTxtUserName.setText(chatPage_chatData.senderName);
+        }else{
+            chatLayout.mTxtUserName.setText(chatPage_chatData.getterName);
+        }
         chatLayout.mTxtMsg.setText(chatPage_chatData.message);
         //chatLayout.mTxtTime.setText((int) chatPage_chatData.time);
         return convertView;
