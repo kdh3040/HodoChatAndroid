@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Api;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -74,16 +76,19 @@ public class Matching extends Fragment {
     public  void  SetData()
     {
         Random random = new Random();
-        nSel= random.nextInt(20);
+
+        // TODO : 2 빼야댐
+        nSel= random.nextInt(m_Def.getDownloadCnt()/2);
 
         Log.d("@#### ", "random : " + nSel);
 
         //MatchingImg.setImageBitmap();
         MatchingText.setText(m_UserData.m_stUserData[nSel].getNickName());
 
-        try {
 
-            if(bm != null)
+            MatchingImg.setImageResource(R.drawable.ic_menu_camera);
+           /*    try {
+     if(bm != null)
                 bm.recycle();
 
             String _url = m_UserData.m_stUserData[nSel].getImage();
@@ -99,7 +104,7 @@ public class Matching extends Fragment {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
