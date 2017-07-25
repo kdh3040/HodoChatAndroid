@@ -1,5 +1,6 @@
 package hodo.hodotalk.MainPage;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -21,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import hodo.hodotalk.ChatPage.ChatPage_main;
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.R;
 
@@ -77,6 +79,10 @@ public class Connect extends Fragment {
     }
 
     private void CreateChatRoom() {
+
+        Intent intent = new Intent(getContext(),ChatPage_main.class);
+        startActivity(intent);
+
 
     }
 
