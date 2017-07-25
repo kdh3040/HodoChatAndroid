@@ -83,7 +83,7 @@ import java.util.Map;
             ref1.child(Integer.toString(_idx)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Favorite_RecvData stRecvData = new Favorite_RecvData ();
+                    Favorite_RecvData stRecvData = new Favorite_RecvData();
                     stRecvData = dataSnapshot.getValue(Favorite_RecvData.class);
                     if(stRecvData != null)
                     {
