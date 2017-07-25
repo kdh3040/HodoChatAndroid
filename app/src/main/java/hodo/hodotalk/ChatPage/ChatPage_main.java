@@ -29,7 +29,8 @@ public class ChatPage_main extends AppCompatActivity {
     //private MyData m_MyData = MyData.getInstance();
 
     ListView m_listView;
-    Button button ;
+    Button button;
+    Button img_Button;
     EditText m_EditText;
     ChatPage_Adapter m_Adapter;
 
@@ -64,6 +65,7 @@ public class ChatPage_main extends AppCompatActivity {
 
 
         button=(Button)findViewById(R.id.btn_send);
+        img_Button = (Button)findViewById(R.id.btn_img);
         m_EditText=(EditText)findViewById(R.id.edit_message);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +86,13 @@ public class ChatPage_main extends AppCompatActivity {
 
 
                 }
+
+            }
+        });
+
+        img_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
             }
         });

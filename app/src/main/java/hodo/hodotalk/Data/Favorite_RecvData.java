@@ -10,4 +10,10 @@ public class Favorite_RecvData {
     String Img;
     String NickName;
     String Token;
+
+    public Favorite_RecvData() {
+
+
+    }
+
 }

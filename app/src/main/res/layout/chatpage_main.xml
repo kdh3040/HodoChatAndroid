@@ -18,11 +18,18 @@
         android:background="@android:color/darker_gray"
         android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btn_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="image"
+            android:layout_weight="0.05" />
+
         <EditText
             android:id="@+id/edit_message"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="0.77"/>
 
         <Button
             android:id="@+id/btn_send"
