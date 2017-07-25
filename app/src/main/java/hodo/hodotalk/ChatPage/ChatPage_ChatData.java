@@ -9,11 +9,12 @@ import java.util.Date;
 public class ChatPage_ChatData {
 
     public String firebaseKey;
-    public String userName;
+    public String senderName;
     public String userPhotoUrl;
-    public String userEmail;
+    public String getterName;
     public String message;
-    public String time;
+
+    //public long time;
 
 
 }

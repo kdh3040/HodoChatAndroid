@@ -1,81 +1,138 @@
 package hodo.hodotalk.ChatPage;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.util.List;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-import hodo.hodotalk.Data.FavoriteData_Group;
+import java.util.Random;
+
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.R;
 
 public class ChatPage_main extends AppCompatActivity {
 
-    private FavoriteData_Group m_favoriteData_group = FavoriteData_Group.getInstance();
-    private MyData m_MyData = MyData.getInstance();
+    //private FavoriteData_Group m_favoriteData_group = FavoriteData_Group.getInstance();
+    //private MyData m_MyData = MyData.getInstance();
 
-    ListView listView;
+    ListView m_listView;
     Button button ;
-    EditText editText;
+    EditText m_EditText;
+    ChatPage_Adapter m_Adapter;
+
+    FirebaseDatabase m_FirebaseDatabase;
+    DatabaseReference m_DatabaseReference;
+    DatabaseReference m_DatabaseReference2;
+
+    ChildEventListener m_ChildEventListener;
+    private String TAG ="hodo";
+    MyData m_Mydata = MyData.getInstance();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatpage_main);
+        Log.i("hodo","hh");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        listView.findViewById(R.id.list_message);
-        button.findViewById(R.id.btn_send);
-        editText.findViewById(R.id.edit_message);
+
+        m_listView=(ListView)findViewById(R.id.list_message);
+        m_Adapter = new ChatPage_Adapter(this, 0);
+        m_listView.setAdapter(m_Adapter);
+
+        final String sender = m_Mydata.getNickName();
+        final String getter = "target";
+
+        button=(Button)findViewById(R.id.btn_send);
+        m_EditText=(EditText)findViewById(R.id.edit_message);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String message = m_EditText.getText().toString();
+                if(!TextUtils.isEmpty(message)){
+                    m_EditText.setText("");
+                    ChatPage_ChatData chatData = new ChatPage_ChatData();
+
+                    chatData.senderName = sender;
+                    chatData.getterName = getter;
+                    chatData.message = message;
+                    //chatData.time = System.currentTimeMillis();
+                    m_DatabaseReference.push().setValue(chatData);
+                    m_DatabaseReference2.push().setValue(chatData);
+
+
+
+                }
 
             }
         });
 
+        m_FirebaseDatabase = FirebaseDatabase.getInstance();
+
+        m_DatabaseReference = m_FirebaseDatabase.getReference(sender+"_"+getter);
+        m_DatabaseReference2 = m_FirebaseDatabase.getReference(getter+"_"+sender);
 
 
 
-    class ChatAdapter extends BaseAdapter {
+        m_ChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-        @Override
-        public int getCount() {
-            return 0;
-        }
+                ChatPage_ChatData chatPage_chatData = dataSnapshot.getValue(ChatPage_ChatData.class);
 
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
+                chatPage_chatData.firebaseKey = dataSnapshot.getKey();
+                //Log.i("hodo",chatPage_chatData.firebaseKey);
+                m_Adapter.add(chatPage_chatData);
 
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+                m_listView.smoothScrollToPosition(m_Adapter.getCount());
 
 
-            return null;
-        }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String firebaseKey = dataSnapshot.getKey();
+
+                int count = m_Adapter.getCount();
+                for (int i = 0; i < count; i++) {
+                    if (m_Adapter.getItem(i).firebaseKey.equals(firebaseKey)) {
+                        m_Adapter.remove(m_Adapter.getItem(i));
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        m_DatabaseReference.addChildEventListener(m_ChildEventListener);
     }
-
-
-
-
 
 }

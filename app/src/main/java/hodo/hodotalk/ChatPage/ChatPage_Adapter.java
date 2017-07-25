@@ -34,7 +34,7 @@ public class ChatPage_Adapter extends ArrayAdapter<ChatPage_ChatData>
             chatLayout = new ChatLayout();
             chatLayout.mTxtUserName = convertView.findViewById(R.id.txt_userName);
             chatLayout.mTxtMsg = convertView.findViewById(R.id.txt_message);
-            chatLayout.mTxtTime =convertView.findViewById(R.id.txt_time);
+            //chatLayout.mTxtTime =convertView.findViewById(R.id.txt_time);
 
             convertView.setTag(chatLayout);
 
@@ -42,16 +42,16 @@ public class ChatPage_Adapter extends ArrayAdapter<ChatPage_ChatData>
             chatLayout = (ChatLayout)convertView.getTag();
         }
         ChatPage_ChatData chatPage_chatData = getItem(position);
-        chatLayout.mTxtUserName.setText(chatPage_chatData.userName);
+        chatLayout.mTxtUserName.setText(chatPage_chatData.senderName);
         chatLayout.mTxtMsg.setText(chatPage_chatData.message);
-        chatLayout.mTxtTime.setText(chatPage_chatData.time);
-        return super.getView(position, convertView, parent);
+        //chatLayout.mTxtTime.setText((int) chatPage_chatData.time);
+        return convertView;
     }
 
     private class ChatLayout {
         private TextView mTxtUserName;
         private TextView mTxtMsg;
-        private TextView mTxtTime;
+        //private TextView mTxtTime;
 
     }
 }
