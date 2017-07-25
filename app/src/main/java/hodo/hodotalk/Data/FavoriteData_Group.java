@@ -33,6 +33,10 @@ public class FavoriteData_Group {
             m_stFavorite[i] = new FavoritData();
     }
 
+    public void GetDataFromFCB(int _idx)
+    {
+        m_stFavorite[_idx].GetDataFromFCB(_idx);
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package hodo.hodotalk.ChatPage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,13 @@ public class ChatPage_main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatpage_main);
+
+
+        Intent intent = getIntent();
+        final String sender = m_Mydata.getNickName();
+        final String getter = intent.getStringExtra("TargetNick");
+
+
         Log.i("hodo","hh");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,8 +61,7 @@ public class ChatPage_main extends AppCompatActivity {
         m_Adapter = new ChatPage_Adapter(this, 0);
         m_listView.setAdapter(m_Adapter);
 
-        final String sender = m_Mydata.getNickName();
-        final String getter = "target";
+
 
         button=(Button)findViewById(R.id.btn_send);
         m_EditText=(EditText)findViewById(R.id.edit_message);

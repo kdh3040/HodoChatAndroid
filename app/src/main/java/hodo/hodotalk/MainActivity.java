@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity
 
     public static UserData_Group stUserData = UserData_Group.getInstance();
     public static MyData stMyData = MyData.getInstance();
+    public static FavoriteData_Group stFavorite = FavoriteData_Group.getInstance();
     private HoDoDefine cDef = HoDoDefine.getInstance();
     static int cnt;
 
@@ -243,6 +245,9 @@ public class MainActivity extends AppCompatActivity
                 {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.Favorite);
+
+                    for(int i=0; i<stMyData.getFavorite();i++)
+                        stFavorite.GetDataFromFCB(i);
                 }
             }
 
@@ -262,6 +267,9 @@ public class MainActivity extends AppCompatActivity
                 if(stRecvData != null) {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.Favorite);
+
+                    for(int i=0; i<stMyData.getFavorite();i++)
+                        stFavorite.GetDataFromFCB(i);
                 }
             }
 
@@ -270,6 +278,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
 
     }
     public int GetMyHeart()
