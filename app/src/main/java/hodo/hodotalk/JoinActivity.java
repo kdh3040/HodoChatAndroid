@@ -362,7 +362,7 @@ public class JoinActivity extends AppCompatActivity {
         user.child("Gender").setValue(nChoiceGender);
         user.child("Img").setValue(strImgUri);
 
-        m_stMyData.SetData(mAuth.getCurrentUser().getEmail(), FirebaseInstanceId.getInstance().getToken(), strImgUri, nChoiceGender, strChoiceNickName, 0, nChoiceAge, nChoiceBlood, nChoiceLoc, nChoiceRel, nChoiceJob, nChoiceBody);
+        m_stMyData.SetData(mAuth.getCurrentUser().getEmail(), FirebaseInstanceId.getInstance().getToken(), strImgUri, nChoiceGender, strChoiceNickName, 0, nChoiceAge, nChoiceBlood, nChoiceLoc, nChoiceRel, nChoiceJob, nChoiceBody, 0);
 
         Intent intent = new Intent(JoinActivity.this, MainActivity.class);
         intent.putExtra("MyGender", nChoiceGender);

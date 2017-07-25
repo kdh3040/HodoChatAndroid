@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
                 if(stRecvData != null)
                 {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
-                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.Favorite);
                 }
             }
 
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity
                 stRecvData = dataSnapshot.getValue(RecvData.class);
                 if(stRecvData != null) {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
-                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.Favorite);
                 }
             }
 

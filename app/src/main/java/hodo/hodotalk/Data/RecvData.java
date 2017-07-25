@@ -18,6 +18,7 @@ public class RecvData {
     public String NickName;     // 닉네임
     public int    Religion;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
     public String Token;     // 토큰
+    public  int Favorite;
 
 
     public RecvData()
@@ -34,7 +35,7 @@ public class RecvData {
         NickName = null;     // 닉네임
         Religion = 0;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
         Token = null;     // 토큰
-
+        Favorite = 0;
     }
 
     public  void SetDataAll(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)

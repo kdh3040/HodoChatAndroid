@@ -58,7 +58,7 @@ public class MyData {
         Favorite = 0;
     }
 
-    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)
+    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _Favorite)
     {
         Email = _Email;
         Token = _Token;
@@ -72,6 +72,7 @@ public class MyData {
         Job = _Job;
         Body = _Body;
         Heart = _Heart;
+        Favorite = _Favorite;
     }
 
     public  MyData GetDataAll()

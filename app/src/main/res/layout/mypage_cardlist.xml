@@ -1,112 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="hodo.hodotalk.MyPage.CardList">
-
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_list"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dip">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/cardlist_favorite"
-            android:layout_width="fill_parent"
-            android:layout_height="25dp"
-            android:gravity="center_vertical"
-            android:background="#C2C2C2"
-            android:text="내가 좋아하는 카드" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/dynamicLayout">
 
 
-        <ImageView
-            android:id="@+id/cardlist_ImageView"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_below="@+id/cardlist_favorite"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
-
-            <TextView
-                android:id="@+id/cardlist_ImageViewName"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="5dp"
-                android:gravity="center_horizontal"
-                android:layout_below="@+id/cardlist_ImageView"
-                android:text="내가 좋아하는 카드" />
-
-
-            <TextView
-                android:id="@+id/cardlist_favorite2"
-                android:layout_width="fill_parent"
-                android:layout_height="25dp"
-                android:gravity="center_vertical"
-                android:layout_below="@+id/cardlist_ImageViewName"
-                android:background="#C2C2C2"
-                android:text="내가 관심있는 카드" />
-
-            <ImageView
-                android:id="@+id/cardlist_ImageView2"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_below="@+id/cardlist_favorite2"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
-
-            <TextView
-                android:id="@+id/cardlist_ImageViewName2"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="5dp"
-                android:gravity="center_horizontal"
-                android:layout_below="@+id/cardlist_ImageView2"
-                android:text="내가 좋아하는 카드" />
-
-
-            <TextView
-                android:id="@+id/cardlist_favorite3"
-                android:layout_width="fill_parent"
-                android:layout_height="25dp"
-                android:gravity="center_vertical"
-                android:layout_below="@+id/cardlist_ImageViewName2"
-                android:background="#C2C2C2"
-                android:text="나에게 관심있는 카드" />
-
-            <ImageView
-                android:id="@+id/cardlist_ImageView3"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_below="@+id/cardlist_favorite3"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
-
-            <TextView
-                android:id="@+id/cardlist_ImageViewName3"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="5dp"
-                android:gravity="center_horizontal"
-                android:layout_below="@+id/cardlist_ImageView3"
-                android:text="내가 좋아하는 카드" />
-
-
-        </RelativeLayout>
     </LinearLayout>
-
-</FrameLayout>
+</ScrollView>

@@ -5,7 +5,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -52,6 +55,11 @@ import java.util.Map;
             user.child("Token").setValue(Token);
             user.child("NickName").setValue(Img);
             user.child("Img").setValue(NickName);
+
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+            String str_date = df.format(new Date());
+
+            user.child("Date").setValue(str_date);
 
         }
 
