@@ -33,13 +33,8 @@ import hodo.hodotalk.MainPage.Choice;
 import hodo.hodotalk.MainPage.Connect;
 import hodo.hodotalk.MainPage.Main;
 import hodo.hodotalk.MainPage.Matching;
-import hodo.hodotalk.MyPage.CardList;
 import hodo.hodotalk.MyPage.EditProfile;
-import hodo.hodotalk.MyPage.FAQ;
-import hodo.hodotalk.MyPage.HeartCharge;
-import hodo.hodotalk.MyPage.PopView;
-import hodo.hodotalk.MyPage.QA;
-import hodo.hodotalk.MyPage.Setting;
+import hodo.hodotalk.MyPage.MyPage_CardList;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
 
@@ -59,12 +54,7 @@ public class MainActivity extends AppCompatActivity
     private  Matching cMatching;
 
     // 마이 페이지
-    private  CardList cCardList;
-    private  FAQ cFAQ;
-    private  HeartCharge cHeartCharge;
-    private  PopView cPopView;
-    private  QA cQA;
-    private  Setting cSetting;
+
 
 
     public static UserData_Group stUserData = UserData_Group.getInstance();
@@ -164,13 +154,6 @@ public class MainActivity extends AppCompatActivity
         cConnect = Connect.newInstance();
         cMatching = Matching.newInstance();
 
-        cCardList = CardList.newInstance();
-        cFAQ = FAQ.newInstance();
-        cHeartCharge  = HeartCharge.newInstance();
-        cPopView = PopView.newInstance();
-        cQA = QA.newInstance();
-        cSetting = Setting.newInstance();
-
         getSupportFragmentManager()
                 .beginTransaction()
                 //.replace(R.id.fl_activity_main_container, cMain).commit();
@@ -244,7 +227,7 @@ public class MainActivity extends AppCompatActivity
                 if(stRecvData != null)
                 {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
-                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.Favorite);
+                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
                     for(int i=0; i<stMyData.getFavorite();i++)
                         stFavorite.GetDataFromFCB(i);
@@ -337,29 +320,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_cardlist) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fl_activity_main_container, cCardList).commit();
+            Intent intent = new Intent(MainActivity.this, MyPage_CardList.class);
+            startActivity(intent);
         } else if (id == R.id.nav_heartCharge) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fl_activity_main_container, cHeartCharge).commit();
+
         } else if (id == R.id.nav_popView) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fl_activity_main_container, cPopView).commit();
+
         } else if (id == R.id.nav_Setting) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fl_activity_main_container, cSetting).commit();
+
         } else if (id == R.id.nav_FAQ) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fl_activity_main_container, cFAQ).commit();
+
         } else if (id == R.id.nav_QA) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fl_activity_main_container, cQA).commit();
+
         }else if (id == R.id.nav_google_signin) {
            // signIn();
         }else if (id == R.id.nav_google_signout) {

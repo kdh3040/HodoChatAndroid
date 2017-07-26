@@ -122,11 +122,11 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
                 + "\n" + _TR.Transform_job(stUserData.getJob()) + "\n" + _TR.Transform_Body(stUserData.getBody()) + ", " + _TR.Transform_Blood(stUserData.getBlood());
         viewHolder.tvNature.setText(_Main);
 
-        //viewHolder.imgThumbnail.setImageResource(R.drawable.ic_menu_gallery);
+        viewHolder.imgThumbnail.setImageResource(R.drawable.ic_menu_gallery);
 
         //viewHolder.tvNature.setText(nature.getNickName());
         //viewHolder.imgThumbnail.setImageResource(nature.getThumbnail());
-        try {
+      /*  try {
 
             String _url = stUserData.getImage();
             URL imageURL = new URL(_url);
@@ -140,7 +140,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override

@@ -27,7 +27,11 @@ public class MyData {
     private String NickName;     // 닉네임
     private int    Religion;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
     private String Token;     // 토큰
-    private int    Favorite;     // 좋아요 보낸 숫자
+    private int    SendHeart;     // 하트 보낸 횟수
+    private int    RecvHeart;     // 하트 받은 횟수
+    private int    SendInter;     // 관심 보낸 횟수
+    private int    RecvInter;     // 관심 받은 횟수
+
 
 
     private static MyData  _Instance;
@@ -55,10 +59,13 @@ public class MyData {
         NickName = null;     // 닉네임
         Religion = 0;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
         Token = null;     // 토큰
-        Favorite = 0;
+        SendHeart = 0;     // 하트 보낸 횟수
+        RecvHeart= 0;     // 하트 받은 횟수
+        SendInter= 0;     // 관심 보낸 횟수
+        RecvInter= 0;     // 관심 받은 횟수
     }
 
-    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _Favorite)
+    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _SendHeart, int _RecvHeart, int _SendInter, int _RecvInter)
     {
         Email = _Email;
         Token = _Token;
@@ -72,7 +79,10 @@ public class MyData {
         Job = _Job;
         Body = _Body;
         Heart = _Heart;
-        Favorite = _Favorite;
+        SendHeart = _SendHeart;     // 하트 보낸 횟수
+        RecvHeart= _RecvHeart;     // 하트 받은 횟수
+        SendInter= _SendInter;     // 관심 보낸 횟수
+        RecvInter= _RecvInter;     // 관심 받은 횟수
     }
 
     public  MyData GetDataAll()
@@ -163,13 +173,23 @@ public class MyData {
         return Body;
     }
 
-    public int getFavorite() {
-        return  Favorite;
+
+    public int getSendInter() {
+        return  SendInter;
+    }
+    public int getRecvHeart() {
+        return  RecvHeart;
+    }
+    public int getRecvInter() {
+        return  RecvInter;
+    }
+    public int getSendHeart() {
+        return  SendHeart;
     }
 
-    public void setFavorite(int _Favorite) {
+    public void SetSendHeart(int _SendHeart) {
 
-        Favorite = _Favorite;
+        SendHeart = _SendHeart;
 
         int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
         String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
@@ -185,10 +205,77 @@ public class MyData {
         DatabaseReference user = table.child(tempStr);
 
         Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put("Favorite", Favorite);
+        updateMap.put("SendHeart", SendHeart);
         user.updateChildren(updateMap);
-
     }
 
+
+    public void SetRecvHeart(int _RecvHeart) {
+
+        RecvHeart = _RecvHeart;
+
+        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(Gender == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("RecvHeart", RecvHeart);
+        user.updateChildren(updateMap);
+    }
+
+
+    public void SetSendInter(int _SendInter) {
+
+        SendInter = _SendInter;
+
+        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(Gender == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("SendInter", SendInter);
+        user.updateChildren(updateMap);
+    }
+
+
+    public void SetRecvInter(int _RecvInter) {
+
+        RecvInter = _RecvInter;
+
+        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(Gender == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("RecvInter", RecvInter);
+        user.updateChildren(updateMap);
+    }
 
 }

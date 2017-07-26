@@ -78,14 +78,16 @@ public class Main extends Fragment {
             public void onClick(View v)
             {
                 nAddView++;
+                /// 테스트용
+                if(nAddView > 5)
+                    nAddView = 5;
+
                 mMainAdapter.DelDataList();
                 mMainAdapter.AddData(nAddView);
                 RefreshItem();
 
 
-                /// 테스트용
-                if(nAddView > 5)
-                    nAddView = 5;
+
             }
         });
 

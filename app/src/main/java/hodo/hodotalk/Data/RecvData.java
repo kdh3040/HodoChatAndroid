@@ -18,7 +18,10 @@ public class RecvData {
     public String NickName;     // 닉네임
     public int    Religion;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
     public String Token;     // 토큰
-    public  int Favorite;
+    public int    SendHeart;     // 하트 보낸 횟수
+    public int    RecvHeart;     // 하트 받은 횟수
+    public int    SendInter;     // 관심 보낸 횟수
+    public int    RecvInter;     // 관심 받은 횟수
 
 
     public RecvData()
@@ -35,23 +38,10 @@ public class RecvData {
         NickName = null;     // 닉네임
         Religion = 0;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
         Token = null;     // 토큰
-        Favorite = 0;
-    }
-
-    public  void SetDataAll(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)
-    {
-        Email = _Email;
-        Token = _Token;
-        Img = _Img;
-        Gender = _Gender;
-        NickName = _NickName;
-        Age = _Age;
-        Blood = _Blood;
-        Location = _Loc;
-        Religion = _Rel;
-        Job = _Job;
-        Body = _Body;
-        Heart = _Heart;
+        SendHeart = 0;     // 하트 보낸 횟수
+        RecvHeart= 0;     // 하트 받은 횟수
+        SendInter= 0;     // 관심 보낸 횟수
+        RecvInter= 0;     // 관심 받은 횟수
     }
 
 }
