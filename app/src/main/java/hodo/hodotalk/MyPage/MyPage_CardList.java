@@ -32,9 +32,11 @@ public class MyPage_CardList extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        int getNumber = m_Mydata.getFavorite();
+        int getNumber = m_Mydata.getSendHeart();
 
         dynamicLayout = (LinearLayout)findViewById(R.id.dynamicLayout);
+
+
 
         for(int i = 0; i<getNumber; i++) {
 
@@ -42,7 +44,7 @@ public class MyPage_CardList extends AppCompatActivity {
             item.setOrientation(LinearLayout.HORIZONTAL);
 
             Button newTextView = new Button(getApplicationContext());
-            newTextView.setText(m_Favorite.m_stFavorite[i].getNickName());
+            newTextView.setText(m_Favorite.m_SendHeart[i].getNickName());
             item.addView(newTextView);
 
             newTextView.setId(i + 1);
@@ -52,7 +54,7 @@ public class MyPage_CardList extends AppCompatActivity {
                     Log.d("log", "position :" + finalI);
 
                     Intent intent = new Intent(getApplicationContext(), ChatPage_main.class);
-                    intent.putExtra("TargetNick", m_Favorite.m_stFavorite[finalI].getNickName());
+                    intent.putExtra("TargetNick", m_Favorite.m_SendHeart[finalI].getNickName());
                     startActivity(intent);
                 }
             });

@@ -159,11 +159,10 @@ public class Matching extends Fragment {
             public void onClick(DialogInterface dialog, int id) {
                 if(m_MyData.getHeart() >= m_Def.getHeartCost()) {
                     m_MyData.setHeart(m_MyData.getHeart() - m_Def.getHeartCost());
-                    m_MyData.setFavorite(m_MyData.getFavorite()+1);
+                //    m_MyData.setFavorite(m_MyData.getFavorite()+1);
 
                     // SendHeartToFCM();  FCM 으로 푸쉬 날리기
 
-                    SaveFavoritePage();
                 }
             }
         });
@@ -184,11 +183,6 @@ public class Matching extends Fragment {
     private void NextMatching() {
 
         refreshView();
-    }
-
-    private void SaveFavoritePage() {
-        stFavoriteGroup.m_stFavorite[m_MyData.getFavorite()].SetData(m_MyData.getFavorite(), m_UserData.m_stUserData[nSel].getEmail(), m_UserData.m_stUserData[nSel].getToken(),
-                m_UserData.m_stUserData[nSel].getImage(), m_UserData.m_stUserData[nSel].getNickName());
     }
 
 }

@@ -5,6 +5,7 @@ package hodo.hodotalk.Data;
  */
 
 public class Favorite_RecvData {
+    String PushKey;
     String Date;
     String Email;
     String Img;
@@ -12,8 +13,14 @@ public class Favorite_RecvData {
     String Token;
 
     public Favorite_RecvData() {
+    }
 
-
+    public void SetData(String _Date, String _Email, String _Img, String _NickName, String _Token) {
+        Date = _Date;
+        Email = _Email;
+        Img = _Img;
+        NickName = _NickName;
+        Token = _Token;
     }
 
 }

@@ -94,6 +94,8 @@ public class UserData implements Serializable{
         return Token;
     }
 
+    public int getGender(){return  Gender;}
+
     public String getNickName() {
         return NickName;
     }

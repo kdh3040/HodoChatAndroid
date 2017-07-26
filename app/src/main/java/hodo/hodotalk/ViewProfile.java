@@ -108,9 +108,11 @@ public class ViewProfile extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 if(stmyData.getHeart() > 5) {
                     stmyData.setHeart(stmyData.getHeart() - 5);
-                    stmyData.setFavorite(stmyData.getFavorite()+1);
+                    SaveCardList(0);
                     SendHeartToFCM();
-                    SaveFavoritePage();
+                    stmyData.SetSendHeart(stmyData.getSendHeart()+1);
+
+
                 }
             }
 
@@ -129,8 +131,33 @@ public class ViewProfile extends AppCompatActivity {
         newdlg.show();
     }
 
-    private void SaveFavoritePage() {
-        stFavoriteGroup.m_stFavorite[stmyData.getFavorite()].SetData(stmyData.getFavorite(), stTargetData.getEmail(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+    private void SaveCardList(int _idx) {
+        switch (_idx)
+        {
+            case 0:
+            {
+                stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetMyData(_idx, stmyData.getSendHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetTargetData(_idx, stmyData.getSendHeart(), stmyData.getEmail(),  stTargetData.getEmail(), stTargetData.getGender(), stmyData.getImg(), stmyData.getNickName());
+                break;
+            }
+            case 1:
+            {
+                stFavoriteGroup.m_RecvHeart[stmyData.getRecvHeart()].SetMyData(_idx, stmyData.getRecvHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                break;
+            }
+            case 2:
+            {
+                stFavoriteGroup.m_RecvInter[stmyData.getRecvInter()].SetMyData(_idx, stmyData.getRecvInter(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                break;
+            }
+            case 3:
+            {
+                stFavoriteGroup.m_SendInter[stmyData.getSendInter()].SetMyData(_idx, stmyData.getSendInter(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                break;
+            }
+        }
+
+
     }
 
     private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";

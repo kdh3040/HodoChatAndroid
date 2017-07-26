@@ -6,9 +6,13 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import hodo.hodotalk.Data.FavoriteData_Group;
+import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.R;
 
 /**
@@ -17,6 +21,9 @@ import hodo.hodotalk.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private final static String TAG = "FCM_MESSAGE";
+
+    private FavoriteData_Group m_CardList = FavoriteData_Group.getInstance();
+    private MyData m_MyData = MyData.getInstance();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -27,6 +34,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             int idx = body.indexOf("님");
             String tempStr =  body.substring(0, idx);
+
 
             if (remoteMessage.getData().size() > 0) {
                 Log.d(TAG, "Message data payload: " + remoteMessage.getData());

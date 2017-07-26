@@ -31,7 +31,7 @@ public class MyData {
     private int    RecvHeart;     // 하트 받은 횟수
     private int    SendInter;     // 관심 보낸 횟수
     private int    RecvInter;     // 관심 받은 횟수
-
+    private String  PushKey;     // 하트 보낸 횟수
 
 
     private static MyData  _Instance;
@@ -63,6 +63,7 @@ public class MyData {
         RecvHeart= 0;     // 하트 받은 횟수
         SendInter= 0;     // 관심 보낸 횟수
         RecvInter= 0;     // 관심 받은 횟수
+        PushKey = null;
     }
 
     public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _SendHeart, int _RecvHeart, int _SendInter, int _RecvInter)
@@ -138,6 +139,9 @@ public class MyData {
 
     public String getNickName() {
         return NickName;
+    }
+    public String getImg() {
+        return Img;
     }
 
     public void UpdateMyProfile(int age, int blood, int location, int religion, int job, int body) {
@@ -278,4 +282,23 @@ public class MyData {
         user.updateChildren(updateMap);
     }
 
+    public void setPushKey(String tempStr, String _idx, int _FavoriteIdx, String favoritePushKey) {
+
+        PushKey = favoritePushKey;
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(Gender == 0)
+            table = database.getReference("Account/WOMAN" + "/" + tempStr + "/PushKey/" + _idx);
+        else
+            table = database.getReference("CardList/MAN" + "/" + tempStr + "/PushKey/" + _idx);
+
+        DatabaseReference user = table.child(Integer.toString(_FavoriteIdx));
+
+        user.child("PushKey").setValue(PushKey);
+
+
+
+    }
 }

@@ -1,12 +1,5 @@
 package hodo.hodotalk.Data;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import hodo.hodotalk.Util.HoDoDefine;
 
 /**
@@ -16,7 +9,11 @@ import hodo.hodotalk.Util.HoDoDefine;
 public class FavoriteData_Group {
 
     private HoDoDefine cDef = HoDoDefine.getInstance();
-    public FavoritData m_stFavorite[] = new FavoritData[cDef.getDownloadCnt()];
+    public FavoritData m_SendHeart[] = new FavoritData[cDef.getDownloadCnt()];
+    public FavoritData m_RecvHeart[] = new FavoritData[cDef.getDownloadCnt()];
+    public FavoritData m_SendInter[] = new FavoritData[cDef.getDownloadCnt()];
+    public FavoritData m_RecvInter[] = new FavoritData[cDef.getDownloadCnt()];
+
 
     private static FavoriteData_Group _Instance;
     public static FavoriteData_Group getInstance()
@@ -29,14 +26,60 @@ public class FavoriteData_Group {
 
     private FavoriteData_Group()
     {
-        for(int i = 0; i< cDef.getDownloadCnt(); i++)
-            m_stFavorite[i] = new FavoritData();
+        for(int i = 0; i< cDef.getDownloadCnt(); i++) {
+            m_SendHeart[i] = new FavoritData();
+            m_RecvHeart[i] = new FavoritData();
+            m_SendInter[i] = new FavoritData();
+            m_RecvInter[i] = new FavoritData();
+        }
     }
 
-    public void GetDataFromFCB(int _idx)
+    public void SetSendHeartData(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName)
     {
-        m_stFavorite[_idx].GetDataFromFCB(_idx);
+        for(int i = 0; i< _idx; i++)
+            m_SendHeart[i].SetMyData(0, i, _Email, _Gender, _Token, _Img, _NickName);
     }
+    public void SetRecvHeart(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_RecvHeart[i].SetMyData(1, i, _Email, _Gender, _Token, _Img, _NickName);
+    }
+    public void SetRecvInterData(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_RecvInter[i].SetMyData(2, i, _Email, _Gender, _Token, _Img, _NickName);
+    }
+
+    public void SetSendInterData(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_SendInter[i].SetMyData(3, i, _Email, _Gender, _Token, _Img, _NickName);
+    }
+
+
+    public void GetSendHeartData(int _idx)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_SendHeart[i].GetSendData(0, i);
+    }
+
+    public void GetRecvHeart(int _idx)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_RecvHeart[i].GetRecvData(1, i);
+    }
+    public void GetRecvInterData(int _idx)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_RecvInter[i].GetRecvData(2, i);
+    }
+
+    public void GetSendInterData(int _idx)
+    {
+        for(int i = 0; i< _idx; i++)
+            m_SendInter[i].GetSendData(3, i);
+    }
+
 
 
 }

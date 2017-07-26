@@ -87,7 +87,7 @@ public class Connect extends Fragment {
     }
 
     private void SetData() {
-        tvIam.setText(m_stFavorite.m_stFavorite[0].getNickName());
+/*        tvIam.setText(m_stFavorite.m_stFavorite[0].getNickName());
 
         try {
             String _url = m_stFavorite.m_stFavorite[0].getImg();
@@ -103,6 +103,6 @@ public class Connect extends Fragment {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

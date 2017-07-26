@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         //handle databaseError
+                        Toast toast = Toast.makeText(getApplicationContext(), "유져 데이터 cancelled", Toast.LENGTH_SHORT);
                     }
                 });
     }
@@ -215,30 +216,41 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref1, ref2;
-        ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
+        DatabaseReference ref;
+        if(nMyGender == 0)
+            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
+        else
+            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
 
-        ref1.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+ /*       FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref1, ref2;
+        ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");*/
+
+        ref.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                RecvData stRecvData = new RecvData ();
+                RecvData stRecvData = new RecvData();
                 stRecvData = dataSnapshot.getValue(RecvData.class);
-                if(stRecvData != null)
-                {
+                if (stRecvData != null) {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
-                    for(int i=0; i<stMyData.getFavorite();i++)
-                        stFavorite.GetDataFromFCB(i);
+                    stFavorite.GetSendHeartData(stRecvData.SendHeart);
+                    stFavorite.GetRecvInterData(stRecvData.RecvHeart);
+                    stFavorite.GetSendInterData(stRecvData.SendInter);
+                    stFavorite.GetRecvInterData(stRecvData.RecvInter);
+
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast toast = Toast.makeText(getApplicationContext(), "마이 데이터 cancelled", Toast.LENGTH_SHORT);
             }
         });
+
+
+/*
 
         ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
 
@@ -261,6 +273,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+*/
 
 
 
