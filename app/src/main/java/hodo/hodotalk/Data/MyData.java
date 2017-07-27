@@ -6,7 +6,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -213,6 +216,53 @@ public class MyData {
         user.updateChildren(updateMap);
     }
 
+
+
+    public  void SetRecvHeartData(int _idx, String Email,  String _Img, String _NickName)
+    {
+
+        String idxStr = null;
+        switch (_idx)
+        {
+            case 0:
+            {
+                idxStr = "/RecvHeart/";
+                break;
+            }
+            case 1:
+            {
+                idxStr = "/RecvInter/";
+                break;
+            }
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        String tempStr = getEmail();
+        int idx = tempStr.indexOf("@");
+        String tempStr2 =  tempStr.substring(0, idx);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        String str_date = df.format(new Date());
+
+        if(getGender() == 0)
+            table = database.getReference("CardList/WOMAN/" + tempStr2 + idxStr);
+        else
+            table = database.getReference("CardList/MAN/" + tempStr2 + idxStr);
+
+        RecvHeart cRecvData = new RecvHeart();
+
+        cRecvData.Email = Email;
+        cRecvData.Img = _Img;
+        cRecvData.NickName = _NickName;
+        cRecvData.Date = str_date;
+
+        DatabaseReference user = table;
+        user.push().setValue(cRecvData);
+
+        SetRecvHeart(getRecvHeart()+1);
+    }
 
     public void SetRecvHeart(int _RecvHeart) {
 

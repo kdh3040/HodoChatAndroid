@@ -22,7 +22,7 @@ public class HoDoDefine {
 
     private HoDoDefine()
     {
-        nDownloadCnt = 20;
+        nDownloadCnt = 50;
         nViewListCnt = 4;
         nHeartCost =5;
     }

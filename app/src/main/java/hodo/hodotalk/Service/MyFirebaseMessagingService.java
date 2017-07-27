@@ -1,6 +1,7 @@
 package hodo.hodotalk.Service;
 
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -43,19 +44,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String body = remoteMessage.getNotification().getBody();
             Log.d(TAG, "Notification Body: " + body);
 
-            int idx = body.indexOf("#");
-            String targetEmail =  body.substring(0, idx);
-
-            int idx1 = body.indexOf("$");
-            String targetImg =  body.substring(idx+1, idx1);
-
-            int idx2 = body.indexOf("님");
-            String targetNick=  body.substring(idx1+1, idx2);
-
-            SetTargetData(0, targetEmail, targetImg, targetNick);
+            //Map<String, String> data = remoteMessage.getData();
 
 
-            String NotiStr=  body.substring(idx1 + 1);
+
+            //SetTargetData(0, data.get("Email"), data.get("Img"), data.get("NickName"));
 
             if (remoteMessage.getData().size() > 0) {
                 Log.d(TAG, "Message data payload: " + remoteMessage.getData());
@@ -66,24 +59,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             }
 
+            else {
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                PendingIntent pending = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
-                    .setSmallIcon(R.mipmap.ic_launcher) // 알림 영역에 노출 될 아이콘.
-                    .setContentTitle(getString(R.string.app_name)) // 알림 영역에 노출 될 타이틀
-                    .setContentText(NotiStr); // Firebase Console 에서 사용자가 전달한 메시지내용
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.mipmap.ic_launcher) // 알림 영역에 노출 될 아이콘.
+                        .setContentTitle(getString(R.string.app_name)) // 알림 영역에 노출 될 타이틀
+                        .setContentText(body) // Firebase Console 에서 사용자가 전달한 메시지내용
+                        .setContentIntent(pending);
 
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-            notificationManagerCompat.notify(0x1001, notificationBuilder.build());
+                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+                notificationManagerCompat.notify(0x1001, notificationBuilder.build());
+            }
+/*            Intent intent = new Intent(Intent.ACTION_VIEW);*/
 
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+
+            //Intent intent = new Intent(this, LoginActivity.class);
+            //startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
 
         }
     }
 
 
-    public  void SetTargetData(int _idx, String Email,  String _Img, String _NickName)
+    /*public  void SetTargetData(int _idx, String Email,  String _Img, String _NickName)
     {
 
         String idxStr = null;
@@ -111,7 +113,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
         String str_date = df.format(new Date());
 
-        table = database.getReference("CardList/MAN/" + tempStr2 + idxStr);
+        if(m_MyData.getGender() == 0)
+            table = database.getReference("CardList/WOMAN/" + tempStr2 + idxStr);
+        else
+            table = database.getReference("CardList/MAN/" + tempStr2 + idxStr);
 
         RecvHeart cRecvData = new RecvHeart();
 
@@ -124,6 +129,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         user.push().setValue(cRecvData);
 
         m_MyData.SetRecvHeart(m_MyData.getRecvHeart()+1);
-    }
+    }*/
 
 }

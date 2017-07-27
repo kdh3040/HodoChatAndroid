@@ -110,15 +110,17 @@ public class MainActivity extends AppCompatActivity
 
         Log.d("!!!!!", "firebase start----");
         InitProfile_firebase();
-        InitData_firebase();
+
 
         Log.d("!!!!!", "firebase End----");
     }
 
     public  void InitData_firebase()
     {
+
+
         DatabaseReference ref;
-        if(nMyGender == 0)
+        if(stMyData.getGender() == 0)
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
         else
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                     stFavorite.GetRecvInterData(stRecvData.RecvHeart);
                     stFavorite.GetSendInterData(stRecvData.SendInter);
                     stFavorite.GetRecvInterData(stRecvData.RecvInter);
-
+                    InitData_firebase();
                 }
             }
 
@@ -266,6 +268,7 @@ public class MainActivity extends AppCompatActivity
                     stFavorite.GetRecvInterData(stRecvData.RecvHeart);
                     stFavorite.GetSendInterData(stRecvData.SendInter);
                     stFavorite.GetRecvInterData(stRecvData.RecvInter);
+                    InitData_firebase();
                 }
             }
 

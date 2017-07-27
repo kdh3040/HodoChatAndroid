@@ -148,17 +148,17 @@ public class UserData implements Serializable{
         return Img;
     }
 
-    public void SetRecvHeart(String _Email, int _Gender, int _RecvHeart) {
+    public void SetRecvHeart(String TargetEmail, int TargetGender, int _RecvHeart) {
 
         RecvHeart = _RecvHeart;
 
-        int idx = _Email.indexOf("@");
-        String tempStr =  _Email.substring(0, idx);
+        int idx = TargetEmail.indexOf("@");
+        String tempStr =  TargetEmail.substring(0, idx);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
 
-        if(_Gender == 0)
+        if(TargetGender == 0)
             table = database.getReference("Account/WOMAN");
         else
             table = database.getReference("Account/MAN");
@@ -169,4 +169,53 @@ public class UserData implements Serializable{
         updateMap.put("RecvHeart", RecvHeart);
         user.updateChildren(updateMap);
     }
+
+
+
+    public  void SetRecvHeartData(int _idx, String TargetEmail, int TargetGender, String MyEmail, String MyImg, String MyNickName)
+    {
+
+        String idxStr = null;
+        switch (_idx)
+        {
+            case 0:
+            {
+                idxStr = "/RecvHeart/";
+                break;
+            }
+            case 1:
+            {
+                idxStr = "/RecvInter/";
+                break;
+            }
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        String tempStr = TargetEmail;
+        int idx = tempStr.indexOf("@");
+        String tempStr2 =  tempStr.substring(0, idx);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        String str_date = df.format(new Date());
+
+        if(TargetGender == 0)
+            table = database.getReference("CardList/WOMAN/" + tempStr2 + idxStr);
+        else
+            table = database.getReference("CardList/MAN/" + tempStr2 + idxStr);
+
+        RecvHeart cRecvData = new RecvHeart();
+
+        cRecvData.Email = MyEmail;
+        cRecvData.Img = MyImg;
+        cRecvData.NickName = MyNickName;
+        cRecvData.Date = str_date;
+
+        DatabaseReference user = table;
+        user.push().setValue(cRecvData);
+
+        SetRecvHeart(TargetEmail, TargetGender, getRecvHeart()+1);
+    }
+
 }
