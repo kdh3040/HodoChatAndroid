@@ -41,57 +41,6 @@ import java.util.Map;
             Date = null;
         }
 
-    public  void SetTargetData(int _idx, int _FavoriteIdx, String _MyEmail, String _Email, int _Gender, String _Img, String _NickName)
-    {
-        String idxStr = null;
-        switch (_idx)
-        {
-            case 0:
-            {
-                idxStr = "/RecvHeart/";
-                break;
-            }
-            case 1:
-            {
-                idxStr = "/RecvHeart/";
-                break;
-            }
-            case 2:
-            {
-                idxStr = "/RecvInter/";
-                break;
-            }
-            case 3:
-            {
-                idxStr = "/RecvInter/";
-                break;
-            }
-        }
-
-        Email = _Email;
-        Img = _Img;
-        NickName = _NickName;
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
-        String str_date = df.format(new Date());
-
-        int idx = Email.indexOf("@");
-        String tempStr =  Email.substring(0, idx);
-
-        m_ValueFavorite.SetData(str_date, _MyEmail, Img, NickName, null);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        if(_Gender == 0 )
-            table = database.getReference("CardList/WOMAN/" + tempStr + idxStr);
-        else
-            table = database.getReference("CardList/MAN/" + tempStr + idxStr);
-
-        DatabaseReference user = table.push();
-
-        user.setValue(m_ValueFavorite);
-    }
-
         public  void SetMyData(int _idx, int _FavoriteIdx, String _Email, int _Gender, String _Token, String _Img, String _NickName)
         {
 

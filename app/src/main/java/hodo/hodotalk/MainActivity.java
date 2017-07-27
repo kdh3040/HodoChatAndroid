@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity
                             stRecvData = fileSnapshot.getValue(RecvData.class);
                             if(stRecvData != null) {
                                 stUserData.m_stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
-                                        stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body);
+                                        stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.RecvHeart, stRecvData.RecvInter);
                             }
                         }
                         initTab();
@@ -222,11 +222,15 @@ public class MainActivity extends AppCompatActivity
         else
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
 
+        DatabaseReference ref1, ref2;
+        ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
+        ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
  /*       FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref1, ref2;
         ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");*/
 
-        ref.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+        //ref.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref1.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecvData stRecvData = new RecvData();
@@ -249,11 +253,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-/*
-
-        ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
-
         ref2.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -261,10 +260,12 @@ public class MainActivity extends AppCompatActivity
                 stRecvData = dataSnapshot.getValue(RecvData.class);
                 if(stRecvData != null) {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
-                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.Favorite);
+                            stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
-                    for(int i=0; i<stMyData.getFavorite();i++)
-                        stFavorite.GetDataFromFCB(i);
+                    stFavorite.GetSendHeartData(stRecvData.SendHeart);
+                    stFavorite.GetRecvInterData(stRecvData.RecvHeart);
+                    stFavorite.GetSendInterData(stRecvData.SendInter);
+                    stFavorite.GetRecvInterData(stRecvData.RecvInter);
                 }
             }
 
@@ -273,7 +274,7 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-*/
+
 
 
 

@@ -1,6 +1,15 @@
 package hodo.hodotalk.Data;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by boram on 2017-07-18.
@@ -15,13 +24,14 @@ public class UserData implements Serializable{
     private int    Body;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
     private String Email; // email 주소에서 @ 이전까지의 값.
     private int    Gender;       // 성별 (1: 여자, 2: 남자)
-    private int    Heart;
     private String Img;
     private int    Job;           // 직업
     private int    Location;     // 지역 ( 1: 서울, 2: 경기도 3: 부산 4: 인천 5: 경남 6: 경북 7: 대구 8: 전북 9: 전남 10: 광주 11: 대전 12: 울산 13: 강원 14: 충북 15: 충남 16 : 세종 17: 제주)
     private String NickName;     // 닉네임
     private int    Religion;     // 종교 ( 0: 무교 1: 불교 2; 기독 4: 천주 5: 원불 6: 유교 7: 이슬람)
     private String Token;     // 토큰
+    private int    RecvHeart;       // 성별 (1: 여자, 2: 남자)
+    private int    RecvInter;       // 성별 (1: 여자, 2: 남자)
 
 /*
     private static UserData  _Instance;
@@ -41,7 +51,8 @@ public class UserData implements Serializable{
         Body =0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
         Email = null; // email 주소에서 @ 이전까지의 값.
         Gender = 0;       // 성별 (1: 여자, 2: 남자)
-        Heart = 0;
+        RecvHeart = 0;
+        RecvInter = 0;
         Img = null;
         Job = 0;           // 직업
         Location = 0;     // 지역 ( 1: 서울, 2: 경기도 3: 부산 4: 인천 5: 경남 6: 경북 7: 대구 8: 전북 9: 전남 10: 광주 11: 대전 12: 울산 13: 강원 14: 충북 15: 충남 16 : 세종 17: 제주)
@@ -51,7 +62,7 @@ public class UserData implements Serializable{
 
     }
 
-    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body)
+    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _RecvHeart, int _RecvInter)
     {
         Email = _Email;
         Token = _Token;
@@ -64,6 +75,8 @@ public class UserData implements Serializable{
         Religion = _Rel;
         Job = _Job;
         Body = _Body;
+        RecvHeart = _RecvHeart;
+        RecvInter = _RecvInter;
     }
 
     public  UserData GetDataAll()
@@ -80,7 +93,6 @@ public class UserData implements Serializable{
         rtClass.Location = Location;
         rtClass.Religion = Religion;
         rtClass.Job = Job;
-        rtClass.Heart = Heart;
         rtClass.Body = Body;
 
         return  rtClass;
@@ -124,7 +136,37 @@ public class UserData implements Serializable{
         return Blood;
     }
 
+    public int getRecvHeart() {
+        return RecvHeart;
+    }
+
+    public int getRecvInter() {
+        return RecvInter;
+    }
+
     public String getImage() {
         return Img;
+    }
+
+    public void SetRecvHeart(String _Email, int _Gender, int _RecvHeart) {
+
+        RecvHeart = _RecvHeart;
+
+        int idx = _Email.indexOf("@");
+        String tempStr =  _Email.substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        if(_Gender == 0)
+            table = database.getReference("Account/WOMAN");
+        else
+            table = database.getReference("Account/MAN");
+
+        DatabaseReference user = table.child(tempStr);
+
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("RecvHeart", RecvHeart);
+        user.updateChildren(updateMap);
     }
 }

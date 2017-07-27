@@ -111,8 +111,6 @@ public class ViewProfile extends AppCompatActivity {
                     SaveCardList(0);
                     SendHeartToFCM();
                     stmyData.SetSendHeart(stmyData.getSendHeart()+1);
-
-
                 }
             }
 
@@ -137,7 +135,7 @@ public class ViewProfile extends AppCompatActivity {
             case 0:
             {
                 stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetMyData(_idx, stmyData.getSendHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
-                stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetTargetData(_idx, stmyData.getSendHeart(), stmyData.getEmail(),  stTargetData.getEmail(), stTargetData.getGender(), stmyData.getImg(), stmyData.getNickName());
+                //stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetTargetData(_idx, stmyData.getSendHeart(), stmyData.getEmail(),  stTargetData.getEmail(), stTargetData.getGender(), stmyData.getImg(), stmyData.getNickName(), stTargetData.getRecvHeart(), stTargetData.getRecvInter());
                 break;
             }
             case 1:
@@ -165,10 +163,18 @@ public class ViewProfile extends AppCompatActivity {
     private void SendHeartToFCM() {
 
         try {
+
+
+            String temp = stTargetData.getEmail() + "#" + stTargetData.getImage() + "$";
+            //String temp = "Dummy" + "$";
+
+
             // FMC 메시지 생성 start
             JSONObject root = new JSONObject();
             JSONObject notification = new JSONObject();
-            notification.put("body", stmyData.getNickName()+"님이 좋아요를 보냈습니다");
+            //notification.put("body", stmyData.getNickName()+"님이 좋아요를 보냈습니다" + "@" + temp);
+            //notification.put("body", stmyData.getNickName()+"님이 좋아요를 보냈습니다");
+            notification.put("body", temp + stmyData.getNickName()+"님이 좋아요를 보냈습니다");
             notification.put("title", getString(R.string.app_name));
             root.put("notification", notification);
             root.put("to", stTargetData.getToken());

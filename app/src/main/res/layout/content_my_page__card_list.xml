@@ -19,10 +19,20 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="#888888"
             android:orientation="vertical"
-            android:id="@+id/dynamicLayout">
+
+            android:id="@+id/SendHeart">
 
 
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#ff0022"
+            android:id="@+id/RecvHeart">
+
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

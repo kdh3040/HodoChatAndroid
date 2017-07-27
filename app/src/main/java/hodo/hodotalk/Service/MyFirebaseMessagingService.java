@@ -1,6 +1,7 @@
 package hodo.hodotalk.Service;
 
 
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -11,8 +12,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.Data.RecvData;
+import hodo.hodotalk.Data.RecvHeart;
+import hodo.hodotalk.LoginActivity;
+import hodo.hodotalk.MainActivity;
 import hodo.hodotalk.R;
 
 /**
@@ -32,9 +43,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String body = remoteMessage.getNotification().getBody();
             Log.d(TAG, "Notification Body: " + body);
 
-            int idx = body.indexOf("님");
-            String tempStr =  body.substring(0, idx);
+            int idx = body.indexOf("#");
+            String targetEmail =  body.substring(0, idx);
 
+            int idx1 = body.indexOf("$");
+            String targetImg =  body.substring(idx+1, idx1);
+
+            int idx2 = body.indexOf("님");
+            String targetNick=  body.substring(idx1+1, idx2);
+
+            SetTargetData(0, targetEmail, targetImg, targetNick);
+
+
+            String NotiStr=  body.substring(idx1 + 1);
 
             if (remoteMessage.getData().size() > 0) {
                 Log.d(TAG, "Message data payload: " + remoteMessage.getData());
@@ -49,11 +70,60 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
                     .setSmallIcon(R.mipmap.ic_launcher) // 알림 영역에 노출 될 아이콘.
                     .setContentTitle(getString(R.string.app_name)) // 알림 영역에 노출 될 타이틀
-                    .setContentText(body); // Firebase Console 에서 사용자가 전달한 메시지내용
+                    .setContentText(NotiStr); // Firebase Console 에서 사용자가 전달한 메시지내용
 
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
             notificationManagerCompat.notify(0x1001, notificationBuilder.build());
 
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+
         }
     }
+
+
+    public  void SetTargetData(int _idx, String Email,  String _Img, String _NickName)
+    {
+
+        String idxStr = null;
+        switch (_idx)
+        {
+            case 0:
+            {
+                idxStr = "/RecvHeart/";
+                break;
+            }
+            case 1:
+            {
+                idxStr = "/RecvInter/";
+                break;
+            }
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        String tempStr = m_MyData.getEmail();
+        int idx = tempStr.indexOf("@");
+        String tempStr2 =  tempStr.substring(0, idx);
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        String str_date = df.format(new Date());
+
+        table = database.getReference("CardList/MAN/" + tempStr2 + idxStr);
+
+        RecvHeart cRecvData = new RecvHeart();
+
+        cRecvData.Email = Email;
+        cRecvData.Img = _Img;
+        cRecvData.NickName = _NickName;
+        cRecvData.Date = str_date;
+
+        DatabaseReference user = table;
+        user.push().setValue(cRecvData);
+
+        m_MyData.SetRecvHeart(m_MyData.getRecvHeart()+1);
+    }
+
 }
