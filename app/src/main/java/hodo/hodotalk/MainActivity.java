@@ -269,10 +269,15 @@ public class MainActivity extends AppCompatActivity
 
                     nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
+                    stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
+
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
-                    stFavorite.GetRecvInterData(stRecvData.RecvHeart);
+                    stFavorite.GetRecvHeartData(stRecvData.RecvHeart);
                     stFavorite.GetSendInterData(stRecvData.SendInter);
                     stFavorite.GetRecvInterData(stRecvData.RecvInter);
+
+
+
                     InitData_firebase();
                 }
             }
@@ -295,7 +300,7 @@ public class MainActivity extends AppCompatActivity
                     nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
-                    stFavorite.GetRecvInterData(stRecvData.RecvHeart);
+                    stFavorite.GetRecvHeartData(stRecvData.RecvHeart);
                     stFavorite.GetSendInterData(stRecvData.SendInter);
                     stFavorite.GetRecvInterData(stRecvData.RecvInter);
                     InitData_firebase();

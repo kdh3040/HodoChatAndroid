@@ -26,6 +26,7 @@ import java.util.Map;
         private String Img;
         private String NickName;     // 닉네임
         private  String Date;
+        private int Conn;
 
         private Favorite_RecvData m_ValueFavorite= new Favorite_RecvData();
         private MyData m_stMyData = MyData.getInstance();
@@ -39,9 +40,10 @@ import java.util.Map;
             NickName = null;     // 닉네임
             Token = null;
             Date = null;
+            Conn = 0;
         }
 
-        public  void SetMyData(int _idx, int _FavoriteIdx, String _Email, int _Gender, String _Token, String _Img, String _NickName)
+        public  void SetMyData(int _idx, int _FavoriteIdx, String _Email, int _Gender, String _Token, String _Img, String _NickName, int _Conn)
         {
 
             String idxStr = null;
@@ -73,13 +75,14 @@ import java.util.Map;
             Token = _Token;
             Img = _Img;
             NickName = _NickName;
+            Conn = _Conn;
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
             String str_date = df.format(new Date());
 
             int idx =  FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
             String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
 
-            m_ValueFavorite.SetData(str_date, Email, Img, NickName, Token);
+            m_ValueFavorite.SetData(str_date, Email, Img, NickName, Token, Conn);
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference table;
@@ -92,32 +95,6 @@ import java.util.Map;
             table.child(Integer.toString(_FavoriteIdx)).setValue(m_ValueFavorite);
 
      }
-
-    public  String GetPushKeyData(String idxStr, int i)
-    {
-        final String[] rtStr = {null};
-
-        if(m_stMyData.getGender() == 0)
-            ref1 = FirebaseDatabase.getInstance().getReference().child("CardList").child("WOMAN").child(strID).child("PushKey").child(idxStr);
-        else
-            ref1 = FirebaseDatabase.getInstance().getReference().child("CardList").child("MAN").child(strID).child("PushKey").child(idxStr);
-
-        ref1.child(Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                String returnSTR = dataSnapshot.getValue(String.class);
-                rtStr[0] = returnSTR;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        return rtStr[0];
-    }
 
     public  void GetSendData(int _idx, int i)
     {
@@ -171,6 +148,7 @@ import java.util.Map;
                         Img = stRecvData.Img;
                         NickName = stRecvData.NickName;
                         Date = stRecvData.Date;
+                        Conn = stRecvData.Conn;
                     }
                 }
 
@@ -212,13 +190,10 @@ import java.util.Map;
             }
         }
 
-
         if(m_stMyData.getGender() == 0)
             ref1 = FirebaseDatabase.getInstance().getReference().child("CardList").child("WOMAN").child(strID).child(idxStr).child(Integer.toString(i));
         else
             ref1 = FirebaseDatabase.getInstance().getReference().child("CardList").child("MAN").child(strID).child(idxStr).child(Integer.toString(i));
-
-
 
 
         //ref1.child(strTarget).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -234,6 +209,7 @@ import java.util.Map;
                     Img = stRecvData.Img;
                     NickName = stRecvData.NickName;
                     Date = stRecvData.Date;
+                    Conn = stRecvData.Conn;
                 }
             }
 
@@ -254,6 +230,13 @@ import java.util.Map;
             return  rtClass;
         }
 
+    public int getConn() {
+        return Conn;
+    }
+
+    public void setConn(int _Conn) {
+        Conn = _Conn;
+    }
     public String getEmail() {
         return Email;
     }

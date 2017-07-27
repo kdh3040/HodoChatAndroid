@@ -10,6 +10,9 @@ public class HoDoDefine {
     public static int nDownloadCnt;
     public static int nViewListCnt;
 
+    public static int nNotMatching;
+    public static int nMatching;
+
 
     private static HoDoDefine _Instance;
     public static HoDoDefine getInstance()
@@ -25,6 +28,9 @@ public class HoDoDefine {
         nDownloadCnt = 50;
         nViewListCnt = 4;
         nHeartCost =5;
+
+        nNotMatching = 0;
+        nMatching = 1;
     }
 
     public int getHeartCost() {return  nHeartCost;}

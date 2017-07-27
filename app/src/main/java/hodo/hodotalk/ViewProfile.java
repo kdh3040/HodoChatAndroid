@@ -28,12 +28,14 @@ import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.Service.PurchaseHeart;
+import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
 
 public class ViewProfile extends AppCompatActivity {
 
     public  static TransformValue cTrans = TransformValue.getInstance();
 
+    private HoDoDefine m_Def = HoDoDefine.getInstance();
     private MyData stmyData = MyData.getInstance();
     private UserData stTargetData;
     private Button btnSendHeart;
@@ -112,9 +114,10 @@ public class ViewProfile extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int id) {
                     if(stmyData.getHeart() > 5) {
                         stmyData.setHeart(stmyData.getHeart() - 5);
-                        SaveCardList(0);
+                        //stmyData.MakeHeartRoom(stmyData.getEmail(), stTargetData.getEmail(), stmyData.getNickName(), stTargetData.getNickName(), stmyData.getImg(), stTargetData.getImage());
+                        stmyData.MakeHeartRoom(stmyData.getEmail(), stTargetData.getEmail(), stmyData.getNickName(), stTargetData.getNickName(), "MyImg", "TagerIMG");
+                        stmyData.MakeHeartRoomList(stmyData.getEmail(), stTargetData.getEmail(),stmyData.getGender());
                         SendHeartToFCM();
-                        stmyData.SetSendHeart(stmyData.getSendHeart()+1);
                     }
                 }
 
@@ -157,23 +160,23 @@ public class ViewProfile extends AppCompatActivity {
         {
             case 0:
             {
-                stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetMyData(_idx, stmyData.getSendHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
-                stTargetData.SetRecvHeartData(_idx, stTargetData.getEmail(), stTargetData.getGender(), stmyData.getEmail(), stmyData.getImg(), stmyData.getNickName());
+                //stFavoriteGroup.m_SendHeart[stmyData.getSendHeart()].SetMyData(_idx, stmyData.getSendHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName(), m_Def.nNotMatching);
+               // stTargetData.SetRecvHeartData(_idx, stTargetData.getEmail(), stTargetData.getGender(), stTargetData.getRecvHeart(), stmyData.getEmail(), stmyData.getImg(), stmyData.getNickName(), m_Def.nNotMatching);
                 break;
             }
             case 1:
             {
-                stFavoriteGroup.m_RecvHeart[stmyData.getRecvHeart()].SetMyData(_idx, stmyData.getRecvHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                stFavoriteGroup.m_RecvHeart[stmyData.getRecvHeart()].SetMyData(_idx, stmyData.getRecvHeart(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName(), m_Def.nNotMatching);
                 break;
             }
             case 2:
             {
-                stFavoriteGroup.m_RecvInter[stmyData.getRecvInter()].SetMyData(_idx, stmyData.getRecvInter(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                stFavoriteGroup.m_RecvInter[stmyData.getRecvInter()].SetMyData(_idx, stmyData.getRecvInter(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName(), m_Def.nNotMatching);
                 break;
             }
             case 3:
             {
-                stFavoriteGroup.m_SendInter[stmyData.getSendInter()].SetMyData(_idx, stmyData.getSendInter(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName());
+                stFavoriteGroup.m_SendInter[stmyData.getSendInter()].SetMyData(_idx, stmyData.getSendInter(), stTargetData.getEmail(), stmyData.getGender(), stTargetData.getToken(), stTargetData.getImage(), stTargetData.getNickName(), m_Def.nNotMatching);
                 break;
             }
         }

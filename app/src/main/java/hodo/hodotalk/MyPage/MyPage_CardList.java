@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import hodo.hodotalk.ChatPage.ChatPage_main;
 import hodo.hodotalk.Data.FavoriteData_Group;
@@ -30,9 +33,12 @@ import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.RecvHeart;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Util.HoDoDefine;
 
 public class MyPage_CardList extends AppCompatActivity {
 
+    private HoDoDefine m_Def = HoDoDefine.getInstance();
+    private  FavoriteData_Group m_favorite = FavoriteData_Group.getInstance();
 
     private LinearLayout SendHeartLayout;
     private LinearLayout RecvHeartLayout;
@@ -55,137 +61,81 @@ public class MyPage_CardList extends AppCompatActivity {
         int idx = m_Mydata.getEmail().indexOf("@");
         strMyID = m_Mydata.getEmail().substring(0, idx);
 
-        if(m_Mydata.getGender() == 0)
-            databaseRef = database.getReference("CardList/WOMAN/" + strMyID);
-        else
-            databaseRef = database.getReference("CardList/MAN/" + strMyID);
+        databaseRef = database.getReference("HeartRoom");
 
-        RecvHeartData(databaseRef);
-        SendHeartData(databaseRef);
-        RecvInterData(databaseRef);
-        SendInterData(databaseRef);
-
+        SetHeartRoom(databaseRef);
     }
 
-    private void RecvHeartData(DatabaseReference databaseRef) {
-        databaseRef.child("RecvHeart").addChildEventListener(new ChildEventListener() {
-            int i = 0;
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                int saa =0;
-                RecvHeart cRecvCard = dataSnapshot.getValue(RecvHeart.class);
+    private void SetHeartRoom(DatabaseReference databaseRef) {
+        int nRoomCnt = m_Mydata.arrRoomList.size();
 
-                final String strNick = cRecvCard.NickName;
-                final String strImg = cRecvCard.Img;
+        for(int i=0; i<nRoomCnt; i++)
+        {
+            databaseRef.child(m_Mydata.arrRoomList.get(i)).addChildEventListener(new ChildEventListener() {
+                int i = 0;
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    int saa =0;
+                    RecvHeart cRecvCard = dataSnapshot.getValue(RecvHeart.class);
 
-                LinearLayout item1 = new LinearLayout(getApplicationContext());
-                Button   newTextView1 = new Button(getApplicationContext());
-                item1.setOrientation(LinearLayout.VERTICAL);
-                newTextView1.setText(strNick);
-                newTextView1.setId(i + 1);
-                Log.i("TAG: NickName", strNick + "   "  + strImg);
+                    final String strMyNick = cRecvCard.MyNickName;
+                    final String strTargetNick = cRecvCard.TargetNickName;
+                    final String strMyImg = cRecvCard.MyImg;
+                    final String strTargetImg = cRecvCard.TargetImg;
+                    final int  strMyConn = cRecvCard.MyConn;
+                    final int  strTargetConn = cRecvCard.TargetConn;
 
-                newTextView1.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
 
-                        Intent intent = new Intent(getApplicationContext(), ChatPage_main.class);
+                    LinearLayout item1 = new LinearLayout(getApplicationContext());
+                    Button   newTextView1 = new Button(getApplicationContext());
+                    item1.setOrientation(LinearLayout.VERTICAL);
+                    newTextView1.setText(strMyNick);
+                    newTextView1.setId(i + 1);
+
+                    final  int position = i;
+                    newTextView1.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+
+
+                       /* Intent intent = new Intent(getApplicationContext(), ChatPage_main.class);
                         intent.putExtra("TargetNick", strNick);
-                        startActivity(intent);
-                    }
-                });
+                        startActivity(intent);*/
+                        }
+                    });
 
-                LinearLayout.LayoutParams item_param1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                item_param1.setMargins(5,5,5,5);
+                    LinearLayout.LayoutParams item_param1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    item_param1.setMargins(5,5,5,5);
 
-                item1.setLayoutParams(item_param1);
-                item1.addView(newTextView1);
-                RecvHeartLayout.addView(item1);
+                    item1.setLayoutParams(item_param1);
+                    item1.addView(newTextView1);
+                    RecvHeartLayout.addView(item1);
+                    i++;
+                }
 
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
 
-            }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    int saa =0;
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                int saa =0;
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    int saa =0;
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                int saa =0;
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    int saa =0;
+                }
+            });
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                int saa =0;
-            }
-        });
+        }
 
-    }
-    private void SendHeartData(DatabaseReference databaseRef) {
 
-        databaseRef.child("SendHeart").addChildEventListener(new ChildEventListener() {
-            int i = 0;
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                int saa =0;
-
-                RecvHeart cRecvCard = dataSnapshot.getValue(RecvHeart.class);
-
-                final String strNick = cRecvCard.NickName;
-                final String strImg = cRecvCard.Img;
-
-                LinearLayout item = new LinearLayout(getApplicationContext());
-                Button   newTextView = new Button(getApplicationContext());
-                item.setOrientation(LinearLayout.VERTICAL);
-                newTextView.setText(strNick);
-                newTextView.setId(i + 1);
-                Log.i("TAG: NickName", strNick + "   "  + strImg);
-
-                newTextView.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(getApplicationContext(), ChatPage_main.class);
-                        intent.putExtra("TargetNick", strNick);
-                        startActivity(intent);
-                    }
-                });
-
-                LinearLayout.LayoutParams item_param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                item_param.setMargins(5,5,5,5);
-
-                item.setLayoutParams(item_param);
-                item.addView(newTextView);
-                SendHeartLayout.addView(item);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                int saa =0;
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                int saa =0;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                int saa =0;
-            }
-        });
-    }
-    private void RecvInterData(DatabaseReference databaseRef) {
-    }
-    private void SendInterData(DatabaseReference databaseRef) {
     }
 
 }

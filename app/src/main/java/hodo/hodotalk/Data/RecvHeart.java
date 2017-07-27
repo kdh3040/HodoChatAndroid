@@ -5,8 +5,10 @@ package hodo.hodotalk.Data;
  */
 
 public class RecvHeart {
-    public  String Date;
-    public  String Email;
-    public  String Img;
-    public  String NickName;
+    public  String MyNickName;
+    public  String TargetNickName;
+    public  String MyImg;
+    public  String TargetImg;
+    public  int MyConn;
+    public  int TargetConn;
 }

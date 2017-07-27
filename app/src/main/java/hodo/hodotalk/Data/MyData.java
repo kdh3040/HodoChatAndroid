@@ -1,12 +1,20 @@
 package hodo.hodotalk.Data;
 
 import android.media.session.MediaSession;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -36,6 +44,9 @@ public class MyData {
     private int    RecvInter;     // 관심 받은 횟수
     private String  PushKey;     // 하트 보낸 횟수
 
+    private  RecvHeart m_HeartRoomObj = new RecvHeart();
+
+    public ArrayList<String> arrRoomList = new ArrayList<>();
 
     private static MyData  _Instance;
 
@@ -106,6 +117,104 @@ public class MyData {
         rtClass.Body = Body;
 
         return  rtClass;
+    }
+
+    public  void GetHeartRoomList(int MyGender, String MyEmail)
+    {
+        int idx = MyEmail.indexOf("@");
+        String MyID =  MyEmail.substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = null;
+
+        if(MyGender == 0)
+            databaseRef = database.getReference("HeartRoomList" + "/WOMAN/" + MyID);
+        else
+            databaseRef = database.getReference("HeartRoomList" + "/MAN/" +  MyID);
+
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            int i = 0;
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                int saa =0;
+                String strRoomList = dataSnapshot.getValue(String.class);
+                arrRoomList.add(strRoomList);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                int saa =0;
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                int saa =0;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                int saa =0;
+            }
+        });
+
+    }
+
+    public  void MakeHeartRoomList(String MyEmail, String TargetEmail, int MyGender)
+    {
+        int idx = MyEmail.indexOf("@");
+        String MyID =  MyEmail.substring(0, idx);
+
+        idx = TargetEmail.indexOf("@");
+        String TargetID =  TargetEmail.substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        table = database.getReference("HeartRoomList");
+        DatabaseReference user, targetuser;
+        if(MyGender == 0) {
+            user = table.child("WOMAN").child(MyID);
+            targetuser = table.child("MAN").child(TargetID);
+        }
+        else {
+            user = table.child("MAN").child(MyID);
+            targetuser = table.child("WOMAN").child(TargetID);
+        }
+        Map<String, Object> updateMap = new HashMap<>();
+        updateMap.put("RoomName", MyID + "_" + TargetID);
+        user.push().setValue(MyID + "_" + TargetID);
+        targetuser.push().setValue(MyID + "_" + TargetID);
+
+    }
+
+    public  void MakeHeartRoom(String MyEmail, String TargetEmail, String MyNickName, String TargetNickName, String MyImg, String TargetImg)
+    {
+        int idx = MyEmail.indexOf("@");
+        String MyID =  MyEmail.substring(0, idx);
+
+        idx = TargetEmail.indexOf("@");
+        String TargetID =  TargetEmail.substring(0, idx);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        table = database.getReference("HeartRoom");
+
+        DatabaseReference user = table.child(MyID + "_" + TargetID);
+
+        m_HeartRoomObj.MyNickName = MyNickName;
+        m_HeartRoomObj.TargetNickName = TargetNickName;
+        m_HeartRoomObj.MyImg = MyImg;
+        m_HeartRoomObj.TargetImg = TargetImg;
+        m_HeartRoomObj.MyConn = 1;
+        m_HeartRoomObj.TargetConn = 0;
+
+        user.setValue(m_HeartRoomObj);
     }
 
     public String getEmail() {return  Email;}
@@ -194,161 +303,5 @@ public class MyData {
         return  SendHeart;
     }
 
-    public void SetSendHeart(int _SendHeart) {
 
-        SendHeart = _SendHeart;
-
-        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        if(Gender == 0)
-            table = database.getReference("Account/WOMAN");
-        else
-            table = database.getReference("Account/MAN");
-
-        DatabaseReference user = table.child(tempStr);
-
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put("SendHeart", SendHeart);
-        user.updateChildren(updateMap);
-    }
-
-
-
-    public  void SetRecvHeartData(int _idx, String Email,  String _Img, String _NickName)
-    {
-
-        String idxStr = null;
-        switch (_idx)
-        {
-            case 0:
-            {
-                idxStr = "/RecvHeart/";
-                break;
-            }
-            case 1:
-            {
-                idxStr = "/RecvInter/";
-                break;
-            }
-        }
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        String tempStr = getEmail();
-        int idx = tempStr.indexOf("@");
-        String tempStr2 =  tempStr.substring(0, idx);
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
-        String str_date = df.format(new Date());
-
-        if(getGender() == 0)
-            table = database.getReference("CardList/WOMAN/" + tempStr2 + idxStr);
-        else
-            table = database.getReference("CardList/MAN/" + tempStr2 + idxStr);
-
-        RecvHeart cRecvData = new RecvHeart();
-
-        cRecvData.Email = Email;
-        cRecvData.Img = _Img;
-        cRecvData.NickName = _NickName;
-        cRecvData.Date = str_date;
-
-        DatabaseReference user = table;
-        user.push().setValue(cRecvData);
-
-        SetRecvHeart(getRecvHeart()+1);
-    }
-
-    public void SetRecvHeart(int _RecvHeart) {
-
-        RecvHeart = _RecvHeart;
-
-        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        if(Gender == 0)
-            table = database.getReference("Account/WOMAN");
-        else
-            table = database.getReference("Account/MAN");
-
-        DatabaseReference user = table.child(tempStr);
-
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put("RecvHeart", RecvHeart);
-        user.updateChildren(updateMap);
-    }
-
-
-    public void SetSendInter(int _SendInter) {
-
-        SendInter = _SendInter;
-
-        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        if(Gender == 0)
-            table = database.getReference("Account/WOMAN");
-        else
-            table = database.getReference("Account/MAN");
-
-        DatabaseReference user = table.child(tempStr);
-
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put("SendInter", SendInter);
-        user.updateChildren(updateMap);
-    }
-
-
-    public void SetRecvInter(int _RecvInter) {
-
-        RecvInter = _RecvInter;
-
-        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        if(Gender == 0)
-            table = database.getReference("Account/WOMAN");
-        else
-            table = database.getReference("Account/MAN");
-
-        DatabaseReference user = table.child(tempStr);
-
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put("RecvInter", RecvInter);
-        user.updateChildren(updateMap);
-    }
-
-    public void setPushKey(String tempStr, String _idx, int _FavoriteIdx, String favoritePushKey) {
-
-        PushKey = favoritePushKey;
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference table;
-
-        if(Gender == 0)
-            table = database.getReference("Account/WOMAN" + "/" + tempStr + "/PushKey/" + _idx);
-        else
-            table = database.getReference("CardList/MAN" + "/" + tempStr + "/PushKey/" + _idx);
-
-        DatabaseReference user = table.child(Integer.toString(_FavoriteIdx));
-
-        user.child("PushKey").setValue(PushKey);
-
-
-
-    }
 }
