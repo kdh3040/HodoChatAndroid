@@ -3,6 +3,7 @@ package hodo.hodotalk;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,9 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +41,7 @@ import hodo.hodotalk.MainPage.Main;
 import hodo.hodotalk.MainPage.Matching;
 import hodo.hodotalk.MyPage.EditProfile;
 import hodo.hodotalk.MyPage.MyPage_CardList;
+import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
 
@@ -55,6 +62,10 @@ public class MainActivity extends AppCompatActivity
 
     // 마이 페이지
 
+
+    // 왼쪽 네비게이션
+    private  TextView nav_header_id_text;
+    private Button nav_header_btn_editProfile;
 
 
     public static UserData_Group stUserData = UserData_Group.getInstance();
@@ -111,6 +122,21 @@ public class MainActivity extends AppCompatActivity
         Log.d("!!!!!", "firebase start----");
         InitProfile_firebase();
 
+        NavigationView naviView = (NavigationView)findViewById(R.id.nav_view);
+        naviView.setNavigationItemSelectedListener(this);
+
+        View nav_header_view = navigationView.getHeaderView(0);
+
+        nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.myname);
+        nav_header_btn_editProfile = (Button) nav_header_view.findViewById(R.id.EditProfile);
+
+        nav_header_btn_editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, EditProfile.class);
+                startActivity(intent);
+            }
+        });
 
         Log.d("!!!!!", "firebase End----");
     }
@@ -241,6 +267,8 @@ public class MainActivity extends AppCompatActivity
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
+                    nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
+
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
                     stFavorite.GetRecvInterData(stRecvData.RecvHeart);
                     stFavorite.GetSendInterData(stRecvData.SendInter);
@@ -263,6 +291,8 @@ public class MainActivity extends AppCompatActivity
                 if(stRecvData != null) {
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
+
+                    nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
                     stFavorite.GetRecvInterData(stRecvData.RecvHeart);
@@ -340,9 +370,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, MyPage_CardList.class);
             startActivity(intent);
         } else if (id == R.id.nav_heartCharge) {
-
-        } else if (id == R.id.nav_popView) {
-
+            Intent intent = new Intent(MainActivity.this, PurchaseHeart.class);
+            startActivity(intent);
         } else if (id == R.id.nav_Setting) {
 
         } else if (id == R.id.nav_FAQ) {

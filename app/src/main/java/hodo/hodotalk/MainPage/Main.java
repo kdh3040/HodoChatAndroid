@@ -18,6 +18,7 @@ import android.widget.Button;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.ViewProfile;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.ItemClickSupport;
@@ -110,26 +111,44 @@ public class Main extends Fragment {
                 if(SendNick != null)
                 {
                     AlertDialog.Builder newdlg = new AlertDialog.Builder(v.getContext());
-                    newdlg.setTitle(SendNick + "님의 프로필을 열어볼까요?");
-                    newdlg.setMessage("하트 5개가 사용됩니다").setCancelable(false);
-                    newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            if(stMyData.getHeart() >= cDef.getHeartCost()) {
-                                stMyData.setHeart(stMyData.getHeart() - cDef.getHeartCost());
-                                ViewProfilePage();
+
+                    if(stMyData.getHeart() >= cDef.getHeartCost())
+                    {
+                        newdlg.setTitle(SendNick + "님의 프로필을 열어볼까요?");
+                        newdlg.setMessage("하트 5개가 사용됩니다").setCancelable(false);
+                        newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                    stMyData.setHeart(stMyData.getHeart() - cDef.getHeartCost());
+                                    ViewProfilePage();
                             }
-                        }
-                    });
-                    newdlg.setNeutralButton("하트구매", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            int asdadsad=0;
-                        }
-                    });
-                    newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            int asdadsad=0;
-                        }
-                    });
+                        });
+                        newdlg.setNeutralButton("하트구매", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ViewPurchaseHeart();
+                            }
+                        });
+                        newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                int asdadsad=0;
+                            }
+                        });
+                    }
+
+                    else
+                    {
+                        newdlg.setTitle("하트가 부족합니다");
+                        newdlg.setMessage("상대방의 프로필을 보시려면" +"\n" + "하트 5개가 필요합니다" + "\n" + "하트 충전 화면으로 이동하시겠습니까").setCancelable(false);
+                        newdlg.setNegativeButton("충전하기", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ViewPurchaseHeart();
+                            }
+                        });
+                        newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                int asdadsad=0;
+                            }
+                        });
+                    }
 
                     newdlg.show();
                 }
@@ -155,6 +174,12 @@ public class Main extends Fragment {
     {
         Intent intent = new Intent(getActivity(), ViewProfile.class);
         intent.putExtra("Target", stTargetData);
+        startActivity(intent);
+    }
+
+    public void ViewPurchaseHeart()
+    {
+        Intent intent = new Intent(getActivity(), PurchaseHeart.class);
         startActivity(intent);
     }
 

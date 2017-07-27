@@ -5,15 +5,11 @@
         <item
             android:id="@+id/nav_cardlist"
             android:icon="@drawable/ic_menu_camera"
-            android:title="cardlist" />
+            android:title="카드리스트" />
         <item
             android:id="@+id/nav_heartCharge"
             android:icon="@drawable/ic_menu_gallery"
             android:title="heartCharge" />
-        <item
-            android:id="@+id/nav_popView"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="PopView" />
         <item
             android:id="@+id/nav_Setting"
             android:icon="@drawable/ic_menu_manage"
