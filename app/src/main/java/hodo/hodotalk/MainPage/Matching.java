@@ -1,5 +1,6 @@
 package hodo.hodotalk.MainPage;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.Api;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -32,7 +34,10 @@ import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData_Group;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Util.HeartFunc;
 import hodo.hodotalk.Util.HoDoDefine;
+import hodo.hodotalk.Util.TransformValue;
+import hodo.hodotalk.ViewProfile;
 
 /**
  * Created by boram on 2017-07-12.
@@ -47,12 +52,16 @@ public class Matching extends Fragment {
     private ImageView MatchingImg;
     private TextView MatchingText;
 
+    private HeartFunc fHeartFunc = HeartFunc.getInstance();
     private UserData_Group m_UserData = UserData_Group.getInstance();
     private MyData m_MyData = MyData.getInstance();
     private HoDoDefine m_Def = HoDoDefine.getInstance();
+    private TransformValue _TR = TransformValue.getInstance();
 
     private FavoriteData_Group stFavoriteGroup = FavoriteData_Group.getInstance();
     static int nSel = 0;
+
+    private Context context;
 
     public static Matching newInstance(){
         Matching fragment = new Matching();
@@ -73,35 +82,31 @@ public class Matching extends Fragment {
         ft.detach(this).attach(this).commit();
     }
 
-    public  void  SetData()
+    public  void  SetData(int idx)
     {
-        Random random = new Random();
 
         // TODO : 2 빼야댐
-        nSel= random.nextInt(m_Def.getDownloadCnt()/2);
 
-        Log.d("@#### ", "random : " + nSel);
 
-        //MatchingImg.setImageBitmap();
-           /*    try {
-     if(bm != null)
-                bm.recycle();
 
-            String _url = m_UserData.m_stUserData[nSel].getImage();
-            URL imageURL = new URL(_url);
-            URLConnection ucon = imageURL.openConnection();
-            ucon.connect();
-            BufferedInputStream imagebuff = new BufferedInputStream(ucon.getInputStream(), (1024*50));
-            bm = BitmapFactory.decodeStream(imagebuff);
-            imagebuff.close();
-            MatchingImg.setImageBitmap(bm);
+        Log.d("@#### ", "random : " + idx);
 
-        }         catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        DrawMatingProfile(idx);
+        DrawMatingProfileImg(idx);
+    }
 
+    private void DrawMatingProfile(int idx) {
+        String _Main = m_UserData.arrUsers.get(idx).getNickName() + "\n"  + _TR.Transform_Loc(m_UserData.arrUsers.get(idx).getLocation()) + ", " + _TR.Transform_Age(m_UserData.arrUsers.get(idx).getAge())
+                +  _TR.Transform_job(m_UserData.arrUsers.get(idx).getJob()) + "\n" + _TR.Transform_Body(m_UserData.arrUsers.get(idx).getBody()) + ", " + _TR.Transform_Blood(m_UserData.arrUsers.get(idx).getBlood());
+
+        MatchingText.setText(_Main);
+
+    }
+
+    private void DrawMatingProfileImg(int idx) {
+        Picasso.with(context)
+                .load(m_UserData.arrUsers.get(idx).getImage())
+                .into(MatchingImg);
     }
 
     @Override
@@ -109,7 +114,10 @@ public class Matching extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mainpage_matching, container, false);
+        final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.mainpage_matching, container, false);
+
+        Random random = new Random();
+        nSel= random.nextInt(m_UserData.arrUsers.size());
 
         MatchingText = (TextView)rootView.findViewById(R.id.ProfileText);
         MatchingImg= (ImageView) rootView.findViewById(R.id.Profileimage);
@@ -120,13 +128,13 @@ public class Matching extends Fragment {
         btn_NextMatching = (Button)rootView.findViewById(R.id.BtnNextMatching);
         btn_NextMatching .setText("더 보기");
 
-
-        View.OnClickListener listener = new View.OnClickListener() {
+        Button.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.BtnSendHeart:
-                        SendHeart(view);
+                        AlertDialog.Builder newdlg  = fHeartFunc.SendHeart(m_UserData.arrUsers.get(nSel), rootView.getContext());
+                        newdlg.show();
                         break;
                     case R.id.BtnNextMatching:
                         NextMatching();
@@ -136,22 +144,21 @@ public class Matching extends Fragment {
             }
         };
 
+        context = rootView.getContext();
         btn_SendHeart.setOnClickListener(listener);
         btn_NextMatching.setOnClickListener(listener);
 
-        SetData();
+        SetData(nSel);
 
         Log.d("!!!!!", "App End----");
 
         return rootView;
     }
 
-    private void SendHeart(View view) {
-
-    }
-
     private void NextMatching() {
-
+        Random random = new Random();
+        nSel= random.nextInt(m_UserData.arrUsers.size());
+        SetData(nSel);
         refreshView();
     }
 

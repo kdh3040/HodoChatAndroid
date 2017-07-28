@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity
 
 
     // 왼쪽 네비게이션
+    private LinearLayout nav_layout;
+    private ImageView nav_header_id_Image;
     private  TextView nav_header_id_text;
     private Button nav_header_btn_editProfile;
 
@@ -130,6 +135,8 @@ public class MainActivity extends AppCompatActivity
 
         View nav_header_view = navigationView.getHeaderView(0);
 
+        nav_layout = (LinearLayout) nav_header_view.findViewById(R.id.nav_layout);
+        nav_header_id_Image = (ImageView) nav_header_view.findViewById(R.id.myProfile);
         nav_header_id_text = (TextView) nav_header_view.findViewById(R.id.myname);
         nav_header_btn_editProfile = (Button) nav_header_view.findViewById(R.id.EditProfile);
 
@@ -154,8 +161,8 @@ public class MainActivity extends AppCompatActivity
         else
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
 
-        //ref.limitToFirst(1).addListenerForSingleValueEvent(
-        ref.addListenerForSingleValueEvent(
+        ref.limitToFirst(8).addListenerForSingleValueEvent(
+        //ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -275,16 +282,17 @@ public class MainActivity extends AppCompatActivity
                     stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
-                    nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
+                    nav_header_id_text.setText(stMyData.getNickName() );
+
+
+                    Picasso.with(getApplicationContext())
+                            .load(stRecvData.Img)
+                            .into( nav_header_id_Image);
+
+//                    nav_layout.setBackground();
+
 
                     stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
-
-                    stFavorite.GetSendHeartData(stRecvData.SendHeart);
-                    stFavorite.GetRecvHeartData(stRecvData.RecvHeart);
-                    stFavorite.GetSendInterData(stRecvData.SendInter);
-                    stFavorite.GetRecvInterData(stRecvData.RecvInter);
-
-
 
                     InitData_firebase();
                 }

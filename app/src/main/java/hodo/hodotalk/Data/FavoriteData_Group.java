@@ -34,31 +34,6 @@ public class FavoriteData_Group {
         }
     }
 
-
-    public void SetSendHeartData(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName, int _Conn)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_SendHeart[i].SetMyData(0, i, _Email, _Gender, _Token, _Img, _NickName, _Conn);
-    }
-    public void SetRecvHeart(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName, int _Conn)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_RecvHeart[i].SetMyData(1, i, _Email, _Gender, _Token, _Img, _NickName, _Conn);
-    }
-    public void SetRecvInterData(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName, int _Conn)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_RecvInter[i].SetMyData(2, i, _Email, _Gender, _Token, _Img, _NickName, _Conn);
-    }
-
-    public void SetSendInterData(int _idx, String _Email, int _Gender, String _Token, String _Img, String _NickName, int _Conn)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_SendInter[i].SetMyData(3, i, _Email, _Gender, _Token, _Img, _NickName, _Conn);
-    }
-
-
-
     public void GetSendHeartData(int _idx)
     {
         for(int i = 0; i< _idx; i++)

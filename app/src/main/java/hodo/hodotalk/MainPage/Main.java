@@ -80,9 +80,6 @@ public class Main extends Fragment {
             public void onClick(View v)
             {
                 nAddView++;
-                /// 테스트용
-                if(nAddView > 5)
-                    nAddView = 5;
 
                 boolean bCheck = mMainAdapter.DelDataList(nAddView);
 
