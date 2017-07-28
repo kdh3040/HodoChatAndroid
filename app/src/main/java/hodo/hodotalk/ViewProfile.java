@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -26,6 +28,7 @@ import java.net.URLConnection;
 
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.Util.HoDoDefine;
@@ -81,17 +84,10 @@ public class ViewProfile extends AppCompatActivity {
                         break;
 
                 }
-                //  UpdateStatus();
             }
         };
 
         btnSendHeart.setOnClickListener(listener);
-
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()
-                .penaltyLog().build());
 
         ViewProfileIMG();
         ViewProfile();
@@ -237,23 +233,10 @@ public class ViewProfile extends AppCompatActivity {
         txtProfile[4].setText("  " + cTrans.Transform_Blood(stTargetData.getBlood())+"입니다");
     }
 
-
     public void ViewProfileIMG()
     {
-        try {
-            String _url = stTargetData.getImage();
-            URL imageURL = new URL(_url);
-            URLConnection ucon = imageURL.openConnection();
-            ucon.connect();
-            BufferedInputStream imagebuff = new BufferedInputStream(ucon.getInputStream(), (1024*50));
-            Bitmap bm = BitmapFactory.decodeStream(imagebuff);
-            imgProfile.setImageBitmap(bm);
-            imagebuff.close();
-
-        }         catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Picasso.with(getApplicationContext())
+                .load(stTargetData.getImage())
+                .into(imgProfile);
     }
 }

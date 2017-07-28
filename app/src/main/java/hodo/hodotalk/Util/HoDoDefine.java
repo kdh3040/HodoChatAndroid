@@ -1,5 +1,8 @@
 package hodo.hodotalk.Util;
 
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by boram on 2017-07-19.
  */
@@ -32,6 +35,7 @@ public class HoDoDefine {
 
         nNotMatching = 0;
         nMatching = 1;
+
     }
 
     public int getHeartCost() {return  nHeartCost;}

@@ -81,8 +81,6 @@ public class Choice extends Fragment {
         m_nIdx[0] = rand.nextInt(m_Def.getDownloadCnt() / 2);
         m_nIdx[1] = rand.nextInt(m_Def.getDownloadCnt() / 2);
 
-        Choice_tv1.setText(m_Userdata.m_stUserData[m_nIdx[0]].getNickName());
-        Choice_Img1.setImageResource(R.drawable.ic_menu_manage);
         /*
         try {
 
@@ -102,8 +100,6 @@ public class Choice extends Fragment {
         }*/
 
 
-        Choice_tv2.setText(m_Userdata.m_stUserData[m_nIdx[1]].getNickName());
-        Choice_Img2.setImageResource(R.drawable.ic_menu_send);
       /*  try {
 
             String _url = m_Userdata.m_stUserData[m_nIdx[1]].getImage();

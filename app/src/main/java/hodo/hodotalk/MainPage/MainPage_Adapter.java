@@ -1,8 +1,10 @@
 package hodo.hodotalk.MainPage;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.BooleanResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -25,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.Data.UserData_Group;
 import hodo.hodotalk.MainActivity;
@@ -39,6 +46,9 @@ import hodo.hodotalk.Util.TransformValue;
 public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.ViewHolder> {
     public List<UserData> items;
 
+    public Picasso picasso;
+    public LruCache picasso_LRuCache;
+
     static int cnt;
     int Listcnt;
 
@@ -51,51 +61,62 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
     public TransformValue _TR = TransformValue.getInstance();
     private MainActivity cMA = new MainActivity();
-    public static UserData_Group stUserData = UserData_Group.getInstance();
+    private static UserData_Group m_UserData = UserData_Group.getInstance();
     private MyData stMydata = MyData.getInstance();
 
     public MainPage_Adapter() {
         super();
 
         items = new ArrayList<UserData>();
-
-        //stUserData[cnt] = new UserData();
-
        cnt = cDef.getDownloadCnt();
-       Listcnt = cDef.getViewListCnt();
+        Listcnt = cDef.getViewListCnt();
+        //Listcnt = m_UserData.arrUsers.size();
 
-        for(int i=0; i< cnt; i++) {
-            //stUserData[i] = UserData.getInstance();
-            stUserData.m_stUserData[i] = cMA.stUserData.m_stUserData[i];
-        }
+        if(Listcnt > m_UserData.arrUsers.size())
+            Listcnt = m_UserData.arrUsers.size();
 
         SetData_Firebase();
     }
 
 
-    public void DelDataList()
+    public boolean DelDataList(int _idx)
     {
+        if(m_UserData.arrUsers.size() <=  _idx*Listcnt )
+            return false;
+
         items.clear();
 
         if(bm != null)
             bm.recycle();
 
+       // picasso_LRuCache.clear();
+
+        return  true;
     }
 
-    public void AddData(int _idx)
+    public boolean AddData(int _idx)
     {
         for(int i=0; i< Listcnt; i++) {
-            items.add(stUserData.m_stUserData[i + _idx*Listcnt]);
+            //items.add(stUserData.m_stUserData[i + _idx*Listcnt]);
+            if(m_UserData.arrUsers.size() <=  _idx*Listcnt )
+                return false;
+
+            items.add(m_UserData.arrUsers.get(i + _idx*Listcnt));
         }
+
         notifyDataSetChanged();
+        return  true;
     }
 
     public  void  SetData_Firebase()
     {
         for(int i=0; i< Listcnt; i++) {
-            items.add(stUserData.m_stUserData[i]);
+
+            items.add(m_UserData.arrUsers.get(i));
         }
     }
+
+    private Context context;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -103,44 +124,28 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
                 .inflate(R.layout.mainpage_main_cardview, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
 
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()
-                .penaltyLog().build());
-
-
-
         return viewHolder;
     }
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        UserData stUserData = items.get(i);
-
+        final UserData stUserData = items.get(i);
 
         String _Main = stUserData.getNickName() + "\n" + "(" + _TR.Transform_Loc(stUserData.getLocation()) + ", " + _TR.Transform_Age(stUserData.getAge()) + ")"
                 + "\n" + _TR.Transform_job(stUserData.getJob()) + "\n" + _TR.Transform_Body(stUserData.getBody()) + ", " + _TR.Transform_Blood(stUserData.getBlood());
         viewHolder.tvNature.setText(_Main);
 
-        viewHolder.imgThumbnail.setImageResource(R.drawable.ic_menu_gallery);
+      DrawBitMapUrl(viewHolder, stUserData.getImage());
 
-        //viewHolder.tvNature.setText(nature.getNickName());
-        //viewHolder.imgThumbnail.setImageResource(nature.getThumbnail());
-      /*  try {
+    }
 
-            String _url = stUserData.getImage();
-            URL imageURL = new URL(_url);
-            URLConnection ucon = imageURL.openConnection();
-            ucon.connect();
-            BufferedInputStream imagebuff = new BufferedInputStream(ucon.getInputStream(), (1024*50));
-            bm = BitmapFactory.decodeStream(imagebuff);
-            imagebuff.close();
-            viewHolder.imgThumbnail.setImageBitmap(bm);
-        }         catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+    private Boolean DrawBitMapUrl(final ViewHolder viewHolder, final String image) {
+        Boolean rtValue = false;
+
+        Picasso.with(context)
+                .load(image)
+                .into(viewHolder.imgThumbnail);
+
+        return rtValue;
     }
 
     @Override
@@ -150,13 +155,9 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
     public UserData SelectUser(int position) {
         UserData rtClass= null;
-        rtClass = stUserData.m_stUserData[position];
-        /*if(stUserData[position].getNickName() !=null)
-        {
-            rtValue = stUserData[position].getNickName();
-            Log.d("####", stUserData[position].getNickName() );
-        }*/
-            return  rtClass;
+        rtClass = m_UserData.arrUsers.get(position);
+
+        return  rtClass;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -170,6 +171,13 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
             imgThumbnail = (ImageView) itemView.findViewById(R.id.img_thumbnail);
             tvNature = (TextView) itemView.findViewById(R.id.tv_des_nature);
 
+           // ImageView picassoImageView = (ImageView) findViewById(R.id.img_thumbnail);
+            context = itemView.getContext();
+
+            picasso_LRuCache = new LruCache(context);
+            picasso = new Picasso.Builder(context)
+                    .memoryCache(picasso_LRuCache)
+                    .build();
         }
     }
 

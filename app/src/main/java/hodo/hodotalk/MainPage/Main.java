@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.R;
 import hodo.hodotalk.Service.PurchaseHeart;
@@ -83,20 +84,17 @@ public class Main extends Fragment {
                 if(nAddView > 5)
                     nAddView = 5;
 
-                mMainAdapter.DelDataList();
-                mMainAdapter.AddData(nAddView);
-                RefreshItem();
+                boolean bCheck = mMainAdapter.DelDataList(nAddView);
 
-
+                if(bCheck ==true) {
+                    mMainAdapter.AddData(nAddView);
+                    RefreshItem();
+                }
+                else
+                    nAddView--;
 
             }
         });
-
-/*        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()
-                .penaltyLog().build());*/
 
         Log.d("!!!!!", "App End----");
 

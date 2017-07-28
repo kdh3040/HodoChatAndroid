@@ -83,10 +83,6 @@ public class Matching extends Fragment {
         Log.d("@#### ", "random : " + nSel);
 
         //MatchingImg.setImageBitmap();
-        MatchingText.setText(m_UserData.m_stUserData[nSel].getNickName());
-
-
-            MatchingImg.setImageResource(R.drawable.ic_menu_camera);
            /*    try {
      if(bm != null)
                 bm.recycle();
@@ -152,32 +148,6 @@ public class Matching extends Fragment {
 
     private void SendHeart(View view) {
 
-        AlertDialog.Builder newdlg = new AlertDialog.Builder(view.getContext());
-        newdlg.setTitle(m_UserData.m_stUserData[nSel].getNickName() + "님에게 좋아요를 보낼까요?");
-        newdlg.setMessage("상대방이 좋아요를 수락하면" +"\n" + "채팅을 시작할 수 있습니다" + "\n" + "(하트 5개가 사용됩니다)").setCancelable(false);
-        newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                if(m_MyData.getHeart() >= m_Def.getHeartCost()) {
-                    m_MyData.setHeart(m_MyData.getHeart() - m_Def.getHeartCost());
-                //    m_MyData.setFavorite(m_MyData.getFavorite()+1);
-
-                    // SendHeartToFCM();  FCM 으로 푸쉬 날리기
-
-                }
-            }
-        });
-        newdlg.setNeutralButton("하트구매", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                int asdadsad=0;
-            }
-        });
-        newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                int asdadsad=0;
-            }
-        });
-
-        newdlg.show();
     }
 
     private void NextMatching() {

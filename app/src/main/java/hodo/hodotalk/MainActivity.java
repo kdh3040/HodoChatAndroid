@@ -30,6 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
@@ -68,7 +70,8 @@ public class MainActivity extends AppCompatActivity
     private Button nav_header_btn_editProfile;
 
 
-    public static UserData_Group stUserData = UserData_Group.getInstance();
+    public static UserData_Group m_UserGroup = UserData_Group.getInstance();
+
     public static MyData stMyData = MyData.getInstance();
     public static FavoriteData_Group stFavorite = FavoriteData_Group.getInstance();
     private HoDoDefine cDef = HoDoDefine.getInstance();
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity
         else
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
 
+        //ref.limitToFirst(1).addListenerForSingleValueEvent(
         ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -160,8 +164,12 @@ public class MainActivity extends AppCompatActivity
                             RecvData stRecvData = new RecvData ();
                             stRecvData = fileSnapshot.getValue(RecvData.class);
                             if(stRecvData != null) {
-                                stUserData.m_stUserData[i++].SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
+
+                                 UserData stUserData = new UserData();
+                                stUserData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
                                         stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.RecvHeart, stRecvData.RecvInter);
+
+                                m_UserGroup.arrUsers.add(stUserData);
                             }
                         }
                         initTab();

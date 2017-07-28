@@ -1,5 +1,7 @@
 package hodo.hodotalk.Data;
 
+import java.util.ArrayList;
+
 import hodo.hodotalk.Util.HoDoDefine;
 
 /**
@@ -9,7 +11,9 @@ import hodo.hodotalk.Util.HoDoDefine;
 public class UserData_Group {
 
     private HoDoDefine cDef = HoDoDefine.getInstance();
-    public UserData m_stUserData[] = new UserData[cDef.getDownloadCnt()];
+  //  public UserData m_stUserData[] = new UserData[cDef.getDownloadCnt()];
+
+    public ArrayList<UserData> arrUsers = new ArrayList<>();
 
     private static UserData_Group _Instance;
     public static UserData_Group getInstance()
@@ -22,7 +26,6 @@ public class UserData_Group {
 
     private UserData_Group()
     {
-        for(int i = 0; i< cDef.getDownloadCnt(); i++)
-            m_stUserData[i] = new UserData();
+
     }
 }
