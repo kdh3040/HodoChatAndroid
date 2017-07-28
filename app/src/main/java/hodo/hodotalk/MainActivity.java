@@ -1,5 +1,6 @@
 package hodo.hodotalk;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,7 +34,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
 import hodo.hodotalk.Data.FavoriteData_Group;
@@ -97,7 +106,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         Log.d("!!!!!", "App start----");
 
         Intent intent = getIntent();
@@ -154,10 +162,9 @@ public class MainActivity extends AppCompatActivity
         Log.d("!!!!!", "firebase End----");
     }
 
+
     public  void InitData_firebase()
     {
-
-
         DatabaseReference ref;
         if(stMyData.getGender() == 0)
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");

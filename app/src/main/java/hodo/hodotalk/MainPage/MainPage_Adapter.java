@@ -81,9 +81,6 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
     public boolean DelDataList(int _idx)
     {
-        if(m_UserData.arrUsers.size() <=  _idx*Listcnt )
-            return false;
-
         items.clear();
 
         if(bm != null)
@@ -98,9 +95,6 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     {
         for(int i=0; i< Listcnt; i++) {
             //items.add(stUserData.m_stUserData[i + _idx*Listcnt]);
-            if(m_UserData.arrUsers.size() <=  _idx*Listcnt )
-                return false;
-
             items.add(m_UserData.arrUsers.get(i + _idx*Listcnt));
         }
 

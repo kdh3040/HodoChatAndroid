@@ -20,6 +20,7 @@ import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvHeart;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Util.HeartFunc;
 import hodo.hodotalk.Util.HoDoDefine;
 
 public class MyPage_CardList extends AppCompatActivity {
@@ -29,6 +30,7 @@ public class MyPage_CardList extends AppCompatActivity {
     private LinearLayout SendHeartLayout;
     private LinearLayout RecvHeartLayout;
     private MyData m_Mydata = MyData.getInstance();
+    private HeartFunc m_HeartFunc = HeartFunc.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,23 +91,26 @@ public class MyPage_CardList extends AppCompatActivity {
                                 newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         m_Mydata.SendHeartItem(strTargetToken);
-                                        m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strTargetNick, m_Mydata.getGender());
+                                        //m_HeartFunc.SendHeartToFCM(stTargetData);
+                                     //   m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strTargetNick, m_Mydata.getGender());
                                     }
                                 });
                                 newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strTargetNick, m_Mydata.getGender());
+                                      //  m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strTargetNick, m_Mydata.getGender());
                                     }
                                 });
                             }
 
                             else
                             {
-                                newdlg.setTitle(strTargetNick + "님의 하트를 받습니다");
+                                newdlg.setTitle(strMyNick + "님의 하트를 받습니다");
                                 newdlg.setMessage("하트를 받으면 채팅 화면으로 넘어갑니다").setCancelable(false);
                                 newdlg.setNegativeButton("채팅하기", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //m_Mydata.MakeChatRoomList();
+                                        m_Mydata.SendHeartItem(strTargetToken);
+                                        m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strMyNick, m_Mydata.getGender());
                                         startActivity(new Intent(getApplicationContext(), Chat_UserList_Acitiviy.class));
                                     }
 
