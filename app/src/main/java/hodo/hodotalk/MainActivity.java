@@ -109,10 +109,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                Context context = getApplicationContext();
+                startActivity(new Intent(getApplicationContext(), Chat_UserList_Acitiviy.class));
+
+                /*Context context = getApplicationContext();
                 stMyData.setHeart(stMyData.getHeart() + 100);
                 Toast toast = Toast.makeText(context, "현재 보유 하트 " + stMyData.getHeart(), Toast.LENGTH_SHORT);
-                toast.show();
+                toast.show();*/
             }
         });
 
@@ -162,8 +164,8 @@ public class MainActivity extends AppCompatActivity
         else
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
 
-        ref.limitToFirst(8).addListenerForSingleValueEvent(
-        //ref.addListenerForSingleValueEvent(
+        //ref.limitToFirst(8).addListenerForSingleValueEvent(
+        ref.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -296,6 +298,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
+                    stMyData.GetChatRoomList(stMyData.getGender(), stMyData.getEmail());
 
                     InitData_firebase();
                 }
@@ -319,6 +322,7 @@ public class MainActivity extends AppCompatActivity
                     nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
                     stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
+                    stMyData.GetChatRoomList(stMyData.getGender(), stMyData.getEmail());
 
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
                     stFavorite.GetRecvHeartData(stRecvData.RecvHeart);
