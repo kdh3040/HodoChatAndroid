@@ -106,7 +106,7 @@ public class Chat_UserList_Acitiviy extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(),Chat_Room_Activity.class);
-                    intent.putExtra("nickName",(String)getItem(i));
+                    intent.putExtra("RoomName",(String)getItem(i));
                     startActivity(intent);
                 }
             });

@@ -99,11 +99,14 @@ public class Chat_Room_Activity extends AppCompatActivity {
         Log.d("hngpic",nickName+"");
         Intent intent = getIntent();
 
-        final String yourNickName =  intent.getStringExtra("nickName");
+        final String strRoomName =  intent.getStringExtra("RoomName");
+
+        int idx = strRoomName.indexOf("_");
+        final String yourNickName = strRoomName.substring(idx+1);
 
         Log.d("hngpic",yourNickName+"");
-        mRef = FirebaseDatabase.getInstance().getReference().child("chat").child(nickName+"_"+yourNickName);
-        mRef2 =FirebaseDatabase.getInstance().getReference().child("chat").child(yourNickName+"_"+nickName);
+        mRef = FirebaseDatabase.getInstance().getReference().child("ChatRoom").child(strRoomName);
+       // mRef2 =FirebaseDatabase.getInstance().getReference().child("chat").child(yourNickName+"_"+nickName);
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -184,7 +187,7 @@ public class Chat_Room_Activity extends AppCompatActivity {
                 }else{
                     Chat_Data chat_message = new Chat_Data(nickName,yourNickName,message,nowTime);
                     mRef.push().setValue(chat_message);
-                    mRef2.push().setValue(chat_message);
+                   // mRef2.push().setValue(chat_message);
                     etText.setText("");
 
 
