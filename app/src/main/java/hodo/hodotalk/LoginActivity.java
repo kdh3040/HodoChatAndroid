@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null){
             Log.d(TAG, "Current User:" + mAuth.getCurrentUser().getEmail());
             // 만약 회원이라면 메인으로 이동한다.
-           //GotoMainPage(true);
+       //   GotoMainPage(true);
         } else {
             Log.d(TAG, "Log out State");
         }

@@ -8,5 +8,8 @@
         android:id="@+id/tv_email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:textColor="#111111"
+        android:text="test"
+        android:gravity="center_vertical"
         android:layout_weight="0.14" />
 </LinearLayout>

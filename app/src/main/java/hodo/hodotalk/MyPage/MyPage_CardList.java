@@ -1,6 +1,7 @@
 package hodo.hodotalk.MyPage;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvHeart;
 import hodo.hodotalk.R;
@@ -42,7 +44,7 @@ public class MyPage_CardList extends AppCompatActivity {
     }
 
     private void SetHeartRoom() {
-        int nRoomCnt = m_Mydata.arrRoomList.size();
+        int nRoomCnt = m_Mydata.arrHeartRoomList.size();
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = null;
@@ -50,7 +52,7 @@ public class MyPage_CardList extends AppCompatActivity {
 
         for (int i = 0; i < nRoomCnt; i++) {
             final int finalI = i;
-            databaseRef.child(m_Mydata.arrRoomList.get(i)).addChildEventListener(new ChildEventListener() {
+            databaseRef.child(m_Mydata.arrHeartRoomList.get(i)).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     int saa = 0;
@@ -87,11 +89,12 @@ public class MyPage_CardList extends AppCompatActivity {
                                 newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         m_Mydata.SendHeartItem(strTargetToken);
+                                        m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strTargetNick, m_Mydata.getGender());
                                     }
                                 });
                                 newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-
+                                        m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strTargetNick, m_Mydata.getGender());
                                     }
                                 });
                             }
@@ -103,7 +106,7 @@ public class MyPage_CardList extends AppCompatActivity {
                                 newdlg.setNegativeButton("채팅하기", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //m_Mydata.MakeChatRoomList();
-                                        //m_Mydata.MakeChatRoom();
+                                        startActivity(new Intent(getApplicationContext(), Chat_UserList_Acitiviy.class));
                                     }
 
                                 });

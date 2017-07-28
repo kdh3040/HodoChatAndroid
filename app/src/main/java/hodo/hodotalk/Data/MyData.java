@@ -56,7 +56,8 @@ public class MyData {
     private  RecvHeart m_HeartRoomObj = new RecvHeart();
     private HoDoDefine m_Def = HoDoDefine.getInstance();
 
-    public ArrayList<String> arrRoomList = new ArrayList<>();
+    public ArrayList<String> arrHeartRoomList = new ArrayList<>();
+    public ArrayList<String> arrChatRoomList = new ArrayList<>();
 
     private static MyData  _Instance;
 
@@ -148,8 +149,8 @@ public class MyData {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 int saa =0;
                 String strRoomList = dataSnapshot.getValue(String.class);
-                if(!arrRoomList.contains(strRoomList))
-                    arrRoomList.add(strRoomList);
+                if(!arrHeartRoomList.contains(strRoomList))
+                    arrHeartRoomList.add(strRoomList);
             }
 
             @Override
@@ -198,7 +199,7 @@ public class MyData {
         }
 
         String strCheckName = MyID + "_" + TargetID;
-        if(!arrRoomList.contains(strCheckName)) {
+        if(!arrHeartRoomList.contains(strCheckName)) {
             Map<String, Object> updateMap = new HashMap<>();
             updateMap.put("RoomName", MyID + "_" + TargetID);
             user.push().setValue(MyID + "_" + TargetID);
@@ -236,6 +237,88 @@ public class MyData {
         m_HeartRoomObj.Date = ctime.format(new Date(time));
 
         user.push().setValue(m_HeartRoomObj);
+    }
+
+
+    public  void GetChatRoomList(int MyGender, String MyEmail)
+    {
+        //int idx = MyEmail.indexOf("@");
+        //STring MyID =  MyEmail.substring(0, idx);
+        String MyID = getNickName();
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = null;
+
+        if(MyGender == 0)
+            databaseRef = database.getReference("ChatRoomList" + "/WOMAN/" + MyID);
+        else
+            databaseRef = database.getReference("ChatRoomList" + "/MAN/" +  MyID);
+
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            int i = 0;
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                int saa =0;
+                String strRoomList = dataSnapshot.getValue(String.class);
+                if(!arrChatRoomList.contains(strRoomList))
+                    arrChatRoomList.add(strRoomList);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                int saa =0;
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                int saa =0;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                int saa =0;
+            }
+        });
+
+    }
+
+    public boolean MakeChatRoomList(String MyEmail, String TargetEmail, int MyGender){
+       // int idx = MyEmail.indexOf("@");
+       // String MyID =  MyEmail.substring(0, idx);
+
+        /*idx = TargetEmail.indexOf("@");
+        String TargetID =  TargetEmail.substring(0, idx);
+*/
+        String MyID = getNickName();
+        String TargetID = TargetEmail;
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference table;
+
+        table = database.getReference("ChatRoomList");
+        DatabaseReference user, targetuser;
+
+        if(MyGender == 0) {
+            user = table.child("WOMAN").child(MyID);
+            targetuser = table.child("MAN").child(TargetID);
+        }
+        else {
+            user = table.child("MAN").child(MyID);
+            targetuser = table.child("WOMAN").child(TargetID);
+        }
+
+        String strCheckName = MyID + "_" + TargetID;
+        if(!arrChatRoomList.contains(strCheckName)) {
+            user.push().setValue(MyID + "_" + TargetID);
+            targetuser.push().setValue(MyID + "_" + TargetID);
+            return true;
+        }
+        else
+            return false;
     }
 
     public void SendHeartItem(String strTargetToken) {
@@ -359,6 +442,5 @@ public class MyData {
     public int getSendHeart() {
         return  SendHeart;
     }
-
 
 }
