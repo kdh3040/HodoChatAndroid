@@ -115,9 +115,10 @@ public class ViewProfile extends AppCompatActivity {
                     if(stmyData.getHeart() > 5) {
                         stmyData.setHeart(stmyData.getHeart() - 5);
                         //stmyData.MakeHeartRoom(stmyData.getEmail(), stTargetData.getEmail(), stmyData.getNickName(), stTargetData.getNickName(), stmyData.getImg(), stTargetData.getImage());
-                        stmyData.MakeHeartRoom(stmyData.getEmail(), stTargetData.getEmail(), stmyData.getNickName(), stTargetData.getNickName(), "MyImg", "TagerIMG");
-                        stmyData.MakeHeartRoomList(stmyData.getEmail(), stTargetData.getEmail(),stmyData.getGender());
-                        SendHeartToFCM();
+                        if(stmyData.MakeHeartRoomList(stmyData.getEmail(), stTargetData.getEmail(),stmyData.getGender())) {
+                            stmyData.MakeHeartRoom(stmyData.getEmail(), stTargetData.getEmail(), stmyData.getNickName(), stTargetData.getNickName(), "MyImg", "TagerIMG", stmyData.getToken(), stTargetData.getToken());
+                            SendHeartToFCM();
+                        }
                     }
                 }
 
@@ -184,8 +185,7 @@ public class ViewProfile extends AppCompatActivity {
 
     }
 
-    private static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
-    private static final String SERVER_KEY = "AAAA1uJPLGE:APA91bG9TpgOzLvUuVkDSmZKdcyodQyT3yMuTeKusV9tXMc7k4EmZiss5FMW2rAtO5PFTSuFvy5nxOarw3bR2Gdk-5rwWSC19to7qBmEpfoUXh8USHZ9VianXYXq3D6pNyGKHKrcquAP";
+
     private void SendHeartToFCM() {
 
         try {
@@ -211,12 +211,12 @@ public class ViewProfile extends AppCompatActivity {
             root.put("data", data);
             // FMC 메시지 생성 end
 
-            URL Url = new URL(FCM_MESSAGE_URL);
+            URL Url = new URL(m_Def.FCM_MESSAGE_URL);
             HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.addRequestProperty("Authorization", "key=" + SERVER_KEY);
+            conn.addRequestProperty("Authorization", "key=" + m_Def.SERVER_KEY);
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestProperty("Content-type", "application/json");
             OutputStream os = conn.getOutputStream();

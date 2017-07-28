@@ -9,6 +9,7 @@ public class RecvHeart {
     public  String TargetNickName;
     public  String MyImg;
     public  String TargetImg;
-    public  int MyConn;
-    public  int TargetConn;
+    public  String MyToken;
+    public  String TargetToken;
+    public  String Date;
 }

@@ -12,7 +12,8 @@ public class HoDoDefine {
 
     public static int nNotMatching;
     public static int nMatching;
-
+    public static final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
+    public static final String SERVER_KEY = "AAAA1uJPLGE:APA91bG9TpgOzLvUuVkDSmZKdcyodQyT3yMuTeKusV9tXMc7k4EmZiss5FMW2rAtO5PFTSuFvy5nxOarw3bR2Gdk-5rwWSC19to7qBmEpfoUXh8USHZ9VianXYXq3D6pNyGKHKrcquAP";
 
     private static HoDoDefine _Instance;
     public static HoDoDefine getInstance()

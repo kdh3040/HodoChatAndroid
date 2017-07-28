@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.common.api.Api;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -13,12 +14,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import hodo.hodotalk.R;
+import hodo.hodotalk.Util.HoDoDefine;
 
 /**
  * Created by boram on 2017-07-18.
@@ -45,6 +54,7 @@ public class MyData {
     private String  PushKey;     // 하트 보낸 횟수
 
     private  RecvHeart m_HeartRoomObj = new RecvHeart();
+    private HoDoDefine m_Def = HoDoDefine.getInstance();
 
     public ArrayList<String> arrRoomList = new ArrayList<>();
 
@@ -138,7 +148,8 @@ public class MyData {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 int saa =0;
                 String strRoomList = dataSnapshot.getValue(String.class);
-                arrRoomList.add(strRoomList);
+                if(!arrRoomList.contains(strRoomList))
+                    arrRoomList.add(strRoomList);
             }
 
             @Override
@@ -164,7 +175,7 @@ public class MyData {
 
     }
 
-    public  void MakeHeartRoomList(String MyEmail, String TargetEmail, int MyGender)
+    public  boolean MakeHeartRoomList(String MyEmail, String TargetEmail, int MyGender)
     {
         int idx = MyEmail.indexOf("@");
         String MyID =  MyEmail.substring(0, idx);
@@ -185,14 +196,20 @@ public class MyData {
             user = table.child("MAN").child(MyID);
             targetuser = table.child("WOMAN").child(TargetID);
         }
-        Map<String, Object> updateMap = new HashMap<>();
-        updateMap.put("RoomName", MyID + "_" + TargetID);
-        user.push().setValue(MyID + "_" + TargetID);
-        targetuser.push().setValue(MyID + "_" + TargetID);
 
+        String strCheckName = MyID + "_" + TargetID;
+        if(!arrRoomList.contains(strCheckName)) {
+            Map<String, Object> updateMap = new HashMap<>();
+            updateMap.put("RoomName", MyID + "_" + TargetID);
+            user.push().setValue(MyID + "_" + TargetID);
+            targetuser.push().setValue(MyID + "_" + TargetID);
+            return true;
+        }
+        else
+            return false;
     }
 
-    public  void MakeHeartRoom(String MyEmail, String TargetEmail, String MyNickName, String TargetNickName, String MyImg, String TargetImg)
+    public  void MakeHeartRoom(String MyEmail, String TargetEmail, String MyNickName, String TargetNickName, String MyImg, String TargetImg, String MyToken, String TargetToken)
     {
         int idx = MyEmail.indexOf("@");
         String MyID =  MyEmail.substring(0, idx);
@@ -207,14 +224,51 @@ public class MyData {
 
         DatabaseReference user = table.child(MyID + "_" + TargetID);
 
+        long time = System.currentTimeMillis();
+        SimpleDateFormat ctime = new SimpleDateFormat("yyyyMMdd");
+
         m_HeartRoomObj.MyNickName = MyNickName;
         m_HeartRoomObj.TargetNickName = TargetNickName;
         m_HeartRoomObj.MyImg = MyImg;
         m_HeartRoomObj.TargetImg = TargetImg;
-        m_HeartRoomObj.MyConn = 1;
-        m_HeartRoomObj.TargetConn = 0;
+        m_HeartRoomObj.MyToken = MyToken;
+        m_HeartRoomObj.TargetToken = TargetToken;
+        m_HeartRoomObj.Date = ctime.format(new Date(time));
 
-        user.setValue(m_HeartRoomObj);
+        user.push().setValue(m_HeartRoomObj);
+    }
+
+    public void SendHeartItem(String strTargetToken) {
+
+        try {
+            // FMC 메시지 생성 start
+            JSONObject root = new JSONObject();
+            JSONObject notification = new JSONObject();
+            JSONObject data = new JSONObject();
+            //notification.put("body", stmyData.getNickName()+"님이 좋아요를 보냈습니다" + "@" + temp);
+            //notification.put("body", stmyData.getNickName()+"님이 좋아요를 보냈습니다");
+            notification.put("body", getNickName()+"님이 하트 선물을 하였습니다");
+            notification.put("title", "호도톡");
+            root.put("notification", notification);
+            root.put("to", strTargetToken);
+            root.put("data", data);
+            // FMC 메시지 생성 end
+
+            URL Url = new URL(m_Def.FCM_MESSAGE_URL);
+            HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.addRequestProperty("Authorization", "key=" + m_Def.SERVER_KEY);
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("Content-type", "application/json");
+            OutputStream os = conn.getOutputStream();
+            os.write(root.toString().getBytes("utf-8"));
+            os.flush();
+            conn.getResponseCode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getEmail() {return  Email;}
@@ -289,6 +343,9 @@ public class MyData {
         return Body;
     }
 
+    public String getToken(){
+        return Token;
+    }
 
     public int getSendInter() {
         return  SendInter;

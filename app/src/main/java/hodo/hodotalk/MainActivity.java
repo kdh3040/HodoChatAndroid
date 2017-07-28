@@ -299,6 +299,8 @@ public class MainActivity extends AppCompatActivity
 
                     nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
+                    stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
+
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
                     stFavorite.GetRecvHeartData(stRecvData.RecvHeart);
                     stFavorite.GetSendInterData(stRecvData.SendInter);

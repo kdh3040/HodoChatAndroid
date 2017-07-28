@@ -59,20 +59,32 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             }
 
-            else {
                 Intent intent = new Intent(this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 PendingIntent pending = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+            NotificationCompat.Builder notificationBuilder;
+
+            if (remoteMessage.getNotification() != null) {
+                Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+               notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.mipmap.ic_launcher) // 알림 영역에 노출 될 아이콘.
+                        .setContentTitle(getString(R.string.app_name)) // 알림 영역에 노출 될 타이틀
+                        .setContentText(body); // Firebase Console 에서 사용자가 전달한 메시지내용
+            }
+
+            else
+            {
+              notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
                         .setSmallIcon(R.mipmap.ic_launcher) // 알림 영역에 노출 될 아이콘.
                         .setContentTitle(getString(R.string.app_name)) // 알림 영역에 노출 될 타이틀
                         .setContentText(body) // Firebase Console 에서 사용자가 전달한 메시지내용
                         .setContentIntent(pending);
+            }
 
                 NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
                 notificationManagerCompat.notify(0x1001, notificationBuilder.build());
-            }
+
 /*            Intent intent = new Intent(Intent.ACTION_VIEW);*/
 
 

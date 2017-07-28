@@ -1,9 +1,11 @@
 package hodo.hodotalk.MyPage;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,17 +35,17 @@ import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.RecvHeart;
 import hodo.hodotalk.R;
+import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.Util.HoDoDefine;
+import hodo.hodotalk.ViewProfile;
 
 public class MyPage_CardList extends AppCompatActivity {
 
     private HoDoDefine m_Def = HoDoDefine.getInstance();
-    private  FavoriteData_Group m_favorite = FavoriteData_Group.getInstance();
 
     private LinearLayout SendHeartLayout;
     private LinearLayout RecvHeartLayout;
     private MyData m_Mydata = MyData.getInstance();
-    private String strMyID ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,48 +57,86 @@ public class MyPage_CardList extends AppCompatActivity {
         SendHeartLayout = (LinearLayout)findViewById(R.id.SendHeart);
         RecvHeartLayout = (LinearLayout)findViewById(R.id.RecvHeart);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseRef = null;
-
-        int idx = m_Mydata.getEmail().indexOf("@");
-        strMyID = m_Mydata.getEmail().substring(0, idx);
-
-        databaseRef = database.getReference("HeartRoom");
-
-        SetHeartRoom(databaseRef);
+        SetHeartRoom();
     }
 
-    private void SetHeartRoom(DatabaseReference databaseRef) {
+    private void SetHeartRoom() {
         int nRoomCnt = m_Mydata.arrRoomList.size();
 
-        for(int i=0; i<nRoomCnt; i++)
-        {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = null;
+        databaseRef = database.getReference("HeartRoom");
+
+        for (int i = 0; i < nRoomCnt; i++) {
+            final int finalI = i;
             databaseRef.child(m_Mydata.arrRoomList.get(i)).addChildEventListener(new ChildEventListener() {
-                int i = 0;
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    int saa =0;
+                    int saa = 0;
                     RecvHeart cRecvCard = dataSnapshot.getValue(RecvHeart.class);
 
+                    final String strDate = cRecvCard.Date;
                     final String strMyNick = cRecvCard.MyNickName;
                     final String strTargetNick = cRecvCard.TargetNickName;
                     final String strMyImg = cRecvCard.MyImg;
                     final String strTargetImg = cRecvCard.TargetImg;
-                    final int  strMyConn = cRecvCard.MyConn;
-                    final int  strTargetConn = cRecvCard.TargetConn;
+                    final String strMyToken = cRecvCard.MyToken;
+                    final String strTargetToken = cRecvCard.TargetToken;
 
+                    boolean bPickMe = true;
+                    if(strMyNick.equals(m_Mydata.getNickName()))
+                        bPickMe = false;
 
                     LinearLayout item1 = new LinearLayout(getApplicationContext());
-                    Button   newTextView1 = new Button(getApplicationContext());
+                    Button newTextView1 = new Button(getApplicationContext());
                     item1.setOrientation(LinearLayout.VERTICAL);
-                    newTextView1.setText(strMyNick);
-                    newTextView1.setId(i + 1);
+                    //newTextView1.setText(m_Mydata.arrRoomList.get(finalI));
+                    newTextView1.setText(strMyNick + " 님이 " + strTargetNick + "님에게 보낸 하트") ;
+                    newTextView1.setId(finalI + 1);
 
-                    final  int position = i;
+
+                    final int position = finalI;
+                    final boolean finalPickMe = bPickMe;
                     newTextView1.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
+                            AlertDialog.Builder newdlg = new AlertDialog.Builder(MyPage_CardList.this);
+                            if(finalPickMe == false) {
+                                newdlg.setTitle(strTargetNick + "님에게 하트를 선물 할까요");
+                                newdlg.setMessage("상대방에게 하트를 추가로 보냅니다").setCancelable(false);
+                                newdlg.setNegativeButton("사용하기", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        m_Mydata.SendHeartItem(strTargetToken);
+                                    }
+                                });
+                                newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
 
+                                    }
+                                });
+                            }
 
+                            else
+                            {
+                                newdlg.setTitle(strTargetNick + "님의 하트를 받습니다");
+                                newdlg.setMessage("하트를 받으면 채팅 화면으로 넘어갑니다").setCancelable(false);
+                                newdlg.setNegativeButton("채팅하기", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //m_Mydata.MakeChatRoomList();
+                                        //m_Mydata.MakeChatRoom();
+                                    }
+
+                                });
+                                newdlg.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        int asdadsad = 0;
+                                    }
+                                });
+
+                            }
+                            newdlg.show();
+
+                            //Toast toast = Toast.makeText(getApplicationContext(), "현재 버튼 " + m_Mydata.arrRoomList.get(finalI), Toast.LENGTH_SHORT);
+                            //toast.show();
                        /* Intent intent = new Intent(getApplicationContext(), ChatPage_main.class);
                         intent.putExtra("TargetNick", strNick);
                         startActivity(intent);*/
@@ -104,12 +144,15 @@ public class MyPage_CardList extends AppCompatActivity {
                     });
 
                     LinearLayout.LayoutParams item_param1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    item_param1.setMargins(5,5,5,5);
+                    item_param1.setMargins(5, 5, 5, 5);
 
                     item1.setLayoutParams(item_param1);
                     item1.addView(newTextView1);
-                    RecvHeartLayout.addView(item1);
-                    i++;
+
+                    if(finalPickMe == false)
+                        SendHeartLayout.addView(item1);
+                    else
+                        RecvHeartLayout.addView(item1);
                 }
 
                 @Override
@@ -119,22 +162,21 @@ public class MyPage_CardList extends AppCompatActivity {
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    int saa =0;
+                    int saa = 0;
                 }
 
                 @Override
                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    int saa =0;
+                    int saa = 0;
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    int saa =0;
+                    int saa = 0;
                 }
             });
 
         }
-
 
     }
 
