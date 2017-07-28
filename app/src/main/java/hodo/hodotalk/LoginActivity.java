@@ -3,6 +3,7 @@ package hodo.hodotalk;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
 
@@ -41,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         edtPasswd = (EditText)findViewById(R.id.password);
         btnLogin = (Button)findViewById(R.id.email_sign_in_button);
         btnCreate = (Button)findViewById(R.id.email_join_button);
+        Button btnTest = (Button)findViewById(R.id.btn_test);
 
 
         progDialog = new ProgressDialog(LoginActivity.this);
@@ -103,7 +115,54 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    String email = URLEncoder.encode("email","UTF-8")+"="+ URLEncoder.encode("hfhfj@hngpic.com","UTF-8");
+                    String addr ="http://13.113.143.45/firebaseact.php";
+                    URL url = new URL(addr);
 
+                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+
+                    if(conn != null) {
+                        conn.setRequestMethod("POST");
+                        conn.setDoInput(true);
+                        conn.setDoOutput(true);
+                        conn.setUseCaches(false);
+                        conn.setConnectTimeout(10000);
+                        Log.d("hngpic","settimeout");
+                        OutputStream outputStream = conn.getOutputStream();
+                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                        writer.write(email);
+                        writer.flush();
+                        outputStream.close();
+                        writer.close();
+                        InputStream inputStream = conn.getInputStream();
+                        BufferedReader br  = new BufferedReader(new InputStreamReader(inputStream));
+                        String line = br.readLine();
+                        if(line ==null) {
+                            Log.d("hngpic","readline is null");
+                        }else {
+                            Log.d("hngpic", line);
+                        }
+                        br.close();
+                        inputStream.close();
+                        conn.disconnect();
+                    }
+                }catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+        //todo 스레드로 빼야됨
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
 
     }
     //Password확인
@@ -164,5 +223,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 
 }
