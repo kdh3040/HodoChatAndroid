@@ -1,13 +1,17 @@
 package hodo.hodotalk.Chat;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,25 +37,46 @@ public class Chat_UserList_Acitiviy extends AppCompatActivity {
 
 
     private UserData_Group userData_group = UserData_Group.getInstance();
-    //DatabaseReference mDataRef;
+
     ArrayList<UserData> arrayList = new ArrayList<>();
 
-    ListAdapter listAdapter;
+    MyListAdapter myListAdapter ;
+
+
+
 
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.chat_current_user);
 
+        arrayList = userData_group.arrUsers;
+
+        listView = (ListView)findViewById(R.id.listview);
+
+
+        myListAdapter = new MyListAdapter(getApplicationContext());
+        listView.setAdapter(myListAdapter);
 
 
     }
-    class ListAdapter extends BaseAdapter {
+    class MyListAdapter extends BaseAdapter {
+
+        private Context m_Context;
+
+        public MyListAdapter(Context context) {
+            m_Context = context;
+
+        }
 
         @Override
         public int getCount() {
+            Log.d("hngpic",""+arrayList.size());
             return arrayList.size();
+
+
         }
 
         @Override
@@ -69,7 +94,7 @@ public class Chat_UserList_Acitiviy extends AppCompatActivity {
 
             View v;
             if(view ==null) {
-                LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+                LayoutInflater inflater = LayoutInflater.from(m_Context);
                 v = inflater.inflate(R.layout.chat_userlist, viewGroup, false);
             }else {
                 v = view;
@@ -87,25 +112,6 @@ public class Chat_UserList_Acitiviy extends AppCompatActivity {
             });
             return v;
         }
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat_current_user);
-
-        arrayList = userData_group.arrUsers;
-
-
-
-
-        listView = (ListView)findViewById(R.id.listview);
-
-        //mDataRef = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
-        listAdapter = new ListAdapter();
-        listView.setAdapter(listAdapter);
-
-
     }
 
 
