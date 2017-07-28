@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
@@ -238,9 +239,11 @@ public class MainActivity extends AppCompatActivity
                                 .replace(R.id.fl_activity_main_container, cChoice).commit();
                         break;
                     case "4":
-                        getSupportFragmentManager()
+
+                        startActivity(new Intent(getApplicationContext(), Chat_UserList_Acitiviy.class));
+                        /*getSupportFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.fl_activity_main_container, cConnect).commit();
+                                .replace(R.id.fl_activity_main_container, cConnect).commit();*/
                         break;
                 }
             }

@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
+
 public class LoginActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
     EditText edtEmail, edtPasswd;
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = (Button)findViewById(R.id.email_sign_in_button);
         btnCreate = (Button)findViewById(R.id.email_join_button);
 
+
         progDialog = new ProgressDialog(LoginActivity.this);
         mAuth = FirebaseAuth.getInstance();
         //로그인 정보 확인
@@ -47,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser() != null){
             Log.d(TAG, "Current User:" + mAuth.getCurrentUser().getEmail());
             // 만약 회원이라면 메인으로 이동한다.
-            GotoMainPage(true);
+           GotoMainPage(true);
         } else {
             Log.d(TAG, "Log out State");
         }
@@ -99,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+
 
     }
     //Password확인
