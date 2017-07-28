@@ -1,9 +1,6 @@
 package hodo.hodotalk.MainPage;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,16 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-
-import hodo.hodotalk.ChatPage.ChatPage_main;
+import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
 import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.R;
 
@@ -80,7 +69,7 @@ public class Connect extends Fragment {
 
     private void CreateChatRoom() {
 
-        Intent intent = new Intent(getContext(),ChatPage_main.class);
+        Intent intent = new Intent(getContext(),Chat_UserList_Acitiviy.class);
         startActivity(intent);
 
 

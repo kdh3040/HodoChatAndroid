@@ -1,43 +1,24 @@
 package hodo.hodotalk.MyPage;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.Api;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import hodo.hodotalk.ChatPage.ChatPage_main;
-import hodo.hodotalk.Data.FavoriteData_Group;
 import hodo.hodotalk.Data.MyData;
-import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.RecvHeart;
 import hodo.hodotalk.R;
-import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.Util.HoDoDefine;
-import hodo.hodotalk.ViewProfile;
 
 public class MyPage_CardList extends AppCompatActivity {
 
