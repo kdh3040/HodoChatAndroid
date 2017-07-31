@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,9 +47,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.LruCache;
-import com.squareup.picasso.Picasso;
-
 
 import java.text.SimpleDateFormat;
 
@@ -63,8 +62,6 @@ public class Chat_Room_Activity extends AppCompatActivity {
     Button btnSend,btnImg;
     EditText etText;
     RecyclerView recyclerView;
-    public Picasso picasso;
-    public LruCache picasso_LRuCache;
     DatabaseReference mRef;
     DatabaseReference mRef2;
     MyData myData = MyData.getInstance();
@@ -152,7 +149,7 @@ public class Chat_Room_Activity extends AppCompatActivity {
                 //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
                 if( chat_message.getimage_URL() != null){
-                    Picasso.with(getApplicationContext())
+                    Glide.with(getApplicationContext())
                             .load(chat_message.getimage_URL().toString())
                             .into(viewHolder.image_sent);
 
