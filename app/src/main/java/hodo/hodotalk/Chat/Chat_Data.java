@@ -9,7 +9,7 @@ public class Chat_Data {
     public String to;
     public String message;
     public Long time;
-    String image;
+    String image_URL;
     private String id;
 
 
@@ -22,15 +22,15 @@ public class Chat_Data {
         this.to = to_person;
         this.message = message;
         this.time = nowTime;
-        //this.image = image;
+        this.image_URL = image_URL;
 
     }
     public Long gettime(){
         return time;
     }
 
-    public Object getImage() {
-        return image;
+    public Object getimage_URL() {
+        return image_URL;
     }
 
     public void setId(String id) {

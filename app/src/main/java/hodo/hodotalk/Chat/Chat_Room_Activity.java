@@ -1,7 +1,10 @@
 package hodo.hodotalk.Chat;
 import android.content.Intent;
+import android.database.Cursor;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -42,6 +45,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.Picasso;
 
 
 import java.text.SimpleDateFormat;
@@ -58,22 +63,24 @@ public class Chat_Room_Activity extends AppCompatActivity {
     Button btnSend,btnImg;
     EditText etText;
     RecyclerView recyclerView;
-
+    public Picasso picasso;
+    public LruCache picasso_LRuCache;
     DatabaseReference mRef;
     DatabaseReference mRef2;
     MyData myData = MyData.getInstance();
-    String nickName,yourNickName;
+    String nickName,yourNickName,strRoomName;
 
     FirebaseRecyclerAdapter<Chat_Data, ChatViewHolder> firebaseRecyclerAdapter;
     SimpleDateFormat mFormat = new SimpleDateFormat("hh:mm");
     LinearLayoutManager mLinearLayoutManager;
     FirebaseUser m_FirebaseUser;
+    FirebaseAuth m_FirebaseAuth;
     int REQUEST_IMAGE = 1001;
 
 
     public static class ChatViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView image;
+        ImageView image_profile,image_sent;
         TextView message;
 
         TextView sender;
@@ -81,7 +88,8 @@ public class Chat_Room_Activity extends AppCompatActivity {
 
         public ChatViewHolder(View itemView) {
             super(itemView);
-            this.image = (ImageView)itemView.findViewById(R.id.imageView);
+            this.image_profile = (ImageView)itemView.findViewById(R.id.imageView);
+            this.image_sent = itemView.findViewById(R.id.iv_sent);
             this.sender = (TextView)itemView.findViewById(R.id.nickname);
             this.message =(TextView)itemView.findViewById(R.id.message);
 
@@ -97,24 +105,26 @@ public class Chat_Room_Activity extends AppCompatActivity {
 
         btnSend =  (Button)findViewById(R.id.btn_send);
         etText = (EditText)findViewById(R.id.et_text);
-        btnImg =(Button)findViewById(R.id.btn_img);
+        btnImg =(Button)findViewById(R.id.btn_image);
         recyclerView = (RecyclerView) findViewById(R.id.chatroom_RecylerView);
         //mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         //listView.setAdapter();
 
 
         nickName = myData.getNickName();
+        m_FirebaseAuth = FirebaseAuth.getInstance();
+        m_FirebaseUser = m_FirebaseAuth.getCurrentUser();
 
         Intent intent = getIntent();
 
-        final String strRoomName =  intent.getStringExtra("RoomName");
+        strRoomName =  intent.getStringExtra("RoomName");
 
         int idx = strRoomName.indexOf("_");
         yourNickName = strRoomName.substring(idx+1);
 
         Log.d("hngpic",yourNickName+"");
         mRef = FirebaseDatabase.getInstance().getReference().child("ChatRoom").child(strRoomName);
-       // mRef2 =FirebaseDatabase.getInstance().getReference().child("chat").child(yourNickName+"_"+nickName);
+       //mRef2 =FirebaseDatabase.getInstance().getReference().child("chat").child(yourNickName+"_"+nickName);
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -141,16 +151,17 @@ public class Chat_Room_Activity extends AppCompatActivity {
 
                 //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-                if(chat_message.getmessage() != null ){
+                if( chat_message.getimage_URL() != null){
+                    Picasso.with(getApplicationContext())
+                            .load(chat_message.getimage_URL().toString())
+                            .into(viewHolder.image_sent);
 
-                    viewHolder.message.setText(chat_message.getmessage());
-                    viewHolder.message.setVisibility(TextView.VISIBLE);
-
-                    Date mDate = new Date(chat_message.gettime());
-                    String date= mFormat.format(mDate);
-
-                    viewHolder.sender.setText(chat_message.getfrom()+" "+date);
                 }
+                Date mDate = new Date(chat_message.gettime());
+                String date= mFormat.format(mDate);
+                viewHolder.sender.setText(chat_message.getfrom()+" "+date);
+
+
             }
         };
 
@@ -186,21 +197,23 @@ public class Chat_Room_Activity extends AppCompatActivity {
                 }else{
                     Chat_Data chat_Data = new Chat_Data(nickName,yourNickName,message,nowTime,null);
                     mRef.push().setValue(chat_Data);
-                   mRef2.push().setValue(chat_Data);
+                   //mRef2.push().setValue(chat_Data);
                     etText.setText("");
 
                 }
             }
         });
 
+
         //채팅창 이미지 추가 버튼
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                //intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
-                startActivityForResult(intent,REQUEST_IMAGE);
+
+                startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQUEST_IMAGE);
             }
         });
     }
@@ -213,30 +226,28 @@ public class Chat_Room_Activity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 if(data != null){
 
-                    final Uri uri = data.getData();
-                    long nowTime =System.currentTimeMillis();
-                    Chat_Data tempMessage = new Chat_Data(nickName,yourNickName,null,nowTime,uri.toString());
-                    mRef.child("message").push().setValue(tempMessage, new DatabaseReference.CompletionListener(){
 
-                        @Override
-                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                            if(databaseError == null){
-                                String key = databaseReference.getKey();
-                                StorageReference storageReference = FirebaseStorage.getInstance()
-                                        .getReference(m_FirebaseUser.getUid())
-                                        .child(key)
-                                        .child(uri.getLastPathSegment());
-                                putImageInStorage(storageReference, uri, key);
-                            }
-                        }
-                    });
+                    final Uri uri = data.getData();
+
+
+
+
+
+                    StorageReference storageReference = FirebaseStorage.getInstance()
+                            .getReference("images")
+                            .child(strRoomName)
+                            .child(uri.getLastPathSegment());
+
+
+                    putImageInStorage(storageReference, uri);
 
 
                 }
             }
         }
     }
-    private void putImageInStorage(StorageReference storageReference, Uri uri,final String key){
+
+    private void putImageInStorage(StorageReference storageReference, Uri uri){
 
         storageReference.putFile(uri).addOnCompleteListener(Chat_Room_Activity.this,
                 new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -244,9 +255,10 @@ public class Chat_Room_Activity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if (task.isSuccessful()) {
                             long nowTime =System.currentTimeMillis();
+
                             Chat_Data chat_data = new Chat_Data(nickName,yourNickName,null,nowTime,task.getResult().getMetadata().getDownloadUrl().toString());
 
-                            mRef.child("message").child(key).setValue(chat_data);
+                            mRef.push().setValue(chat_data);
 
 
                         }else{

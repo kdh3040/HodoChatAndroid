@@ -73,7 +73,9 @@
         <activity
             android:name=".Chat.Chat_Room_Activity"
 
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".Chat.Chat_UserList_Acitiviy"
             android:theme="@style/AppTheme.NoActionBar">
