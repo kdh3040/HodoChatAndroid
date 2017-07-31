@@ -1,7 +1,11 @@
 package hodo.hodotalk.MyPage;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +25,14 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
+
+import hodo.hodotalk.Chat.Chat_Data;
+import hodo.hodotalk.Chat.Chat_Room_Activity;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.MainActivity;
 import hodo.hodotalk.R;
@@ -48,6 +59,7 @@ public class EditProfile extends AppCompatActivity {
     private  static int strChoiceJob;
     private  static int strChoiceBody;
     private  static String strToken ;
+    private  static String strChoiceImg;
 
     ArrayAdapter<String> adapter;
     ArrayAdapter<String> adapterAge;
@@ -68,6 +80,8 @@ public class EditProfile extends AppCompatActivity {
 
     public static TransformValue _TV = TransformValue.getInstance();
     public static MyData stMyData = MyData.getInstance();
+
+    int REQUEST_IMAGE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +113,7 @@ public class EditProfile extends AppCompatActivity {
 
 
         Setting_MyData();
-        ViewProfileIMG();
+        ViewProfileIMG(stMyData.getImg());
 
         adapterAge.addAll("10대", "20대", "30대", "40대");
         adapterBlood.addAll("A형", "B형", "O형", "AB형");
@@ -143,7 +157,7 @@ public class EditProfile extends AppCompatActivity {
                         CreateListDialog(adapterBody, 5);
                         break;
                     case R.id.EditProfile_btnImage:
-                        ViewProfileIMG();
+                        SelectProfileImg();
                         break;
                 }
                 //  UpdateStatus();
@@ -219,19 +233,70 @@ public class EditProfile extends AppCompatActivity {
         btnJob.setText("직업 : "+ _TV.Transform_job(strChoiceJob));
         btnBody.setText("체형 : "+ _TV.Transform_Body(strChoiceBody));
 
-        ViewProfileIMG();
 
-        stMyData.UpdateMyProfile(strChoiceAge, strChoiceBlood, strChoiceLoc, strChoiceRel, strChoiceJob, strChoiceBody);
+        stMyData.UpdateMyProfile(strChoiceImg,strChoiceAge, strChoiceBlood, strChoiceLoc, strChoiceRel, strChoiceJob, strChoiceBody);
+        ViewProfileIMG(stMyData.getImg());
 
     }
 
-    public void ViewProfileIMG()
+    public void SelectProfileImg()
     {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent,"Select Picture"),REQUEST_IMAGE);
+    }
+
+    public void ViewProfileIMG(String ImgUrl)
+    {
+
         Glide.with(getApplicationContext())
-                .load(stMyData.getImg())
+                .load(ImgUrl)
                 .into(ProfileImage);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_IMAGE){
+            if(resultCode == RESULT_OK){
+                if(data != null){
+                    final Uri uri = data.getData();
+                    try {
+                        Bitmap selPhoto = MediaStore.Images.Media.getBitmap( getContentResolver(), uri );
+                        ProfileImage.setImageBitmap(selPhoto);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    StorageReference storageReference = FirebaseStorage.getInstance()
+                            .getReference("images")
+                            .child(stMyData.getIndex())
+                            .child(uri.getLastPathSegment());
+                    putImageInStorage(storageReference, uri);
+                }
+            }
+        }
+    }
+
+    private void putImageInStorage(StorageReference storageReference, Uri uri){
+
+        storageReference.putFile(uri).addOnCompleteListener(EditProfile.this,
+                new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            strChoiceImg = task.getResult().getMetadata().getDownloadUrl().toString();
+                            //ViewProfileIMG(strChoiceImg);
+                        }else{
+
+                        }
+                    }
+                });
+
+    }
 
     private void SetData_Firebase(){
 
@@ -256,7 +321,7 @@ public class EditProfile extends AppCompatActivity {
         user.child("Religion").setValue(strChoiceRel);
         String strToken = FirebaseInstanceId.getInstance().getToken();
         user.child("Token").setValue(strToken);
-        //user.child("ImageUrl").setValue(strChoice);
+        user.child("Img").setValue(strChoiceImg);
     }
 
     public void CreateListDialog(ArrayAdapter<String> _adapter, final  int i){

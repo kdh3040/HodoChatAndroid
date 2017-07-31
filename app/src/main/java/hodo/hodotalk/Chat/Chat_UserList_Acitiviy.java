@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import hodo.hodotalk.Data.ChatRoomData;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.UserData;
 import hodo.hodotalk.Data.UserData_Group;
@@ -96,17 +97,24 @@ public class Chat_UserList_Acitiviy extends AppCompatActivity {
             }
             TextView tv = v.findViewById(R.id.tv_email);
 
-            String strText = (String)getItem(i);
-            int idx = strText.indexOf("_");
-            String MyID =  strText.substring(0, idx);
-            String YourID = strText.substring(idx+1);
+            ChatRoomData tempData = new ChatRoomData();
+            tempData = (ChatRoomData)getItem(i);
+
+            final String strRoomName = tempData.RoomName;
+
+            String MyID =  tempData.MyNickName;
+            String YourID = tempData.TargetNickName;
             tv.setText(MyID+"님과 "+ YourID+"님의 채팅방");
+
+            final ChatRoomData finalTempData = tempData;
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(),Chat_Room_Activity.class);
-                    intent.putExtra("RoomName",(String)getItem(i));
+                    intent.putExtra("RoomName",(String)strRoomName);
+                    intent.putExtra("TargetNickName",(String) finalTempData.TargetNickName);
+                    intent.putExtra("TargetImg",(String) finalTempData.TargetImg);
                     startActivity(intent);
                 }
             });

@@ -1,6 +1,7 @@
 package hodo.hodotalk.Data;
 
 import android.media.session.MediaSession;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -58,7 +59,8 @@ public class MyData {
     private HoDoDefine m_Def = HoDoDefine.getInstance();
 
     public ArrayList<String> arrHeartRoomList = new ArrayList<>();
-    public ArrayList<String> arrChatRoomList = new ArrayList<>();
+    //public ArrayList<String> arrChatRoomList = new ArrayList<>();
+    public ArrayList<ChatRoomData> arrChatRoomList = new ArrayList<>();
 
     private static MyData  _Instance;
 
@@ -252,10 +254,19 @@ public class MyData {
             int i = 0;
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                int saa =0;
-                String strRoomList = dataSnapshot.getValue(String.class);
-                if(!arrChatRoomList.contains(strRoomList))
-                    arrChatRoomList.add(strRoomList);
+                int Check =0;
+                //String strRoomList = dataSnapshot.getValue(String.class);
+                ChatRoomData RoomList = dataSnapshot.getValue(ChatRoomData.class);
+
+                for(int i = 0; i< arrChatRoomList.size(); i++)
+                {
+                    if(arrChatRoomList.get(i).RoomName.contains(RoomList.RoomName))
+                        Check = 1;
+                }
+
+                if(Check != 1)
+                    arrChatRoomList.add(RoomList);
+
             }
 
             @Override
@@ -281,7 +292,7 @@ public class MyData {
 
     }
 
-    public boolean MakeChatRoomList(String MyIdx, String TargetIdx, int MyGender){
+    public boolean MakeChatRoomList(String TargetNickName, String TargetImg, String MyIdx, String TargetIdx, int MyGender){
        // int idx = MyEmail.indexOf("@");
        // String MyID =  MyEmail.substring(0, idx);
 
@@ -306,13 +317,30 @@ public class MyData {
         }
 
         String strCheckName = MyID + "_" + TargetID;
-        if(!arrChatRoomList.contains(strCheckName)) {
-            user.push().setValue(MyID + "_" + TargetID);
-            targetuser.push().setValue(MyID + "_" + TargetID);
+
+        ChatRoomData tempData = new ChatRoomData();
+        tempData.RoomName = strCheckName;
+
+        tempData.MyImg = getImg();
+        tempData.TargetImg =TargetImg;
+
+        tempData.MyNickName = getNickName();
+        tempData.TargetNickName =TargetNickName;
+
+        int Check = 0;
+        for(int i = 0; i< arrChatRoomList.size(); i++)
+        {
+            if(arrChatRoomList.get(i).RoomName.contains(strCheckName))
+                Check = 1;
+        }
+
+        if(Check != 1) {
+            user.push().setValue(tempData);
+            targetuser.push().setValue(tempData);
             return true;
         }
         else
-            return false;
+            return  false;
     }
 
     public void SendHeartItem(String strTargetToken) {
@@ -389,7 +417,8 @@ public class MyData {
         return Img;
     }
 
-    public void UpdateMyProfile(int age, int blood, int location, int religion, int job, int body) {
+    public void UpdateMyProfile(String img, int age, int blood, int location, int religion, int job, int body) {
+        Img= img;
         Age = age;
         Blood = blood;
         Location = location;
