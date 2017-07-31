@@ -18,6 +18,7 @@ import android.widget.Button;
 import hodo.hodotalk.Data.MyData;
 import hodo.hodotalk.Data.RecvData;
 import hodo.hodotalk.Data.UserData;
+import hodo.hodotalk.Data.UserData_Group;
 import hodo.hodotalk.R;
 import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.ViewProfile;
@@ -42,7 +43,7 @@ public class Main extends Fragment {
     public MyData stMyData = MyData.getInstance();
     public UserData stTargetData = new UserData();
     private HoDoDefine cDef = HoDoDefine.getInstance();
-
+    private UserData_Group m_UserGroup = UserData_Group.getInstance();
 
     public MainPage_Adapter mMainAdapter;
     private  RecyclerView recyclerView;
@@ -79,11 +80,11 @@ public class Main extends Fragment {
             @Override
             public void onClick(View v)
             {
+
                 nAddView++;
-
-                boolean bCheck = mMainAdapter.DelDataList(nAddView);
-
-                if(bCheck ==true) {
+                if(nAddView * 4 < m_UserGroup.arrUsers.size())
+                {
+                    mMainAdapter.DelDataList(nAddView);
                     mMainAdapter.AddData(nAddView);
                     RefreshItem();
                 }

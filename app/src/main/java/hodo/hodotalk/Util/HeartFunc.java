@@ -99,7 +99,7 @@ public class HeartFunc {
 
 
 
-    private void SendHeartToFCM(final UserData stTargetData) {
+    public void SendHeartToFCM(final UserData stTargetData) {
 
         try {
 
