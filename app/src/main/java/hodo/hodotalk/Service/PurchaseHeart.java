@@ -35,6 +35,8 @@ public class PurchaseHeart extends AppCompatActivity {
             {
                 m_MyData.setHeart(m_MyData.getHeart()+100);
 
+                Toast.makeText(PurchaseHeart.this, "현재 보유 하트 : "+ m_MyData.getHeart() , Toast.LENGTH_SHORT).show();
+
 
             }
         });

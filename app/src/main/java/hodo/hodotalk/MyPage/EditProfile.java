@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +29,9 @@ import hodo.hodotalk.Util.TransformValue;
 
 public class EditProfile extends AppCompatActivity {
 
+    private ImageView ProfileImage;
+
+    private  Button btnImage;
     private Button btnJoin;
     private Button btnAge;
     private  Button btnBlood;
@@ -71,6 +76,9 @@ public class EditProfile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ProfileImage = (ImageView)findViewById(R.id.EditProfile_image);
+
+        btnImage = (Button)findViewById(R.id.EditProfile_btnImage);
         btnJoin = (Button) findViewById(R.id.EditProfile_btnJoin);
         btnAge = (Button) findViewById(R.id.EditProfile_btnAge);
         btnBlood = (Button) findViewById(R.id.EditProfile_btnBlood);
@@ -91,7 +99,7 @@ public class EditProfile extends AppCompatActivity {
 
 
         Setting_MyData();
-
+        ViewProfileIMG();
 
         adapterAge.addAll("10대", "20대", "30대", "40대");
         adapterBlood.addAll("A형", "B형", "O형", "AB형");
@@ -134,6 +142,9 @@ public class EditProfile extends AppCompatActivity {
                     case R.id.EditProfile_btnbody:
                         CreateListDialog(adapterBody, 5);
                         break;
+                    case R.id.EditProfile_btnImage:
+                        ViewProfileIMG();
+                        break;
                 }
                 //  UpdateStatus();
             }
@@ -146,6 +157,7 @@ public class EditProfile extends AppCompatActivity {
         btnJob.setOnClickListener(listener);
         btnBody.setOnClickListener(listener);
         btnJoin.setOnClickListener(listener);
+        btnImage.setOnClickListener(listener);
 
         InitProfile_firebase();
     }
@@ -189,10 +201,6 @@ public class EditProfile extends AppCompatActivity {
                         }
                     }
                 });
-
-        int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
-        strChoiceNickName =  mAuth.getCurrentUser().getEmail().substring(0, idx);
-
     }
 
     private void UpdateStatus() {
@@ -211,25 +219,35 @@ public class EditProfile extends AppCompatActivity {
         btnJob.setText("직업 : "+ _TV.Transform_job(strChoiceJob));
         btnBody.setText("체형 : "+ _TV.Transform_Body(strChoiceBody));
 
+        ViewProfileIMG();
+
         stMyData.UpdateMyProfile(strChoiceAge, strChoiceBlood, strChoiceLoc, strChoiceRel, strChoiceJob, strChoiceBody);
 
     }
 
-    private void SetData_Firebase(){
+    public void ViewProfileIMG()
+    {
+        Glide.with(getApplicationContext())
+                .load(stMyData.getImg())
+                .into(ProfileImage);
+    }
 
-        int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  mAuth.getCurrentUser().getEmail().substring(0, idx);
+
+    private void SetData_Firebase(){
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
 
-        if(stMyData.getGender() == 0)
-            table = database.getReference("Account/WOMAN");
-        else
-            table = database.getReference("Account/MAN");
+        String strUserIdx = stMyData.getIndex();
+        int nGrage = Integer.parseInt(strUserIdx) / 100;
 
-        DatabaseReference user = table.child(tempStr);
+        if(stMyData.getGender() == 0)
+            table = database.getReference("Account/WOMAN/" + Integer.toString(nGrage));
+        else
+            table = database.getReference("Account/MAN/" + Integer.toString(nGrage));
+
+        DatabaseReference user = table.child(strUserIdx);
         user.child("Age").setValue(strChoiceAge);
         user.child("Blood").setValue(strChoiceBlood);
         user.child("Body").setValue(strChoiceBody);
@@ -283,7 +301,6 @@ public class EditProfile extends AppCompatActivity {
 
         alert.show();
     }
-
 
 }
 
