@@ -17,7 +17,7 @@ public class Chat_Data {
 
     }
 
-    public Chat_Data(String from_person, String to_person, String message, long nowTime){
+    public Chat_Data(String from_person, String to_person, String message, long nowTime, String image_URL){
         this.from = from_person;
         this.to = to_person;
         this.message = message;
