@@ -151,15 +151,18 @@ public class Chat_Room_Activity extends AppCompatActivity {
 
                 //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-                if( chat_message.getimage_URL() != null){
+                if(chat_message.getimage_URL() != null){
                     Picasso.with(getApplicationContext())
                             .load(chat_message.getimage_URL().toString())
                             .into(viewHolder.image_sent);
 
+
+                }else{
+                    viewHolder.message.setText(chat_message.getmessage());
                 }
                 Date mDate = new Date(chat_message.gettime());
                 String date= mFormat.format(mDate);
-                viewHolder.sender.setText(chat_message.getfrom()+" "+date);
+                viewHolder.sender.setText(chat_message.getfrom()+" "+date+"index:"+position);
 
 
             }
