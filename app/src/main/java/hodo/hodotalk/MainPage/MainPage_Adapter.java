@@ -14,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.api.BooleanResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.LruCache;
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -46,9 +48,6 @@ import hodo.hodotalk.Util.TransformValue;
 public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.ViewHolder> {
     public List<UserData> items;
 
-    public Picasso picasso;
-    public LruCache picasso_LRuCache;
-
     static int cnt;
     int Listcnt;
 
@@ -72,7 +71,7 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
         Listcnt = cDef.getViewListCnt();
         //Listcnt = m_UserData.arrUsers.size();
 
-        if(Listcnt > m_UserData.arrUsers.size())
+     //   if(Listcnt > m_UserData.arrUsers.size())
             Listcnt = m_UserData.arrUsers.size();
 
         SetData_Firebase();
@@ -135,9 +134,21 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
     private Boolean DrawBitMapUrl(final ViewHolder viewHolder, final String image) {
         Boolean rtValue = false;
 
-        Picasso.with(context)
+
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.format(DecodeFormat.PREFER_ARGB_8888).placeholder(R.drawable.ic_menu_camera);
+
+
+        Glide.with(context)
                 .load(image)
+                .apply(requestOptions)
                 .into(viewHolder.imgThumbnail);
+
+
+
+        /*Picasso.with(context)
+                .load(image)
+                .into(viewHolder.imgThumbnail);*/
 
         return rtValue;
     }
@@ -167,11 +178,6 @@ public class MainPage_Adapter extends RecyclerView.Adapter<MainPage_Adapter.View
 
            // ImageView picassoImageView = (ImageView) findViewById(R.id.img_thumbnail);
             context = itemView.getContext();
-
-            picasso_LRuCache = new LruCache(context);
-            picasso = new Picasso.Builder(context)
-                    .memoryCache(picasso_LRuCache)
-                    .build();
         }
     }
 

@@ -14,7 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
@@ -34,6 +35,7 @@ import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.Util.HeartFunc;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class ViewProfile extends AppCompatActivity {
 
@@ -114,7 +116,7 @@ public class ViewProfile extends AppCompatActivity {
 
     public void ViewProfileIMG()
     {
-        Picasso.with(getApplicationContext())
+        Glide.with(getApplicationContext())
                 .load(stTargetData.getImage())
                 .into(imgProfile);
     }

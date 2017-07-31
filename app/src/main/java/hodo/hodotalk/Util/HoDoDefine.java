@@ -1,8 +1,5 @@
 package hodo.hodotalk.Util;
 
-import com.squareup.picasso.LruCache;
-import com.squareup.picasso.Picasso;
-
 /**
  * Created by boram on 2017-07-19.
  */

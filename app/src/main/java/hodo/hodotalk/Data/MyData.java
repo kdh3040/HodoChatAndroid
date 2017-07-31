@@ -357,17 +357,17 @@ public class MyData {
     public void setHeart(int heart) {
         Heart = heart;
 
-        int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  FirebaseAuth.getInstance().getCurrentUser().getEmail().substring(0, idx);
-
+        //int idx = FirebaseAuth.getInstance().getCurrentUser().getEmail().indexOf("@");
+        String tempStr =  getIndex();
+        int nGrage = Integer.parseInt(tempStr) / 100;
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
 
         if(Gender == 0)
-            table = database.getReference("Account/WOMAN");
+            table = database.getReference("Account/WOMAN/"+Integer.toString(nGrage));
         else
-            table = database.getReference("Account/MAN");
+            table = database.getReference("Account/MAN/"+Integer.toString(nGrage));
 
         DatabaseReference user = table.child(tempStr);
 

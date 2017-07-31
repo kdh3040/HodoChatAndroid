@@ -321,8 +321,8 @@ public class JoinActivity extends AppCompatActivity {
                     }
                 });
 
-        int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
-        strChoiceNickName =  mAuth.getCurrentUser().getEmail().substring(0, idx);
+        //int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
+        //strChoiceNickName =  mAuth.getCurrentUser().getEmail().substring(0, idx);
 
     }
 
@@ -349,8 +349,8 @@ public class JoinActivity extends AppCompatActivity {
 
     private void SetData_Firebase(){
 
-        int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
-        String tempStr =  mAuth.getCurrentUser().getEmail().substring(0, idx);
+        //int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
+        //String tempStr =  mAuth.getCurrentUser().getEmail().substring(0, idx);
 
 
         String strUserIdx = m_AwsFunc.CreateUserIdx(mAuth.getCurrentUser().getEmail());

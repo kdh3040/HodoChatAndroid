@@ -81,7 +81,8 @@ public class Main extends Fragment {
             public void onClick(View v)
             {
 
-                nAddView++;
+
+                /*nAddView++;
                 if(nAddView * 4 < m_UserGroup.arrUsers.size())
                 {
                     mMainAdapter.DelDataList(nAddView);
@@ -89,7 +90,7 @@ public class Main extends Fragment {
                     RefreshItem();
                 }
                 else
-                    nAddView--;
+                    nAddView--;*/
 
             }
         });

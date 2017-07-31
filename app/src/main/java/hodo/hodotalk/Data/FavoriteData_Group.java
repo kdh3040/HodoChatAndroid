@@ -33,30 +33,4 @@ public class FavoriteData_Group {
             m_RecvInter[i] = new FavoritData();
         }
     }
-
-    public void GetSendHeartData(int _idx)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_SendHeart[i].GetSendData(0, i);
-    }
-
-    public void GetRecvHeartData(int _idx)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_RecvHeart[i].GetRecvData(1, i);
-    }
-    public void GetRecvInterData(int _idx)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_RecvInter[i].GetRecvData(2, i);
-    }
-
-    public void GetSendInterData(int _idx)
-    {
-        for(int i = 0; i< _idx; i++)
-            m_SendInter[i].GetSendData(3, i);
-    }
-
-
-
 }

@@ -20,8 +20,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Api;
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -104,7 +104,7 @@ public class Matching extends Fragment {
     }
 
     private void DrawMatingProfileImg(int idx) {
-        Picasso.with(context)
+        Glide.with(context)
                 .load(m_UserData.arrUsers.get(idx).getImage())
                 .into(MatchingImg);
     }

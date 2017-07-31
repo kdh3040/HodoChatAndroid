@@ -24,6 +24,8 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -33,7 +35,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,6 +62,7 @@ import hodo.hodotalk.Service.PurchaseHeart;
 import hodo.hodotalk.Util.AwsFunc;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -286,7 +288,7 @@ public class MainActivity extends AppCompatActivity
         int nGrage = Integer.parseInt(strUserIdx) / 100;
 
 
-        DatabaseReference ref;
+        final DatabaseReference ref;
         if(nMyGender == 0)
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
         else
@@ -314,9 +316,13 @@ public class MainActivity extends AppCompatActivity
                     nav_header_id_text.setText(stMyData.getNickName() );
 
 
-                    Picasso.with(getApplicationContext())
-                            .load(stRecvData.Img)
-                            .into( nav_header_id_Image);
+
+                    Glide.with(getApplicationContext())
+                            .load(stMyData.getImg())
+                            .thumbnail(0.1f)
+                            .apply(new RequestOptions().fitCenter().circleCrop())
+                            .into(nav_header_id_Image);
+
 
 //                    nav_layout.setBackground();
 
@@ -345,13 +351,17 @@ public class MainActivity extends AppCompatActivity
 
                     nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
+
+                    Glide.with(getApplicationContext())
+                            .load(stMyData.getImg())
+                            .thumbnail(0.1f)
+                            .apply(new RequestOptions().fitCenter().circleCrop())
+                            .into(nav_header_id_Image);
+
+
                     stMyData.GetHeartRoomList();
                     stMyData.GetChatRoomList();
 
-                    stFavorite.GetSendHeartData(stRecvData.SendHeart);
-                    stFavorite.GetRecvHeartData(stRecvData.RecvHeart);
-                    stFavorite.GetSendInterData(stRecvData.SendInter);
-                    stFavorite.GetRecvInterData(stRecvData.RecvInter);
                     InitData_firebase();
                 }
             }
