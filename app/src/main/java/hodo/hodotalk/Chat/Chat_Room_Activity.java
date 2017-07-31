@@ -83,14 +83,15 @@ public class Chat_Room_Activity extends AppCompatActivity {
         TextView sender;
         TextView time;
 
+        //회색글자 처리 뜸 원인불명
         public ChatViewHolder(View itemView) {
             super(itemView);
-            this.image_profile = (ImageView)itemView.findViewById(R.id.imageView);
-            this.image_sent = itemView.findViewById(R.id.iv_sent);
-            this.sender = (TextView)itemView.findViewById(R.id.nickname);
-            this.message =(TextView)itemView.findViewById(R.id.message);
+            image_profile = (ImageView)itemView.findViewById(R.id.imageView);
+            image_sent = (ImageView)itemView.findViewById(R.id.iv_sent);
+            sender = (TextView)itemView.findViewById(R.id.nickname);
+            message =(TextView)itemView.findViewById(R.id.message);
 
-            this.time = (TextView)itemView.findViewById(R.id.time);
+            time = (TextView)itemView.findViewById(R.id.time);
 
         }
     }
@@ -119,7 +120,7 @@ public class Chat_Room_Activity extends AppCompatActivity {
         int idx = strRoomName.indexOf("_");
         yourNickName = strRoomName.substring(idx+1);
 
-        Log.d("hngpic",yourNickName+"");
+
         mRef = FirebaseDatabase.getInstance().getReference().child("ChatRoom").child(strRoomName);
        //mRef2 =FirebaseDatabase.getInstance().getReference().child("chat").child(yourNickName+"_"+nickName);
 
@@ -148,13 +149,21 @@ public class Chat_Room_Activity extends AppCompatActivity {
 
                 //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
-                if( chat_message.getimage_URL() != null){
+                if( chat_message.getmessage() != null){
+
+                    viewHolder.message.setText(chat_message.getmessage());
+                    viewHolder.message.setVisibility(TextView.VISIBLE);
+                    viewHolder.image_sent.setVisibility(ImageView.GONE);
+
+
+                }else{
                     Glide.with(getApplicationContext())
                             .load(chat_message.getimage_URL().toString())
                             .into(viewHolder.image_sent);
+                    viewHolder.image_sent.setVisibility(ImageView.VISIBLE);
+                    viewHolder.message.setVisibility(TextView.GONE);
 
-                }else{
-                    viewHolder.message.setText(chat_message.getmessage());
+
                 }
                 Date mDate = new Date(chat_message.gettime());
                 String date= mFormat.format(mDate);
@@ -225,18 +234,11 @@ public class Chat_Room_Activity extends AppCompatActivity {
             if(resultCode == RESULT_OK){
                 if(data != null){
 
-
                     final Uri uri = data.getData();
-
-
-
-
-
                     StorageReference storageReference = FirebaseStorage.getInstance()
                             .getReference("images")
                             .child(strRoomName)
                             .child(uri.getLastPathSegment());
-
 
                     putImageInStorage(storageReference, uri);
 
