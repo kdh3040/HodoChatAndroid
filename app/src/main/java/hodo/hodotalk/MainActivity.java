@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.InterpolatorRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -57,6 +58,7 @@ import hodo.hodotalk.MainPage.Matching;
 import hodo.hodotalk.MyPage.EditProfile;
 import hodo.hodotalk.MyPage.MyPage_CardList;
 import hodo.hodotalk.Service.PurchaseHeart;
+import hodo.hodotalk.Util.AwsFunc;
 import hodo.hodotalk.Util.HoDoDefine;
 import hodo.hodotalk.Util.TransformValue;
 
@@ -66,8 +68,9 @@ public class MainActivity extends AppCompatActivity
     public  static  TransformValue cTrans =  TransformValue.getInstance();
 
 
+    private int nMyGrade;
     private int nMyGender;
-
+    private String  strMyIdx;
 
     // 메인 페이지
     private  Main cMain;
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity
 
 
     public static UserData_Group m_UserGroup = UserData_Group.getInstance();
+    private AwsFunc m_AwsFunc = AwsFunc.getInstance();
 
     public static MyData stMyData = MyData.getInstance();
     public static FavoriteData_Group stFavorite = FavoriteData_Group.getInstance();
@@ -109,7 +113,9 @@ public class MainActivity extends AppCompatActivity
         Log.d("!!!!!", "App start----");
 
         Intent intent = getIntent();
+        nMyGrade = intent.getIntExtra("MyGrade", 0);
         nMyGender = intent.getIntExtra("MyGender", 0);
+        strMyIdx = intent.getStringExtra("MyIndex");
 
         // 오른쪽 밑에 우편 모양
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -165,11 +171,15 @@ public class MainActivity extends AppCompatActivity
 
     public  void InitData_firebase()
     {
+
+        // 테스트
+        int nSelectGrade = 0;
+
         DatabaseReference ref;
         if(stMyData.getGender() == 0)
-            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
+            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN").child(Integer.toString(nSelectGrade));
         else
-            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
+            ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN").child(Integer.toString(nSelectGrade));
 
         //ref.limitToFirst(8).addListenerForSingleValueEvent(
         ref.addListenerForSingleValueEvent(
@@ -183,7 +193,7 @@ public class MainActivity extends AppCompatActivity
                             if(stRecvData != null) {
 
                                  UserData stUserData = new UserData();
-                                stUserData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
+                                stUserData.SetData(stRecvData.Index, stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Age, stRecvData.Blood,
                                         stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.RecvHeart, stRecvData.RecvInter);
 
                                 m_UserGroup.arrUsers.add(stUserData);
@@ -271,6 +281,11 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
+
+        final String strUserIdx = m_AwsFunc.GetUserIdx(mAuth.getCurrentUser().getEmail());
+        int nGrage = Integer.parseInt(strUserIdx) / 100;
+
+
         DatabaseReference ref;
         if(nMyGender == 0)
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
@@ -278,20 +293,22 @@ public class MainActivity extends AppCompatActivity
             ref = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
 
         DatabaseReference ref1, ref2;
-        ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");
-        ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN");
+        ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN").child(Integer.toString(nGrage));
+        ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN").child(Integer.toString(nGrage));
+        //ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN").child(Integer.toString(nMyGrade));
+        //ref2 = FirebaseDatabase.getInstance().getReference().child("Account").child("MAN").child(Integer.toString(nMyGrade));
  /*       FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref1, ref2;
         ref1 = FirebaseDatabase.getInstance().getReference().child("Account").child("WOMAN");*/
 
         //ref.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
-        ref1.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref1.child(strUserIdx).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecvData stRecvData = new RecvData();
                 stRecvData = dataSnapshot.getValue(RecvData.class);
                 if (stRecvData != null) {
-                    stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
+                    stMyData.SetData(strUserIdx, stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
                     nav_header_id_text.setText(stMyData.getNickName() );
@@ -304,8 +321,8 @@ public class MainActivity extends AppCompatActivity
 //                    nav_layout.setBackground();
 
 
-                    stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
-                    stMyData.GetChatRoomList(stMyData.getGender(), stMyData.getEmail());
+                    stMyData.GetHeartRoomList();
+                    stMyData.GetChatRoomList();
 
                     InitData_firebase();
                 }
@@ -317,19 +334,19 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        ref2.child(MyID).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref2.child(strUserIdx).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 RecvData stRecvData = new RecvData ();
                 stRecvData = dataSnapshot.getValue(RecvData.class);
                 if(stRecvData != null) {
-                    stMyData.SetData(stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
+                    stMyData.SetData(strUserIdx, stRecvData.Email, stRecvData.Token, stRecvData.Img, stRecvData.Gender, stRecvData.NickName, stRecvData.Heart, stRecvData.Age, stRecvData.Blood,
                             stRecvData.Location, stRecvData.Religion, stRecvData.Job, stRecvData.Body, stRecvData.SendHeart, stRecvData.RecvHeart,stRecvData.SendInter,stRecvData.RecvInter);
 
                     nav_header_id_text.setText(stMyData.getNickName() + "\n" + stMyData.getEmail());
 
-                    stMyData.GetHeartRoomList(stMyData.getGender(), stMyData.getEmail());
-                    stMyData.GetChatRoomList(stMyData.getGender(), stMyData.getEmail());
+                    stMyData.GetHeartRoomList();
+                    stMyData.GetChatRoomList();
 
                     stFavorite.GetSendHeartData(stRecvData.SendHeart);
                     stFavorite.GetRecvHeartData(stRecvData.RecvHeart);

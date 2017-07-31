@@ -60,6 +60,8 @@ public class MyPage_CardList extends AppCompatActivity {
                     int saa = 0;
                     RecvHeart cRecvCard = dataSnapshot.getValue(RecvHeart.class);
 
+                    final String strMyIndex = cRecvCard.MyIndex;
+                    final String strTargetIndex = cRecvCard.TargetIndex;
                     final String strDate = cRecvCard.Date;
                     final String strMyNick = cRecvCard.MyNickName;
                     final String strTargetNick = cRecvCard.TargetNickName;
@@ -110,7 +112,7 @@ public class MyPage_CardList extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //m_Mydata.MakeChatRoomList();
                                         m_Mydata.SendHeartItem(strTargetToken);
-                                        m_Mydata.MakeChatRoomList(m_Mydata.getEmail(), strMyNick, m_Mydata.getGender());
+                                        m_Mydata.MakeChatRoomList(strTargetIndex, strMyIndex, m_Mydata.getGender());
                                         startActivity(new Intent(getApplicationContext(), Chat_UserList_Acitiviy.class));
                                     }
 

@@ -49,6 +49,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import hodo.hodotalk.Data.MyData;
+import hodo.hodotalk.Util.AwsFunc;
 import hodo.hodotalk.Util.TransformValue;
 
 public class JoinActivity extends AppCompatActivity {
@@ -94,6 +95,7 @@ public class JoinActivity extends AppCompatActivity {
     private MyData m_stMyData = MyData.getInstance();
     private String TAG = "@@@Firebase : ";
 
+    private AwsFunc m_AwsFunc = AwsFunc.getInstance();
 
     private File file;
     private  String path;
@@ -211,7 +213,6 @@ public class JoinActivity extends AppCompatActivity {
         btnJoin.setOnClickListener(listener);
         btnGender.setOnClickListener(listener);
         btnImg.setOnClickListener(listener);
-
 
        // onTextWriting("test", "testBody");
     }
@@ -351,14 +352,18 @@ public class JoinActivity extends AppCompatActivity {
         int idx = mAuth.getCurrentUser().getEmail().indexOf("@");
         String tempStr =  mAuth.getCurrentUser().getEmail().substring(0, idx);
 
+
+        String strUserIdx = m_AwsFunc.CreateUserIdx(mAuth.getCurrentUser().getEmail());
+        int nGrage = Integer.parseInt(strUserIdx) / 100;
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
         if(nChoiceGender == 0 )
-            table = database.getReference("Account/WOMAN");
+            table = database.getReference("Account/WOMAN/"+Integer.toString(nGrage));
         else
-            table = database.getReference("Account/MAN");
+            table = database.getReference("Account/MAN/"+Integer.toString(nGrage));
 
-        DatabaseReference user = table.child(tempStr);
+        DatabaseReference user = table.child(strUserIdx);
         user.child("NickName").setValue(strChoiceNickName);
         user.child("Age").setValue(nChoiceAge);
         user.child("Email").setValue(mAuth.getCurrentUser().getEmail());
@@ -370,12 +375,17 @@ public class JoinActivity extends AppCompatActivity {
         user.child("Religion").setValue(nChoiceRel);
         user.child("Gender").setValue(nChoiceGender);
         user.child("Img").setValue(strImgUri);
+        user.child("Index").setValue(strUserIdx);
 
-        m_stMyData.SetData(mAuth.getCurrentUser().getEmail(), FirebaseInstanceId.getInstance().getToken(), strImgUri, nChoiceGender, strChoiceNickName,
+
+        m_stMyData.SetData(strUserIdx, mAuth.getCurrentUser().getEmail(), FirebaseInstanceId.getInstance().getToken(), strImgUri, nChoiceGender, strChoiceNickName,
                 0, nChoiceAge, nChoiceBlood, nChoiceLoc, nChoiceRel, nChoiceJob, nChoiceBody, 0, 0, 0, 0);
 
         Intent intent = new Intent(JoinActivity.this, MainActivity.class);
         intent.putExtra("MyGender", nChoiceGender);
+        intent.putExtra("MyGrade", nGrage);
+        intent.putExtra("MyIndex", strUserIdx);
+
         startActivity(intent);
         finish();
 

@@ -5,6 +5,8 @@ package hodo.hodotalk.Data;
  */
 
 public class RecvHeart {
+    public  String MyIndex;
+    public  String TargetIndex;
     public  String MyNickName;
     public  String TargetNickName;
     public  String MyImg;

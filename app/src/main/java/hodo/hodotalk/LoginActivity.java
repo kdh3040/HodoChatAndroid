@@ -31,9 +31,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import hodo.hodotalk.Chat.Chat_UserList_Acitiviy;
+import hodo.hodotalk.Util.AwsFunc;
 
 public class LoginActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
+    private AwsFunc m_AwsFunc = AwsFunc.getInstance();
+
     EditText edtEmail, edtPasswd;
     Button btnLogin, btnCreate;
 
@@ -118,41 +121,7 @@ public class LoginActivity extends AppCompatActivity {
         btnTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
-                    String email = URLEncoder.encode("email","UTF-8")+"="+ URLEncoder.encode("hfhfj@hngpic.com","UTF-8");
-                    String addr ="http://13.113.143.45/firebaseact.php";
-                    URL url = new URL(addr);
-
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-
-                    if(conn != null) {
-                        conn.setRequestMethod("POST");
-                        conn.setDoInput(true);
-                        conn.setDoOutput(true);
-                        conn.setUseCaches(false);
-                        conn.setConnectTimeout(10000);
-                        Log.d("hngpic","settimeout");
-                        OutputStream outputStream = conn.getOutputStream();
-                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
-                        writer.write(email);
-                        writer.flush();
-                        outputStream.close();
-                        writer.close();
-                        InputStream inputStream = conn.getInputStream();
-                        BufferedReader br  = new BufferedReader(new InputStreamReader(inputStream));
-                        String line = br.readLine();
-                        if(line ==null) {
-                            Log.d("hngpic","readline is null");
-                        }else {
-                            Log.d("hngpic", line);
-                        }
-                        br.close();
-                        inputStream.close();
-                        conn.disconnect();
-                    }
-                }catch(Exception e) {
-                    e.printStackTrace();
-                }
+                m_AwsFunc.CreateUserIdx(edtEmail.getText().toString().trim());
             }
         });
 
@@ -165,6 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
     }
+
     //Password확인
     private boolean isValidPasswd(String str){
         if(str == null || TextUtils.isEmpty(str)){

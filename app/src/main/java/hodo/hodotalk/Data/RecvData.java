@@ -6,6 +6,7 @@ package hodo.hodotalk.Data;
 
 public class RecvData {
 
+    public String Index; // 고유 아이디
     public int    Age;          // 나이 ( 1 ~ 99)
     public int    Blood;        // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
     public int    Body;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
@@ -26,6 +27,7 @@ public class RecvData {
 
     public RecvData()
     {
+        Index = null;
         Age =0;          // 나이 ( 1 ~ 99)
         Blood =0;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
         Body =0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)

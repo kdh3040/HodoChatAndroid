@@ -19,6 +19,7 @@ public class UserData implements Serializable{
 
     private static final long  serialVersionUID = 1L;
 
+    private String Index; // email 주소에서 @ 이전까지의 값.
     private int    Age;          // 나이 ( 1 ~ 99)
     private int    Blood;        // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
     private int    Body;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
@@ -46,6 +47,7 @@ public class UserData implements Serializable{
 
     public UserData()
     {
+        Index = null;
         Age =0;          // 나이 ( 1 ~ 99)
         Blood =0;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
         Body =0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
@@ -62,8 +64,9 @@ public class UserData implements Serializable{
 
     }
 
-    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _RecvHeart, int _RecvInter)
+    public  void SetData(String Idx, String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _RecvHeart, int _RecvInter)
     {
+        Index = Idx;
         Email = _Email;
         Token = _Token;
         Img = _Img;
@@ -96,6 +99,10 @@ public class UserData implements Serializable{
         rtClass.Body = Body;
 
         return  rtClass;
+    }
+
+    public String getIndex() {
+        return Index;
     }
 
     public String getEmail() {

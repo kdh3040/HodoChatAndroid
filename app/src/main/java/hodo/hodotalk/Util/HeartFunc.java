@@ -55,8 +55,8 @@ public class HeartFunc {
                     if(m_MyData.getHeart() > 5) {
                         m_MyData.setHeart(m_MyData.getHeart() - 5);
                         //stmyData.MakeHeartRoom(stmyData.getEmail(), stTargetData.getEmail(), stmyData.getNickName(), stTargetData.getNickName(), stmyData.getImg(), stTargetData.getImage());
-                        if(m_MyData.MakeHeartRoomList(m_MyData.getEmail(), stTargetData.getEmail(),m_MyData.getGender())) {
-                            m_MyData.MakeHeartRoom(m_MyData.getEmail(), stTargetData.getEmail(), m_MyData.getNickName(), stTargetData.getNickName(), "MyImg", "TagerIMG", m_MyData.getToken(), stTargetData.getToken());
+                        if(m_MyData.MakeHeartRoomList(m_MyData.getIndex(), stTargetData.getIndex(),m_MyData.getGender())) {
+                            m_MyData.MakeHeartRoom(m_MyData.getIndex(), stTargetData.getIndex(), m_MyData.getNickName(), stTargetData.getNickName(), "MyImg", "TagerIMG", m_MyData.getToken(), stTargetData.getToken());
                             SendHeartToFCM(stTargetData);
                         }
                     }

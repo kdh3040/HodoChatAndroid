@@ -38,6 +38,7 @@ public class MyData {
     private int    Age;          // 나이 ( 1 ~ 99)
     private int    Blood;        // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
     private int    Body;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
+    private String Index; // 고유 아이디
     private String Email; // email 주소에서 @ 이전까지의 값.
     private int    Gender;       // 성별 (1: 여자, 2: 남자)
     private int    Heart;
@@ -72,6 +73,7 @@ public class MyData {
 
     private MyData()
     {
+        Index = null;
         Age =0;          // 나이 ( 1 ~ 99)
         Blood =0;         // 혈액형 (1: A형, 2: B형 3: O형 4: AB형)
         Body =0;          // 체형 (1: 마른 2: 슬림탄탄 3: 보통 4: 통통 5: 근육 6: 건장)
@@ -91,8 +93,9 @@ public class MyData {
         PushKey = null;
     }
 
-    public  void SetData(String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _SendHeart, int _RecvHeart, int _SendInter, int _RecvInter)
+    public  void SetData(String Idx, String _Email, String _Token, String _Img, int _Gender, String _NickName, int _Heart, int _Age, int _Blood, int _Loc, int _Rel, int _Job, int _Body, int _SendHeart, int _RecvHeart, int _SendInter, int _RecvInter)
     {
+        Index = Idx;
         Email = _Email;
         Token = _Token;
         Img = _Img;
@@ -130,15 +133,14 @@ public class MyData {
         return  rtClass;
     }
 
-    public  void GetHeartRoomList(int MyGender, String MyEmail)
+    public  void GetHeartRoomList()
     {
-        int idx = MyEmail.indexOf("@");
-        String MyID =  MyEmail.substring(0, idx);
+        String MyID =  Index;
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = null;
 
-        if(MyGender == 0)
+        if(Gender == 0)
             databaseRef = database.getReference("HeartRoomList" + "/WOMAN/" + MyID);
         else
             databaseRef = database.getReference("HeartRoomList" + "/MAN/" +  MyID);
@@ -176,47 +178,37 @@ public class MyData {
 
     }
 
-    public  boolean MakeHeartRoomList(String MyEmail, String TargetEmail, int MyGender)
+    public  boolean MakeHeartRoomList(String MyIdx, String TargetIdx, int MyGender)
     {
-        int idx = MyEmail.indexOf("@");
-        String MyID =  MyEmail.substring(0, idx);
-
-        idx = TargetEmail.indexOf("@");
-        String TargetID =  TargetEmail.substring(0, idx);
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
 
         table = database.getReference("HeartRoomList");
         DatabaseReference user, targetuser;
         if(MyGender == 0) {
-            user = table.child("WOMAN").child(MyID);
-            targetuser = table.child("MAN").child(TargetID);
+            user = table.child("WOMAN").child(MyIdx);
+            targetuser = table.child("MAN").child(TargetIdx);
         }
         else {
-            user = table.child("MAN").child(MyID);
-            targetuser = table.child("WOMAN").child(TargetID);
+            user = table.child("MAN").child(MyIdx);
+            targetuser = table.child("WOMAN").child(TargetIdx);
         }
 
-        String strCheckName = MyID + "_" + TargetID;
+        String strCheckName = MyIdx + "_" + TargetIdx;
         if(!arrHeartRoomList.contains(strCheckName)) {
-            Map<String, Object> updateMap = new HashMap<>();
-            updateMap.put("RoomName", MyID + "_" + TargetID);
-            user.push().setValue(MyID + "_" + TargetID);
-            targetuser.push().setValue(MyID + "_" + TargetID);
+            user.push().setValue(MyIdx + "_" + TargetIdx);
+            targetuser.push().setValue(MyIdx + "_" + TargetIdx);
             return true;
         }
         else
             return false;
     }
 
-    public  void MakeHeartRoom(String MyEmail, String TargetEmail, String MyNickName, String TargetNickName, String MyImg, String TargetImg, String MyToken, String TargetToken)
+    public  void MakeHeartRoom(String MyIdx, String TargetIdx, String MyNickName, String TargetNickName, String MyImg, String TargetImg, String MyToken, String TargetToken)
     {
-        int idx = MyEmail.indexOf("@");
-        String MyID =  MyEmail.substring(0, idx);
+        String MyID =  MyIdx;
 
-        idx = TargetEmail.indexOf("@");
-        String TargetID =  TargetEmail.substring(0, idx);
+        String TargetID =  TargetIdx;
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
@@ -228,6 +220,8 @@ public class MyData {
         long time = System.currentTimeMillis();
         SimpleDateFormat ctime = new SimpleDateFormat("yyyyMMdd");
 
+        m_HeartRoomObj.MyIndex = MyIdx;
+        m_HeartRoomObj.TargetIndex = TargetIdx;
         m_HeartRoomObj.MyNickName = MyNickName;
         m_HeartRoomObj.TargetNickName = TargetNickName;
         m_HeartRoomObj.MyImg = MyImg;
@@ -240,16 +234,16 @@ public class MyData {
     }
 
 
-    public  void GetChatRoomList(int MyGender, String MyEmail)
+    public  void GetChatRoomList()
     {
         //int idx = MyEmail.indexOf("@");
         //STring MyID =  MyEmail.substring(0, idx);
-        String MyID = getNickName();
+        String MyID = Index;
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = null;
 
-        if(MyGender == 0)
+        if(Gender == 0)
             databaseRef = database.getReference("ChatRoomList" + "/WOMAN/" + MyID);
         else
             databaseRef = database.getReference("ChatRoomList" + "/MAN/" +  MyID);
@@ -287,15 +281,15 @@ public class MyData {
 
     }
 
-    public boolean MakeChatRoomList(String MyEmail, String TargetEmail, int MyGender){
+    public boolean MakeChatRoomList(String MyIdx, String TargetIdx, int MyGender){
        // int idx = MyEmail.indexOf("@");
        // String MyID =  MyEmail.substring(0, idx);
 
         /*idx = TargetEmail.indexOf("@");
         String TargetID =  TargetEmail.substring(0, idx);
 */
-        String MyID = getNickName();
-        String TargetID = TargetEmail;
+        String MyID = MyIdx;
+        String TargetID = TargetIdx;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference table;
 
@@ -353,6 +347,8 @@ public class MyData {
             e.printStackTrace();
         }
     }
+
+    public String getIndex() {return  Index;}
 
     public String getEmail() {return  Email;}
 
