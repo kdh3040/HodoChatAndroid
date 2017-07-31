@@ -153,6 +153,8 @@ public class Chat_Room_Activity extends AppCompatActivity {
                             .load(chat_message.getimage_URL().toString())
                             .into(viewHolder.image_sent);
 
+                }else{
+                    viewHolder.message.setText(chat_message.getmessage());
                 }
                 Date mDate = new Date(chat_message.gettime());
                 String date= mFormat.format(mDate);
