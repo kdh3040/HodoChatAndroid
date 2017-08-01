@@ -6,8 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +43,8 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -53,11 +59,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+
+
+
 /**
  * Created by mjk on 2017. 7. 27..
  */
 
 public class Chat_Room_Activity extends AppCompatActivity {
+
 
     Button btnSend,btnImg;
     EditText etText;
@@ -82,17 +92,20 @@ public class Chat_Room_Activity extends AppCompatActivity {
 
         TextView sender;
         TextView time;
+        LinearLayout linearLayout;
+
 
         //회색글자 처리 뜸 원인불명
         public ChatViewHolder(View itemView) {
             super(itemView);
             image_profile = (ImageView)itemView.findViewById(R.id.imageView);
-            image_sent = (ImageView)itemView.findViewById(R.id.iv_sent);
+            image_sent = (ImageView)itemView.findViewById(R.id.image_sent);
             sender = (TextView)itemView.findViewById(R.id.nickname);
             message =(TextView)itemView.findViewById(R.id.message);
+            linearLayout = (LinearLayout)itemView.findViewById(R.id.ll_chat_only);
+
 
             time = (TextView)itemView.findViewById(R.id.time);
-
         }
     }
 
@@ -156,20 +169,46 @@ public class Chat_Room_Activity extends AppCompatActivity {
                     viewHolder.image_sent.setVisibility(ImageView.GONE);
 
 
+
                 }else{
                     Glide.with(getApplicationContext())
                             .load(chat_message.getimage_URL().toString())
                             .into(viewHolder.image_sent);
+                    Log.d("hngpic",chat_message.getimage_URL().toString());
+
                     viewHolder.image_sent.setVisibility(ImageView.VISIBLE);
+                    //viewHolder.image_sent.setScaleType(ImageView.ScaleType.FIT_START);
                     viewHolder.message.setVisibility(TextView.GONE);
+
+
 
 
                 }
                 Date mDate = new Date(chat_message.gettime());
                 String date= mFormat.format(mDate);
-                viewHolder.sender.setText(chat_message.getfrom()+" "+date);
+                String sender = chat_message.getfrom();
+                if(sender.equals(nickName)){
+                    viewHolder.sender.setVisibility(TextView.GONE);
+                    viewHolder.image_profile.setVisibility(ImageView.INVISIBLE);
+                    //LinearLayoutCompat.LayoutParams layoutParams = new LinearLayoutCompat.LayoutParams();
+                    viewHolder.linearLayout.setGravity(Gravity.RIGHT);
+                    //viewHolder.image_sent.setScaleType();
+                    //viewHolder.message.setGravity(Gravity.RIGHT);
+                    //int visibility =viewHolder.image_sent.getVisibility();
+                    //Log.d("hngpic","visibility: "+visibility);
 
 
+
+                }else{
+
+
+                    viewHolder.sender.setVisibility(TextView.VISIBLE);
+                    viewHolder.image_profile.setVisibility(ImageView.VISIBLE);
+                    viewHolder.linearLayout.setGravity(Gravity.LEFT);
+                    //viewHolder.message.setGravity(Gravity.LEFT);
+
+                }
+                viewHolder.sender.setText(chat_message.getfrom()+"  "+date);
             }
         };
 
@@ -198,13 +237,17 @@ public class Chat_Room_Activity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 String message = etText.getText().toString();
                 long nowTime =System.currentTimeMillis();
                 if(etText.getText() == null){
                     return;
                 }else{
                     Chat_Data chat_Data = new Chat_Data(nickName,yourNickName,message,nowTime,null);
+
                     mRef.push().setValue(chat_Data);
+
                    //mRef2.push().setValue(chat_Data);
                     etText.setText("");
 
