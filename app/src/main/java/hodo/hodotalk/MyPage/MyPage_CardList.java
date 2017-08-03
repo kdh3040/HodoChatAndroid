@@ -112,7 +112,7 @@ public class MyPage_CardList extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //m_Mydata.MakeChatRoomList();
                                         m_Mydata.SendHeartItem(strTargetToken);
-                                        m_Mydata.MakeChatRoomList(strTargetIndex, strMyIndex, m_Mydata.getGender());
+                                        m_Mydata.MakeChatRoomList(strMyNick, strMyImg, strTargetIndex, strMyIndex, m_Mydata.getGender());
                                         startActivity(new Intent(getApplicationContext(), Chat_UserList_Acitiviy.class));
                                     }
 

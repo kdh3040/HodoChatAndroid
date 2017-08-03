@@ -387,11 +387,6 @@ public class MainActivity extends AppCompatActivity
         stMyData.setHeart(_Heart);
     }
 
-    public void UpdateMyProfile(int _Age, int _Blood, int _Location, int _Religion, int _Job, int _body)
-    {
-        stMyData.UpdateMyProfile(_Age, _Blood, _Location, _Religion,_Job, _body);
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
