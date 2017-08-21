@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         edtPasswd = (EditText)findViewById(R.id.password);
         btnLogin = (Button)findViewById(R.id.email_sign_in_button);
         btnCreate = (Button)findViewById(R.id.email_join_button);
-        Button btnTest = (Button)findViewById(R.id.btn_test);
+        //Button btnTest = (Button)findViewById(R.id.btn_test);
 
 
         progDialog = new ProgressDialog(LoginActivity.this);
@@ -118,12 +118,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                m_AwsFunc.CreateUserIdx(edtEmail.getText().toString().trim());
-            }
-        });
+        //btnTest.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        m_AwsFunc.CreateUserIdx(edtEmail.getText().toString().trim());
+        //    }
+        //});
 
 
 
